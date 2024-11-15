@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Hamauliateon</title>
+    <link rel="icon" type="image/svg" href="/Static/foto/logo hkbp.svg">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
+       body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        h1, h3, p {
+            font-family: 'Poppins', sans-serif;
         }
         .sidebar {
             background-color: #002855;
@@ -19,17 +23,16 @@
             padding-top: 20px;
         }
         .sidebar h2 {
-            font-size: 18px;
-            margin-bottom: 30px;
+            font-size: 16px;
             text-align: left;
-            padding-left: 20px;
+            margin-bottom: 0px;
         }
         .sidebar a {
             color: white;
             text-decoration: none;
             display: block;
-            padding: 12px 20px;
-            font-size: 14px;
+            padding: 10px;
+            margin: 10px 0;
             transition: background 0.3s;
         }
         .sidebar a:hover {
@@ -39,39 +42,75 @@
             color: white;
             text-decoration: none;
             display: block;
-            padding: 5px 20px;
-            transition: background 0.3s;
-        }
+            transition: background 0.3s;   }
         .sidebar ul li:hover {
             background-color: #004080;
+        }
+        .icon {
+            margin-right: 20px;
+            vertical-align: middle;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            color: white;
+            gap: 20px;
+        }
+
+        .logo {
+            width: 55px;
+            height: auto;
+        }
+
+        .header-text {
+            line-height: 1.2;
+        }
+        .row.mb-4 {
+            display: flex;
+            align-items: stretch; /* Ensure columns have equal height */
         }
         .stat-box {
             background-color: #ffffff;
             border: 1px solid #dee2e6;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
+            padding: 20px 14px;
+            text-align: left;
+            width: 100%;
+            height: 100%;
         }
+
         .stat-box h3 {
             font-size: 14px;
-            color: #666666;
-            margin-bottom: 5px;
+            color: #333;
+            margin-bottom: 10px;
         }
+
         .stat-box p {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: bold;
             color: #002855;
         }
-                                    /* Hilangkan spinner up/down pada input type="number" */
-                                    input[type=number]::-webkit-outer-spin-button,
-                            input[type=number]::-webkit-inner-spin-button {
-                                -webkit-appearance: none;
-                                margin: 0;
-                            }
-                            input[type=number] {
-                                -moz-appearance: textfield; /* Firefox */
-                            }
+        .upload-box:hover {
+            background-color: #e9e9e9;
+            border: 2px dashed #003366;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #002244;
+        }
+
+        /* Hilangkan spinner up/down pada input type="number" */
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+        }
+       input[type=number] {
+        -moz-appearance: textfield; /* Firefox */
+        }
     </style>
 </head>
 <body>
@@ -80,13 +119,16 @@
     <div class="row">
         <!-- Sidebar -->
         <div class="col-md-2 sidebar">
-            <h2>Huria Kristen Batak Protestan <br> HKBP Purwokerto</h2>
-            <a href="/profile"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-            <a href="/profile/keluarga"><i class="fas fa-users"></i> Anggota Keluarga</a>
-            <a href="/profile/bulanan"><i class="fas fa-envelope"></i> Persembahan Bulanan</a>
-            <a href="/profile/hamauliateon"><i class="fas fa-book"></i> Hamauliateon</a>
+            <div class="header-logo">
+                <img src="/Static/assets/Logo-HKBP-White.svg" alt="Logo HKBP" class="logo">
+                <h2 class="header-text">Huria Kristen Batak Protestan <br> HKBP Purwokerto</h2>
+            </div> <br>
+            <a href="/profile"><img src="/Static/assets/mage_dashboard.svg" alt="Dashboard Icon" class="icon">Dashboard</a>
+            <a href="/profile/keluarga"><img src="/Static/assets/tabler-icon-users.svg" alt="Anggota Keluarga" class="icon">Anggota Keluarga</a>
+            <a href="/profile/bulanan"><img src="/Static/assets/heroicons_envelope-open.svg" alt="Persembahan Bulanan" class="icon">Persembahan Bulanan</a>
+            <a href="/profile/hamauliateon"><img src="/Static/assets/solar_hand-money-outline.svg" alt="Hamauliateon" class="icon">Hamauliateon</a>
             <!-- <a href="/profile/layanan"><i class="fas fa-concierge-bell"></i> Layanan</a> -->
-            <a data-bs-toggle="collapse" data-bs-target="#Peremajaan"><i class="fas fa-concierge-bell"></i> Peremajaan Data</a>
+            <a data-bs-toggle="collapse" data-bs-target="#Peremajaan"><img src="/Static/assets/majesticons_paper-fold-text-line.svg" alt="Layanan" class="icon"></i>Layanan</a>
             <div id="Peremajaan" class="collapse">
                 <ul>
                     <li><a href="/profile/jemaat_baptis">Jemaat Baptis</a></li>
@@ -98,10 +140,12 @@
             </div>
             <!-- <a href="#"><i class="fas fa-hands-helping"></i> Diakonia</a> -->
             <!-- <a href="#"><i class="fas fa-user"></i> Pelayananku</a> -->
-            <a href="/signout"><i class="fas fa-sign-out-alt"></i> Keluar</a>
+            <a href="/signout">
+                <img src="/Static/assets/heroicons-outline_logout.svg" alt="Keluar" class="icon">Keluar
+            </a>
         </div>
         <div class="col-md-10 p-4">
-            <h2 class="mb-3">hamauliateon/Persembahan Ucapan Syukur</h2>
+            <h2 class="mb-3">Hamauliateon / Persembahan Ucapan Syukur</h2>
             <!-- Stats Container -->
             <div class="row mb-4">
                 <div class="col-md-2">
@@ -119,14 +163,13 @@
             </div>
         <div class="col-md-10 p-4">
             <!-- Form Hamauliateon -->
-            <h3 class="mb-3">Form Hamauliateon</h3>
             <form action="/addhamauliateon" method="POST" enctype="multipart/form-data">
                 <div class="row mb-3">
                     <div class="col-md-4">
                         <!-- Upload Box -->
                         <div class="upload-box p-3 text-center" style="border: 1px dashed #ccc; border-radius: 8px;">
                             <input type="file" name="bukti" class="form-control-file" accept=".jpeg, .jpg, .png" style="display: none;" id="uploadBukti">
-                            <label for="uploadBukti" id="uploadLabel"  style="cursor: pointer;">
+                            <label for="uploadBukti" id="uploadLabel" style="cursor: pointer;">
                                 <p>Pindahkan atau <a href="#">Upload Bukti Hamauliateon</a></p>
                                 <p><small>.jpeg, .jpg, .png</small></p>
                             </label>
@@ -134,6 +177,10 @@
                     </div>
                     <div class="col-md-8">
                         <!-- Form Fields -->
+                        <!-- Total Persembahan -->
+                        <div class="mb-3">
+                            <h4>Total Persembahan: <span id="totalPersembahan">Rp0</span></h4>
+                        </div>
                         <div class="mb-3">
                             <label for="nama" class="form-label">Nama/Keluarga</label>
                             <input type="text" class="form-control" id="nama" name="nama" required>
@@ -142,62 +189,103 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label>Huria</label>
-                                <input type="number" class="form-control no-spinner" name="huria" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control no-spinner pos-input" name="huria" min="0">
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Pembangunan</label>
-                                <input type="number" class="form-control no-spinner" name="pembangunan" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control no-spinner pos-input" name="pembangunan" min="0">                           
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Diakonia</label>
-                                <input type="number" class="form-control no-spinner" name="diakonia" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control no-spinner pos-input" name="diakonia" min="0">
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Pendeta</label>
-                                <input type="number" class="form-control no-spinner" name="pendeta" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control no-spinner pos-input" name="pendeta" min="0">              
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Sintua</label>
-                                <input type="number" class="form-control no-spinner" name="sintua" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control no-spinner pos-input" name="sintua" min="0">                        
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Parhalado</label>
-                                <input type="number" class="form-control no-spinner" name="parhalado" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control no-spinner pos-input" name="parhalado" min="0">                          
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Ama</label>
-                                <input type="number" class="form-control no-spinner" name="ama" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control no-spinner pos-input" name="ama" min="0">                        
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Ina</label>
-                                <input type="number" class="form-control no-spinner" name="ina" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control no-spinner pos-input" name="ina" min="0">                        
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>NHKBP</label>
-                                <input type="number" class="form-control no-spinner" name="nhkbp" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control no-spinner pos-input" name="nhkbp" min="0">                        
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Remaja</label>
-                                <input type="number" class="form-control no-spinner" name="remaja" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control no-spinner pos-input" name="remaja" min="0">                          
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Sekolah Minggu</label>
-                                <input type="number" class="form-control no-spinner" name="sekolah_minggu" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control no-spinner pos-input" name="sekolah_minggu" min="0">                        
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Pemusik</label>
-                                <input type="number" class="form-control no-spinner" name="pemusik" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control no-spinner pos-input" name="pemusik" min="0">                          
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Multimedia</label>
-                                <input type="number" class="form-control no-spinner" name="multimedia" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control no-spinner pos-input" name="multimedia" min="0">
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Song Leader</label>
-                                <input type="number" class="form-control no-spinner" name="song_leader" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control no-spinner pos-input" name="song_leader" min="0">     
+                                </div>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
                 <!-- Submit Button -->
@@ -213,6 +301,29 @@
     document.getElementById('uploadBukti').addEventListener('change', function() {
         const fileName = this.files[0] ? this.files[0].name : "Pindahkan atau Upload Bukti hamauliateon";
         document.getElementById('uploadLabel').innerHTML = `<p>${fileName}</p>`; 
+    });
+</script>
+<script>
+    // JavaScript to calculate the total amount
+    document.addEventListener('DOMContentLoaded', function() {
+        const posInputs = document.querySelectorAll('.pos-input');
+        const totalPersembahanElement = document.getElementById('totalPersembahan');
+
+        function calculateTotal() {
+            let total = 0;
+            posInputs.forEach(input => {
+                total += parseInt(input.value) || 0;
+            });
+            totalPersembahanElement.textContent = 'Rp' + total.toLocaleString('id-ID');
+        }
+
+        // Add event listeners to all pos inputs
+        posInputs.forEach(input => {
+            input.addEventListener('input', calculateTotal);
+        });
+
+        // Initial calculation
+        calculateTotal();
     });
 </script>
 </body>
