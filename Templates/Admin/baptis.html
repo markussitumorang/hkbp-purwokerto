@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="icon" type="image/svg" href="/Static/foto/logo hkbp.svg">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    h1, h3, p {
+    font-family: 'Poppins', sans-serif;
+    }
+        .sidebar {
+            background-color: #002855;
+            color: white;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        .sidebar h2 {
+            font-size: 16px;
+            text-align: left;
+            margin-bottom: 0px;
+        }
+
+        .header-logo {
+        display: flex;               /* Menggunakan Flexbox untuk menata elemen di dalamnya */
+        align-items: center;         /* Menyelaraskan elemen secara vertikal di tengah */
+        color: white;                /* Agar teks tetap berwarna putih sesuai tema */
+        gap: 20px;
+        }
+
+        .logo {
+            width: 55px;                 /* Atur lebar logo sesuai kebutuhan agar sesuai */
+            height: auto;                /* Menjaga proporsi logo */
+        }
+        .header-text {
+            line-height: 1.2;              /* Mengatur jarak antar baris teks */
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            margin: 10px 0;
+            transition: background 0.3s;
+        }
+        .sidebar a:hover {
+            background-color: #004080;
+        }
+        .sidebar ul li {
+            color: white;
+            text-decoration: none;
+            display: block;
+            transition: background 0.3s;   }
+        .sidebar ul li:hover {
+            background-color: #004080;
+        }
+        .stat-box {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-box h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .stat-box p {
+            font-size: 20px;
+            font-weight: bold;
+            color: #002855;
+        }
+        .chart-box {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .calendar {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .calendar h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .container-box {
+            background-color: #ffffff;
+            border: 1px dashed #c4c4c4;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #002855;
+        }
+        .table-container {
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary-custom {
+            background-color: #002855;
+            border: none;
+            color: white;
+        }
+        .btn-primary-custom:hover {
+            background-color: #004080;
+        }
+        .table th {
+            background-color: #002855;
+            color: white;
+            text-align: center;
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #e0e7ff;
+        }
+        .btn-action {
+            background-color: #ffffff;
+            border: 1px solid #002855;
+            color: #002855;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 14px;
+        }
+        .btn-action:hover {
+            background-color: #002855;
+            color: white;
+        }
+        .search-bar {
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            padding: 5px 15px;
+            width: 200px;
+        }
+        .icon {
+         margin-right: 20px;  /* Memberikan jarak 20px antara ikon dan teks */
+         vertical-align: middle;  /* Menjaga ikon sejajar dengan teks secara vertikal */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar">
+            <div class="header-logo">
+                <img src="/Static/assets/Logo-HKBP-White.svg" alt="Logo HKBP" class="logo">
+                <h2 class="header-text">Huria Kristen Batak Protestan <br> HKBP Purwokerto</h2>
+            </div> <br>
+            <a href="/dashboard">
+                <img src="/Static/assets/mage_dashboard.svg" alt="Dashboard Icon" class="icon">Dashboard
+            </a>
+            <a href="/dashboard/management_user">
+                <img src="/Static/assets/tabler-icon-user-edit.svg" alt="User Management" class="icon">Manajemen User
+            </a>
+
+            <!-- Peremajaan Data -->
+            <a href="#" data-bs-toggle="collapse" data-bs-target="#Peremajaan" aria-expanded="false" aria-controls="Peremajaan">
+                <img src="/Static/assets/tabler-icon-database.svg" alt="Database" class="icon">
+                Peremajaan Data
+            </a>
+            <div id="Peremajaan" class="collapse">
+                <ul>
+                    <li><a href="/dashboard/ubah_data_jemaat">Ubah Data Jemaat</a></li>
+                    <li><a href="/dashboard/jemaat_baptis">Jemaat Baptis</a></li>
+                    <li><a href="/dashboard/jemaat_sidi">Jemaat Sidi</a></li>
+                    <li><a href="/dashboard/anak_lahir">Anak Lahir</a></li>
+                    <li><a href="/dashboard/rpp">RPP</a></li>
+                    <li><a href="/dashboard/martumpol">Martumpol</a></li>
+                    <li><a href="/dashboard/pernikahan">Pernikahan</a></li>
+                    <li><a href="/dashboard/meninggal_dunia">Meninggal Dunia</a></li>
+                </ul>
+            </div>
+            <!-- Informasi Jemaat -->
+            <a href="#" data-bs-toggle="collapse" data-bs-target="#Injem" aria-expanded="false" aria-controls="Injem">
+                <img src="/Static/assets/tabler-icon-users.svg" alt="Informasi Jemaat" class="icon">
+                Informasi Jemaat
+            </a>
+            <div id="Injem" class="collapse">
+                <ul>
+                    <li><a href="/dashboard/cari_data_jemaat">Cari Data Jemaat</a></li>
+                    <li><a href="/dashboard/search-jemaat">Ulang Tahun</a></li>
+                </ul>
+            </div>
+        
+            <!-- Keuangan -->
+            <a href="#" data-bs-toggle="collapse" data-bs-target="#Keuangan" aria-expanded="false" aria-controls="Keuangan">
+                <img src="/Static/assets/tabler-icon-cash.svg" alt="Keuangan" class="icon">
+                Keuangan
+            </a>
+            <div id="Keuangan" class="collapse">
+                <ul>
+                    <li><a href="/dashboard/bulanann">Persembahan Bulanan</a></li>
+                    <li><a href="/dashboard/hamauliateon">Hamauliateon</a></li>
+                    <li><a href="/dashboard/warta_keuangan">Warta Keuangan</a></li>
+                </ul>
+            </div>
+        
+            <!-- Other links -->
+            <a href="/dashboard/kegiatan_kebaktian">
+                <img src="/Static/assets/lucide_church.svg" alt="Kegiatan Kebaktian" class="icon">Kegiatan Kebaktian
+            </a>
+            <a href="/dashboard/data_pelayan">
+                <img src="/Static/assets/tabler-icon-cross.svg" alt="Data Pelayan" class="icon">Data Pelayan
+            </a>
+            <a href="/dashboard/warta">
+                <img src="/Static/assets/tabler-icon-file-description.svg" alt="Warta" class="icon">Warta
+            </a>
+            <a href="/dashboard/berita">
+                <img src="/Static/assets/tabler-icon-news.svg" alt="Berita" class="icon">Berita
+            </a>
+            <a href="/signout">
+                <img src="/Static/assets/heroicons-outline_logout.svg" alt="Keluar" class="icon">Keluar
+            </a>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="container container-box">
+                <h2 class="header-title mb-4">Jemaat Baptis</h2>
+                <div class="table-container">
+                    <div class="d-flex justify-content-between mb-3">
+                        <button class="btn btn-primary btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addUserModal">Tambah Data</button>
+                        <input type="text" class="search-bar" id="searchInput" placeholder="Jeemaat Baptis...">
+                        <script>
+                            const searchInput = document.getElementById("searchInput");
+                            searchInput.addEventListener("keypress", function(event) {
+                                if (event.key === "Enter") {
+                                    event.preventDefault();
+                                    const query = searchInput.value;
+                                    if (query) {
+                                        window.location.href = `/dashboard/jemaat_baptis?query=${encodeURIComponent(query)}`;
+                                    }
+                                }
+                            });
+                        </script>
+                    </div>
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nama Jemaat</th>
+                                <th>Jenis kelamin</th>
+                                <th>Tanggal Baptis</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Sample rows to replicate the example -->
+                            {% if users %}
+                                {% for user in users %}
+                                <tr>
+                                    <td>{{ user[1] }}</td>
+                                    <td>{{ user[2] }}</td>
+                                    <td>{{ user[6] }}</td>
+                                    <td class="text-center">
+                                        <!-- <a href="/lihat?id={{ user[0] }}&page=baptis"><button class="btn btn-action">Lihat</button></a> -->
+                                        <a href="/deletebaptis?id={{ user[0] }}"><button class="btn btn-action">Hapus</button></a>
+                                        <button class="btn btn-action" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#editUserModal"
+                                                id = "{{ user[0] }}"
+                                                nama_lengkap = "{{ user[1] }}"
+                                                jenis_kelamin = "{{ user[2] }}"
+                                                wijk = "{{ user[3] }}"
+                                                tempat_lahir = "{{ user[4] }}"
+                                                tanggal_lahir = "{{ user[5] }}"
+                                                tanggal_baptis = "{{ user[6] }}"
+                                                onclick="modal(this)">
+                                        Edit Data
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="3" class="text-center">Tidak ada data user</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Add User Modal -->
+         <!-- Modal for adding new user -->
+        <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addUserModalLabel">Tambah Jemaat Baru</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" action="/addbaptis">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
+                                <select class="form-select" id="jenis_kelamin" name="jenis_kelamin" required>
+                                    <option value="" disabled>Pilih Jenis Kelamin</option>
+                                    <option value="Laki - Laki">Laki-Laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="Wijk" class="form-label">Wijk</label>
+                                <select class="form-select" id="wijk" name="wijk" required>
+                                    <option value="" disabled selected>Wijk</option>
+                                    {% for w in wijk %}
+                                    <option value="{{ w }}">{{ w }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="tempat_lahir" class="form-label">Tempat Tanggal Lahir</label>
+                                <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir" placeholder="Tempat Lahir" required>
+                                <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="tanggal_baptis" class="form-label">Tanggal Baptis</label>
+                                <input type="date" class="form-control" id="tanggal_baptis" name="tanggal_baptis" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary btn-primary-custom">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addUserModalLabel">Edit Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" action="/editbaptis">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="modal_id" class="form-label">ID</label>
+                                <input type="text" class="form-control" id="modal_id" name="modal_id" required readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="modal_nama_lengkap" class="form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control" id="modal_nama_lengkap" name="modal_nama_lengkap" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="modal_jenis_kelamin" class="form-label">Jenis Kelamin</label>
+                                <select class="form-select" id="modal_jenis_kelamin" name="modal_jenis_kelamin" required>
+                                    <option value="" disabled>Pilih Jenis Kelamin</option>
+                                    <option value="Laki - Laki">Laki-Laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="modal_Wijk" class="form-label">Wijk</label>
+                                <select class="form-select" id="modal_wijk" name="modal_wijk" required>
+                                    <option value="" disabled selected>Wijk</option>
+                                    {% for w in wijk %}
+                                    <option value="{{ w }}">{{ w }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="modal_tempat_lahir" class="form-label">Tempat Tanggal Lahir</label>
+                                <input type="text" class="form-control" id="modal_tempat_lahir" name="modal_tempat_lahir" placeholder="Tempat Lahir" required>
+                                <input type="date" class="form-control" id="modal_tanggal_lahir" name="modal_tanggal_lahir" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="modal_tanggal_baptis" class="form-label">Tanggal Baptis</label>
+                                <input type="date" class="form-control" id="modal_tanggal_baptis" name="modal_tanggal_baptis" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary btn-primary-custom">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS and Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function modal(button){
+        const id = button.getAttribute("id");
+        const nama_lengkap = button.getAttribute("nama_lengkap");
+        const jenis_kelamin = button.getAttribute("jenis_kelamin");
+        const wijk = button.getAttribute("wijk");
+        const tempat_lahir = button.getAttribute("tempat_lahir");
+        const tanggal_lahir = button.getAttribute("tanggal_lahir");
+        const tanggal_baptis = button.getAttribute("tanggal_baptis");
+        document.getElementById("modal_id").value = id
+        document.getElementById("modal_nama_lengkap").value = nama_lengkap
+        document.getElementById("modal_jenis_kelamin").value = jenis_kelamin
+        document.getElementById("modal_wijk").value = wijk
+        document.getElementById("modal_tempat_lahir").value = tempat_lahir
+        document.getElementById("modal_tanggal_lahir").value = tanggal_lahir
+        document.getElementById("modal_tanggal_baptis").value = tanggal_baptis
+    }
+</script>
+</body>
+</html>

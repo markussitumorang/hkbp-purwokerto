@@ -1,0 +1,481 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    height: 90px;
+    background-color: white;
+    color: #003366;
+  }
+  
+  /* header .logo h1 {
+    margin-left: 10px;
+    font-size: 18px;
+  } */
+  
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+  nav ul li {
+    margin: 0 15px;
+  }
+  
+  nav ul li a {
+    color: #003366;
+    text-decoration: none;
+    font-size: 20px;
+    transition: all 0.5s ease; /* Transisi yang lebih halus untuk semua properti */
+  }
+  nav ul li a:hover {
+    font-weight: 500; /* Berat font tebal ketika di-hover */
+  }
+  
+  /* Hero Section */
+.hero {
+    position: relative;
+    height: 1080px;
+    background: url('../foto/header_foto.jpg') no-repeat center center;
+    background-size: cover;
+  }
+  
+  /* Info boxes container */
+  .hero-info {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    align-items: flex-start;
+    transform: translateX(-50%);
+    display: inline-flex;
+    justify-content: center;
+    gap: 30px;
+  }
+  
+  .info-box {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px; /* Kurangi padding agar lebih proporsional */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-width: 150px;
+    display: flex; /* Flexbox untuk membuat ikon dan teks sejajar */
+    align-items: center; /* Sejajarkan secara vertikal */
+    gap: 10px; /* Memberikan jarak antara ikon dan teks */
+}
+
+.info-box h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #002060;
+    margin: 0; /* Hilangkan margin default */
+    display: flex; /* Flexbox agar ikon dan teks dalam h2 sejajar */
+    align-items: center; /* Sejajarkan ikon dan teks secara vertikal */
+    gap: 25px; /* Memberikan jarak antara ikon dan teks */
+}
+
+.icon {
+    width: 50px; /* Atur ukuran ikon */
+    height: 50px; /* Atur ukuran ikon */
+    vertical-align: middle;
+}
+
+  
+  /* Responsive layout for smaller screens */
+  @media (max-width: 768px) {
+    .hero-info {
+      flex-direction: column;
+    }
+  }
+  
+
+  /* Main Section */
+  /* main {
+    padding: 40px;
+  }
+  
+  .warta-section, .pelayan-section, .jadwal-section, .berita-section {
+    margin-bottom: 40px;
+  }
+  
+  .card-container, .pelayan-container, .jadwal-container, .berita-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  
+  .pelayan-card, .jadwal-box, .berita-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    margin: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    overflow: hidden;
+  } */
+
+  /* .card{
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    margin: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    overflow: hidden;
+  } */
+  /* .card img{
+    width: 100%;
+    border-radius: 8px;
+  } */
+  /* .pelayan-card img, .berita-card img {
+    width: 100%;
+    border-radius: 8px;
+  } */
+  
+  /* button, .load-more {
+    background-color: #003366;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+  } */
+  
+  /* .social-icons a {
+    margin: 0 5px;
+    color: #003366;
+    font-size: 18px;
+  } */
+  
+  /* Footer */
+  footer {
+    background-color: #003366;
+    color: white;
+  }
+  
+  /* .footer-menu ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-menu ul li {
+    margin: 10px 0;
+  }
+  
+  footer a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  footer a:hover {
+    text-decoration: underline;
+  } */
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-container img {
+    height: 60px; /* Adjust the height as per your requirement */
+    margin-right: 15px; /* Space between logo and text */
+  }
+
+  .logo-container h1 {
+    font-size: 20px; /* Adjust the font size */
+    color: #002060; /* Color from the image */
+    margin: 0; /* Remove default margins */
+  }
+
+  .carousel-inner .carousel-item {
+    transition: transform 0.6s ease; /* Transisi yang halus */
+  }
+  
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    background-size: 100%, 100%; /* Ukuran penuh untuk ikon panah */
+  }
+  
+  /* Card Styles */
+  .card {
+    border-radius: 15px; /* Membuat sudut card melengkung */
+    overflow: hidden; /* Menghindari gambar atau konten keluar dari card */
+    border: 2px solid #1E1E1E; /* Menambahkan sedikit garis tepi agar terlihat lebih elegan */
+    max-width: 328px; /* Mengatur lebar maksimum agar card tidak membesar lebih dari ini */
+    margin: auto; /* Mengatur card di tengah */
+  }
+  
+  .card-img-top {
+    height: 200px; /* Mengatur tinggi gambar card */
+    object-fit: cover; /* Memastikan gambar tidak terdistorsi */
+  }
+  
+  .card-body {
+    background-color: #fcfcfc; /* Memberikan latar belakang yang lembut */
+    padding: 20px; /* Padding untuk membuat konten lebih rapi */
+  }
+  
+  .card-title {
+    font-size: 1.25rem; /* Mengatur ukuran font untuk judul */
+    font-weight: bold; /* Membuat teks lebih tegas */
+    color: #002060; /* Warna biru untuk judul */
+    margin-bottom: 10px;
+  }
+  
+  .card-text {
+    font-size: 0.9rem; /* Mengatur ukuran font untuk deskripsi */
+    color: #5a5a5a; /* Warna abu-abu gelap */
+    margin-bottom: 20px; /* Jarak bawah dari deskripsi */
+  }
+  
+  .tombol {
+    background-color: #002060; /* Warna biru untuk tombol */
+    border: none; /* Menghilangkan border default */
+    border-radius: 50px; /* Membuat tombol menjadi oval */
+    padding: 10px 20px; /* Padding untuk tombol */
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  
+  .tombol:hover {
+    background-color: #0040a0; /* Mengubah warna saat tombol di-hover */
+  }
+  
+ /*.card {
+    text-align: center;
+  }
+/*  
+  .card img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  .card h3 {
+    font-size: 1.25rem;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  .card p {
+    font-size: 0.875rem;
+    margin-top: 10px;
+    color: #666;
+  } */
+  
+  /* Button Style */
+  .card button {
+    background-color: #002366;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .card button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Container Styling */
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .warta-section {
+    padding: 50px 0;
+  }
+
+  .title-blue {
+    color: #002060; /* Gantilah dengan kode warna biru yang diinginkan */
+  }
+  
+  .warta-section h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .section-subtitle {
+    font-size: 14px; /* Ukuran teks yang lebih kecil */
+    color: #7a7a7a; /* Warna teks abu-abu */
+    text-align: center; /* Ratakan teks ke tengah */
+    margin-bottom: 0; /* Menghilangkan margin bawah */
+  }
+  
+  .load-more {
+    display: block;
+    margin: 20px auto;
+    background-color: #002366;
+    color: white;
+    padding: 14px 40px;
+    border: none;
+    border-radius: 41px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .load-more:hover {
+    background-color: #0056b3;
+  }
+
+/* Card Pelayan */
+.profile-card {
+  border: 2px solid #e0e0e0; /* Garis tipis untuk card */
+  border-radius: 15px; /* Sudut card melengkung */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Memberikan efek bayangan */
+  overflow: hidden; /* Menghindari konten keluar dari batas */
+  text-align: center; /* Menengahkan semua teks dan elemen di dalam card */
+  padding: 20px;
+  background-color: #ffffff; /* Latar belakang putih */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animasi saat hover */
+}
+
+.profile-card:hover {
+  transform: translateY(-10px); /* Mengangkat card saat di-hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Menguatkan bayangan saat hover */
+}
+
+.profile-card-img-container {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto; /* Agar berada di tengah */
+  overflow: hidden; /* Menghindari gambar keluar dari container */
+  border-radius: 50%; /* Membuat container menjadi bulat */
+  border: 3px solid #e0e0e0; /* Garis pinggir di sekitar gambar */
+}
+
+.profile-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Memastikan gambar menutupi area bulat tanpa terdistorsi */
+}
+
+.profile-card-body {
+  margin-top: 20px; /* Jarak antara gambar dan konten card */
+}
+
+.profile-card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #002060; /* Warna biru untuk judul */
+  margin-bottom: 5px; /* Jarak bawah kecil untuk memisahkan dari deskripsi */
+}
+
+.profile-card-text {
+  font-size: 0.9rem;
+  color: #5a5a5a; /* Warna abu-abu untuk deskripsi */
+  margin-bottom: 15px;
+}
+
+.profile-social-icons {
+  display: flex;
+  justify-content: center; /* Mengatur ikon agar berada di tengah */
+  gap: 15px; /* Jarak antar ikon */
+  margin-top: 15px;
+}
+
+.profile-social-icons a {
+  color: #002060; /* Warna ikon biru */
+  font-size: 1.5rem; /* Ukuran ikon */
+  transition: color 0.3s ease;
+}
+
+.profile-social-icons a:hover {
+  color: #0040a0; /* Warna saat di-hover untuk efek interaktif */
+}
+
+.schedule-box {
+  background-color: #ffffff; /* Warna background putih untuk kotak */
+  display: inline-block;
+  border-radius: 15px; /* Membuat sudut-sudut kotak melengkung */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Memberikan efek bayangan */
+  padding: 30px 37px; /* Padding dalam kotak */
+  width: 350px;
+}
+.col-md-3 {
+  margin: 40px; /* Memberikan jarak 10px di setiap sisi elemen */
+}
+
+
+.schedule-box-body {
+  display: flex;
+  align-items: center; /* Mengatur konten secara vertikal di tengah */
+  gap: 30px; /* Menambahkan jarak antara ikon dan teks */
+}
+
+.icon-container {
+  width: 50px; /* Ukuran lebar ikon */
+  height: 50px; /* Ukuran tinggi ikon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.schedule-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain; /* Memastikan ikon sesuai dengan container tanpa terdistorsi */
+}
+
+.schedule-time,
+.schedule-description {
+  margin: 0; /* Menghilangkan margin default */
+}
+
+.schedule-time {
+  font-size: 24px;
+  text-align: left;
+  color: #002060; /* Warna biru untuk waktu */
+  font-weight: bold;
+}
+
+.schedule-description {
+  font-size: 16px;
+  text-align: left;
+  color: #002060; /* Warna biru untuk deskripsi */
+  white-space: nowrap; /* Pastikan teks tetap berada dalam satu baris */
+  margin-top: 5px; /* Memberikan jarak kecil antara waktu dan deskripsi */
+}
+
+.icon {
+    font-size: 2rem;
+}
+.jadwal{
+    background-color: #002366;
+    display: flex;
+    text-align: center;
+    color: white;
+    padding-bottom: 40px;
+}
+.footer {
+    background-color: #002366;
+    color: white;
+    padding: 20px 0;
+}
+.footer a {
+    color: white;
+    text-decoration: none;
+}
+.footer a:hover {
+    text-decoration: underline;
+}
+.footer .social-icons a {
+    font-size: 1.5rem;
+    margin-right: 10px;
+}
+.footer hr {
+    border-top: 1px solid white;
+}

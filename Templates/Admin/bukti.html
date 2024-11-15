@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Image</title>
+    <link rel="icon" type="image/svg" href="/Static/foto/logo hkbp.svg">
+</head>
+<body>
+    {% if pdf %}
+    <h1>PDF Viewer</h1>
+    <embed src="{{ url_for('static', filename=filename) }}" width="600" height="500" type="application/pdf">
+    {% else %}
+    <h1>Gambar dari Folder Static</h1>
+    <img src="{{ url_for('static', filename=filename) }}" style="width: 400px; height: auto;">
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    h1, h3, p {
+    font-family: 'Poppins', sans-serif;
+    }
+        .sidebar {
+            background-color: #002855;
+            color: white;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        .sidebar h2 {
+            font-size: 16px;
+            text-align: left;
+            margin-bottom: 0px;
+        }
+
+        .header-logo {
+        display: flex;               /* Menggunakan Flexbox untuk menata elemen di dalamnya */
+        align-items: center;         /* Menyelaraskan elemen secara vertikal di tengah */
+        color: white;                /* Agar teks tetap berwarna putih sesuai tema */
+        gap: 20px;
+        }
+
+        .logo {
+            width: 55px;                 /* Atur lebar logo sesuai kebutuhan agar sesuai */
+            height: auto;                /* Menjaga proporsi logo */
+        }
+        .header-text {
+            line-height: 1.2;              /* Mengatur jarak antar baris teks */
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            margin: 10px 0;
+            transition: background 0.3s;
+        }
+        .sidebar a:hover {
+            background-color: #004080;
+        }
+        .sidebar ul li {
+            color: white;
+            text-decoration: none;
+            display: block;
+            transition: background 0.3s;   }
+        .sidebar ul li:hover {
+            background-color: #004080;
+        }
+        .stat-box {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-box h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .stat-box p {
+            font-size: 20px;
+            font-weight: bold;
+            color: #002855;
+        }
+        .chart-box {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .calendar {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .calendar h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .container-box {
+            background-color: #ffffff;
+            border: 1px dashed #c4c4c4;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #002855;
+        }
+        .table-container {
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary-custom {
+            background-color: #002855;
+            border: none;
+            color: white;
+        }
+        .btn-primary-custom:hover {
+            background-color: #004080;
+        }
+        .table th {
+            background-color: #002855;
+            color: white;
+            text-align: center;
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #e0e7ff;
+        }
+        .btn-action {
+            background-color: #ffffff;
+            border: 1px solid #002855;
+            color: #002855;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 14px;
+        }
+        .btn-action:hover {
+            background-color: #002855;
+            color: white;
+        }
+        .search-bar {
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            padding: 5px 15px;
+            width: 200px;
+        }
+        .icon {
+         margin-right: 20px;  /* Memberikan jarak 20px antara ikon dan teks */
+         vertical-align: middle;  /* Menjaga ikon sejajar dengan teks secara vertikal */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar">
+            <div class="header-logo">
+                <img src="/Static/assets/Logo-HKBP-White.svg" alt="Logo HKBP" class="logo">
+                <h2 class="header-text">Huria Kristen Batak Protestan <br> HKBP Purwokerto</h2>
+            </div> <br>
+            <a href="/dashboard">
+                <img src="/Static/assets/mage_dashboard.svg" alt="Dashboard Icon" class="icon">Dashboard
+            </a>
+            <a href="/dashboard/management_user">
+                <img src="/Static/assets/tabler-icon-user-edit.svg" alt="User Management" class="icon">Manajemen User
+            </a>
+
+            <!-- Peremajaan Data -->
+            <a href="#" data-bs-toggle="collapse" data-bs-target="#Peremajaan" aria-expanded="false" aria-controls="Peremajaan">
+                <img src="/Static/assets/tabler-icon-database.svg" alt="Database" class="icon">
+                Peremajaan Data
+            </a>
+            <div id="Peremajaan" class="collapse">
+                <ul>
+                    <li><a href="/dashboard/ubah_data_jemaat">Ubah Data Jemaat</a></li>
+                    <li><a href="/dashboard/jemaat_baptis">Jemaat Baptis</a></li>
+                    <li><a href="/dashboard/jemaat_sidi">Jemaat Sidi</a></li>
+                    <li><a href="/dashboard/anak_lahir">Anak Lahir</a></li>
+                    <li><a href="/dashboard/rpp">RPP</a></li>
+                    <li><a href="/dashboard/martumpol">Martumpol</a></li>
+                    <li><a href="/dashboard/pernikahan">Pernikahan</a></li>
+                    <li><a href="/dashboard/meninggal_dunia">Meninggal Dunia</a></li>
+                </ul>
+            </div>
+            <!-- Informasi Jemaat -->
+            <a href="#" data-bs-toggle="collapse" data-bs-target="#Injem" aria-expanded="false" aria-controls="Injem">
+                <img src="/Static/assets/tabler-icon-users.svg" alt="Informasi Jemaat" class="icon">
+                Informasi Jemaat
+            </a>
+            <div id="Injem" class="collapse">
+                <ul>
+                    <li><a href="/dashboard/cari_data_jemaat">Cari Data Jemaat</a></li>
+                    <li><a href="/dashboard/search-jemaat">Ulang Tahun</a></li>
+                </ul>
+            </div>
+        
+            <!-- Keuangan -->
+            <a href="#" data-bs-toggle="collapse" data-bs-target="#Keuangan" aria-expanded="false" aria-controls="Keuangan">
+                <img src="/Static/assets/tabler-icon-cash.svg" alt="Keuangan" class="icon">
+                Keuangan
+            </a>
+            <div id="Keuangan" class="collapse">
+                <ul>
+                    <li><a href="/dashboard/bulanann">Persembahan Bulanan</a></li>
+                    <li><a href="/dashboard/hamauliateon">Hamauliateon</a></li>
+                    <li><a href="/dashboard/warta_keuangan">Warta Keuangan</a></li>
+                </ul>
+            </div>
+        
+            <!-- Other links -->
+            <a href="/dashboard/kegiatan_kebaktian">
+                <img src="/Static/assets/lucide_church.svg" alt="Kegiatan Kebaktian" class="icon">Kegiatan Kebaktian
+            </a>
+            <a href="/dashboard/data_pelayan">
+                <img src="/Static/assets/tabler-icon-cross.svg" alt="Data Pelayan" class="icon">Data Pelayan
+            </a>
+            <a href="/dashboard/warta">
+                <img src="/Static/assets/tabler-icon-file-description.svg" alt="Warta" class="icon">Warta
+            </a>
+            <a href="/dashboard/berita">
+                <img src="/Static/assets/tabler-icon-news.svg" alt="Berita" class="icon">Berita
+            </a>
+            <a href="/signout">
+                <img src="/Static/assets/heroicons-outline_logout.svg" alt="Keluar" class="icon">Keluar
+            </a>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="container container-box">
+                <h2 class="header-title mb-4">Kegiatan Kebaktian</h2>
+                <div class="table-container">
+                    <div class="d-flex justify-content-between mb-3">
+                        <button class="btn btn-primary btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addUserModal">Tambah Data</button>
+                        <input type="text" class="search-bar" id="searchInput" placeholder="Cari Kebaktian...">
+                        <script>
+                            const searchInput = document.getElementById("searchInput");
+                            searchInput.addEventListener("keypress", function(event) {
+                                if (event.key === "Enter") {
+                                    event.preventDefault();
+                                    const query = searchInput.value;
+                                    if (query) {
+                                        window.location.href = `/dashboard/kegiatan_kebaktian?query=${encodeURIComponent(query)}`;
+                                    }
+                                }
+                            });
+                        </script>
+                    </div>
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nama Kebaktian</th>
+                                <th>Jenis Kebaktian</th>
+                                <th>Tanggal</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Sample rows to replicate the example -->
+                            {% if users %}
+                                {% for user in users %}
+                                <tr>
+                                    <td>{{ user[1] }}</td>
+                                    <td>{{ user[7] }}</td>
+                                    <td>{{ user[2] }}</td>
+                                    <td class="text-center">
+                                        <!-- <a href="/lihat?id={{ user[0] }}&page=kebaktian"><button class="btn btn-action">Lihat</button></a> -->
+                                        <a href="/deletekebaktian?id={{ user[0] }}"><button class="btn btn-action">Hapus</button></a>
+                                        <button class="btn btn-action" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#editUserModal"
+                                                id = "{{ user[0] }}"
+                                                nama_kebaktian = "{{ user [1] }}"
+                                                tanggal = "{{ user [2] }}"
+                                                pengkhotbah = "{{ user [3] }}"
+                                                liturgis = "{{ user [4] }}"
+                                                jumlah_perhalado = "{{ user [5] }}"
+                                                keterangan = "{{ user [6] }}"
+                                                jenis_ibadah = "{{ user [7] }}"
+                                                jumlah_laki = "{{ user [8] }}"
+                                                jumlah_perempuan = "{{ user [9] }}"
+                                                total_jemaat = "{{ user [10] }}"
+                                                bapak = "{{ user [11] }}"
+                                                ibu = "{{ user [12] }}"
+                                                naposo = "{{ user [13] }}"
+                                                remaja = "{{ user [14] }}"
+                                                sekolah_minggu = "{{ user [15] }}"
+                                                onclick="modal(this)">
+                                        Edit Data
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="3" class="text-center">Tidak ada data user</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Add User Modal -->
+         <!-- Modal for adding new user -->
+         <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addUserModalLabel">Tambah User Baru</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" action="/addkebaktian">
+                        <div class="modal-body">
+                            <div class="row">
+                                <!-- Left Column -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="nama_kebaktian" class="form-label">Nama Kebaktian</label>
+                                        <input type="text" class="form-control" id="nama_kebaktian" name="nama_kebaktian" placeholder="Nama Kebaktian" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="tanggal" class="form-label">Tanggal</label>
+                                        <input type="date" class="form-control" id="tanggal" name="tanggal" placeholder="Masukkan Tanggal" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="pengkhotbah" class="form-label">Pengkhotbah</label>
+                                        <input type="text" class="form-control" id="pengkhotbah" name="pengkhotbah" placeholder="Pengkhotbah">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="liturgis" class="form-label">Liturgis</label>
+                                        <input type="text" class="form-control" id="liturgis" name="liturgis" placeholder="Liturgis">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="jumlah_parhalado" class="form-label">Jumlah Parhalado yang Hadir</label>
+                                        <input type="number" class="form-control" id="jumlah_parhalado" name="jumlah_parhalado" placeholder="Jumlah Parhalado yang Hadir">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="keterangan" class="form-label">Keterangan</label>
+                                        <textarea class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan"></textarea>
+                                    </div>
+                                </div>
+        
+                                <!-- Right Column -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="jenis_ibadah" class="form-label">Jenis Ibadah Kebaktian</label>
+                                        <select class="form-select" id="jenis_ibadah" name="jenis_ibadah" required>
+                                            <option selected disabled>Pilih Jenis Ibadah Kebaktian</option>
+                                            <option value="Ibadah Minggu">Ibadah Minggu</option>
+                                            <option value="Kebaktian Wijk">Kebaktian Wijk</option>
+                                            <option value="Kebaktian Kategorial">Kebaktian Kategorial</option>
+                                            <option value="Kebaktian Sekolah Minggu">Kebaktian Sekolah Minggu</option>
+                                            <option value="Kebaktian Paskah">Kebaktian Paskah</option>
+                                            <option value="Kebaktian Natal">Kebaktian Natal</option>
+                                            <option value="Kebaktian Tahun Baru">Kebaktian Tahun Baru</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Jumlah Jemaat Hadir</label>
+                                        <div class="row">
+                                            <div class="col">
+                                                <input type="number" class="form-control" name="jumlah_laki" placeholder="Laki-laki">
+                                            </div>
+                                            <div class="col">
+                                                <input type="number" class="form-control" name="jumlah_perempuan" placeholder="Perempuan">
+                                            </div>
+                                        </div>
+                                        <input type="number" class="form-control mt-2" name="total_jemaat" placeholder="Total Jemaat Hadir">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Rincian Jemaat Hadir</label>
+                                        <div class="row">
+                                            <div class="col">
+                                                <input type="number" class="form-control" name="bapak" placeholder="Bapak">
+                                            </div>
+                                            <div class="col">
+                                                <input type="number" class="form-control" name="ibu" placeholder="Ibu">
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col">
+                                                <input type="number" class="form-control" name="naposo" placeholder="Naposo">
+                                            </div>
+                                            <div class="col">
+                                                <input type="number" class="form-control" name="remaja" placeholder="Remaja">
+                                            </div>
+                                        </div>
+                                        <div class="mt-2">
+                                            <input type="number" class="form-control" name="sekolah_minggu" placeholder="Sekolah Minggu">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary btn-primary-custom">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addUserModalLabel">Tambah User Baru</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" action="/editkebaktian">
+                        <div class="modal-body">
+                            <div class="row">
+                                <!-- Left Column -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="modal_nama_kebaktian" class="form-label">Nama Kebaktian</label>
+                                        <input type="text" class="form-control" id="modal_nama_kebaktian" name="modal_nama_kebaktian" placeholder="Nama Kebaktian" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="modal_tanggal" class="form-label">Tanggal</label>
+                                        <input type="date" class="form-control" id="modal_tanggal" name="modal_tanggal" placeholder="Masukkan Tanggal" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="modal_pengkhotbah" class="form-label">Pengkhotbah</label>
+                                        <input type="text" class="form-control" id="modal_pengkhotbah" name="modal_pengkhotbah" placeholder="Pengkhotbah">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="modal_liturgis" class="form-label">Liturgis</label>
+                                        <input type="text" class="form-control" id="modal_liturgis" name="modal_liturgis" placeholder="Liturgis">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="modal_jumlah_parhalado" class="form-label">Jumlah Parhalado yang Hadir</label>
+                                        <input type="number" class="form-control" id="modal_jumlah_parhalado" name="modal_jumlah_parhalado" placeholder="Jumlah Parhalado yang Hadir">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="modal_keterangan" class="form-label">Keterangan</label>
+                                        <textarea class="form-control" id="modal_keterangan" name="modal_keterangan" placeholder="Keterangan"></textarea>
+                                    </div>
+                                </div>
+        
+                                <!-- Right Column -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="modal_jenis_ibadah" class="form-label">Jenis Ibadah Kebaktian</label>
+                                        <select class="form-select" id="modal_jenis_ibadah" name="modal_jenis_ibadah" required>
+                                            <option selected disabled>Pilih Jenis Ibadah Kebaktian</option>
+                                            <option value="Ibadah Minggu">Ibadah Minggu</option>
+                                            <option value="Kebaktian Wijk">Kebaktian Wijk</option>
+                                            <option value="Kebaktian Kategorial">Kebaktian Kategorial</option>
+                                            <option value="Kebaktian Sekolah Minggu">Kebaktian Sekolah Minggu</option>
+                                            <option value="Kebaktian Paskah">Kebaktian Paskah</option>
+                                            <option value="Kebaktian Natal">Kebaktian Natal</option>
+                                            <option value="Kebaktian Tahun Baru">Kebaktian Tahun Baru</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Jumlah Jemaat Hadir</label>
+                                        <div class="row">
+                                            <div class="col">
+                                                <input type="number" class="form-control" id="modal_jumlah_laki" name="modal_jumlah_laki" placeholder="Laki-laki">
+                                            </div>
+                                            <div class="col">
+                                                <input type="number" class="form-control" id="modal_jumlah_perempuan" name="modal_jumlah_perempuan" placeholder="Perempuan">
+                                            </div>
+                                        </div>
+                                        <input type="number" class="form-control mt-2" id="modal_total_jemaat" name="modal_total_jemaat" placeholder="Total Jemaat Hadir">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Rincian Jemaat Hadir</label>
+                                        <div class="row">
+                                            <div class="col">
+                                                <input type="number" class="form-control" id="modal_bapak" name="modal_bapak" placeholder="Bapak">
+                                            </div>
+                                            <div class="col">
+                                                <input type="number" class="form-control" id="modal_ibu" name="modal_ibu" placeholder="Ibu">
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col">
+                                                <input type="number" class="form-control" id="modal_naposo" name="modal_naposo" placeholder="Naposo">
+                                            </div>
+                                            <div class="col">
+                                                <input type="number" class="form-control" id="modal_remaja" name="modal_remaja" placeholder="Remaja">
+                                            </div>
+                                        </div>
+                                        <div class="mt-2">
+                                            <input type="number" class="form-control" id="modal_sekolah_minggu" name="modal_sekolah_minggu" placeholder="Sekolah Minggu">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary btn-primary-custom">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS and Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function modal(button){
+        const id = button.getAttribute("id");
+        const nama_kebaktian = getAttribute("nama_kebaktian")
+        const tanggal = getAttribute("tanggal")
+        const pengkhotbah = getAttribute("pengkhotbah")
+        const liturgis = getAttribute("liturgis")
+        const jumlah_perhalado = getAttribute("jumlah_perhalado")
+        const keterangan = getAttribute("keterangan")
+        const jenis_ibadah = getAttribute("jenis_ibadah")
+        const jumlah_laki = getAttribute("jumlah_laki")
+        const jumlah_perempuan = getAttribute("jumlah_perempuan")
+        const total_jemaat = getAttribute("total_jemaat")
+        const bapak = getAttribute("bapak")
+        const ibu = getAttribute("ibu")
+        const naposo = getAttribute("naposo")
+        const remaja = getAttribute("remaja")
+        const sekolah_minggu = getAttribute("sekolah_minggu")
+        document.getElementById("modal_id").value = id
+        document.getElementById("modal_nama_kebaktian").value = nama_kebaktian
+        document.getElementById("modal_tanggal").value = tanggal
+        document.getElementById("modal_pengkhotbah").value = pengkhotbah
+        document.getElementById("modal_liturgis").value = liturgis
+        document.getElementById("modal_jumlah_perhalado").value = jumlah_perhalado
+        document.getElementById("modal_keterangan").value = keterangan
+        document.getElementById("modal_jenis_ibadah").value = jenis_ibadah
+        document.getElementById("modal_jumlah_laki").value = jumlah_laki
+        document.getElementById("modal_jumlah_perempuan").value = jumlah_perempuan
+        document.getElementById("modal_total_jemaat").value = total_jemaat
+        document.getElementById("modal_bapak").value = bapak
+        document.getElementById("modal_ibu").value = ibu
+        document.getElementById("modal_naposo").value = naposo
+        document.getElementById("modal_remaja").value = remaja
+        document.getElementById("modal_sekolah_minggu").value = sekolah_minggu
+    }
+</script>
+</body>
+</html>

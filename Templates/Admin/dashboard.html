@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    h1, h3, p {
+    font-family: 'Poppins', sans-serif;
+    }
+        .sidebar {
+            background-color: #002855;
+            color: white;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        .sidebar h2 {
+            font-size: 16px;
+            text-align: left;
+            margin-bottom: 0px;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            margin: 10px 0;
+            transition: background 0.3s;
+        }
+        .sidebar a:hover {
+            background-color: #004080;
+        }
+        .sidebar ul li {
+            color: white;
+            text-decoration: none;
+            display: block;
+            transition: background 0.3s;   }
+        .sidebar ul li:hover {
+            background-color: #004080;
+        }
+        .stat-box {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px 14px;
+            text-align: left;
+            width: 240px;
+            height: 100px;
+        }
+        .stat-box h3 {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .stat-box p {
+            font-size: 24px;
+            font-weight: bold;
+            color: #002855;
+        }
+        .chart-box {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .chart-box-pie {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .calendar {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .calendar h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .row box {
+            gap: 3px;
+        }
+        .icon {
+         margin-right: 20px;  /* Memberikan jarak 20px antara ikon dan teks */
+         vertical-align: middle;  /* Menjaga ikon sejajar dengan teks secara vertikal */
+        }
+
+        .header-logo {
+        display: flex;               /* Menggunakan Flexbox untuk menata elemen di dalamnya */
+        align-items: center;         /* Menyelaraskan elemen secara vertikal di tengah */
+        color: white;                /* Agar teks tetap berwarna putih sesuai tema */
+        gap: 20px;
+        }
+
+        .logo {
+            width: 55px;                 /* Atur lebar logo sesuai kebutuhan agar sesuai */
+            height: auto;                /* Menjaga proporsi logo */
+        }
+        .header-text {
+            line-height: 1.2;              /* Mengatur jarak antar baris teks */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar">
+            <div class="header-logo">
+                <img src="/Static/assets/Logo-HKBP-White.svg" alt="Logo HKBP" class="logo">
+                <h2 class="header-text">Huria Kristen Batak Protestan <br> HKBP Purwokerto</h2>
+            </div> <br>
+            <a href="/dashboard">
+                <img src="/Static/assets/mage_dashboard.svg" alt="Dashboard Icon" class="icon">Dashboard
+            </a>
+            <a href="/dashboard/management_user">
+                <img src="/Static/assets/tabler-icon-user-edit.svg" alt="User Management" class="icon">Manajemen User
+            </a>
+
+            <!-- Peremajaan Data -->
+            <a href="#" data-bs-toggle="collapse" data-bs-target="#Peremajaan" aria-expanded="false" aria-controls="Peremajaan">
+                <img src="/Static/assets/tabler-icon-database.svg" alt="Database" class="icon">
+                Peremajaan Data
+            </a>
+            <div id="Peremajaan" class="collapse">
+                <ul>
+                    <li><a href="/dashboard/ubah_data_jemaat">Ubah Data Jemaat</a></li>
+                    <li><a href="/dashboard/jemaat_baptis">Jemaat Baptis</a></li>
+                    <li><a href="/dashboard/jemaat_sidi">Jemaat Sidi</a></li>
+                    <li><a href="/dashboard/anak_lahir">Anak Lahir</a></li>
+                    <li><a href="/dashboard/rpp">RPP</a></li>
+                    <li><a href="/dashboard/martumpol">Martumpol</a></li>
+                    <li><a href="/dashboard/pernikahan">Pernikahan</a></li>
+                    <li><a href="/dashboard/meninggal_dunia">Meninggal Dunia</a></li>
+                </ul>
+            </div>
+            <!-- Informasi Jemaat -->
+            <a href="#" data-bs-toggle="collapse" data-bs-target="#Injem" aria-expanded="false" aria-controls="Injem">
+                <img src="/Static/assets/tabler-icon-users.svg" alt="Informasi Jemaat" class="icon">
+                Informasi Jemaat
+            </a>
+            <div id="Injem" class="collapse">
+                <ul>
+                    <li><a href="/dashboard/cari_data_jemaat">Cari Data Jemaat</a></li>
+                    <li><a href="/dashboard/search-jemaat">Ulang Tahun</a></li>
+                </ul>
+            </div>
+        
+            <!-- Keuangan -->
+            <a href="#" data-bs-toggle="collapse" data-bs-target="#Keuangan" aria-expanded="false" aria-controls="Keuangan">
+                <img src="/Static/assets/tabler-icon-cash.svg" alt="Keuangan" class="icon">
+                Keuangan
+            </a>
+            <div id="Keuangan" class="collapse">
+                <ul>
+                    <li><a href="/dashboard/bulanann">Persembahan Bulanan</a></li>
+                    <li><a href="/dashboard/hamauliateon">Hamauliateon</a></li>
+                    <li><a href="/dashboard/warta_keuangan">Warta Keuangan</a></li>
+                </ul>
+            </div>
+        
+            <!-- Other links -->
+            <a href="/dashboard/kegiatan_kebaktian">
+                <img src="/Static/assets/lucide_church.svg" alt="Kegiatan Kebaktian" class="icon">Kegiatan Kebaktian
+            </a>
+            <a href="/dashboard/data_pelayan">
+                <img src="/Static/assets/tabler-icon-cross.svg" alt="Data Pelayan" class="icon">Data Pelayan
+            </a>
+            <a href="/dashboard/warta">
+                <img src="/Static/assets/tabler-icon-file-description.svg" alt="Warta" class="icon">Warta
+            </a>
+            <a href="/dashboard/berita">
+                <img src="/Static/assets/tabler-icon-news.svg" alt="Berita" class="icon">Berita
+            </a>
+            <a href="/signout">
+                <img src="/Static/assets/heroicons-outline_logout.svg" alt="Keluar" class="icon">Keluar
+            </a>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <h1 class="mb-3">Halo, Admin!</h1>
+            <p>Rabu, 10 Oktober 2024</p>
+
+            <!-- Stats Container -->
+            <div class="row mb-4 box">
+                <div class="col-md-4">
+                    <div class="stat-box">
+                        <h3>Jumlah User</h3>
+                        <p>{{ users }}</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-box">
+                        <h3>Anggota Jemaat</h3>
+                        <p>{{ keluarga }}</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-box">
+                        <h3>Warta Terbit</h3>
+                        <p>{{ data }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="stat-box">
+                        <h3>Total Persembahan Bulanan</h3>
+                        <p>{{ total }}</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-box">
+                        <h3>Total Hamauliateon</h3>
+                        <p>{{ hamauliateon }}</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-box">
+                        <h3>Total Kas Huria</h3>
+                        <p>{{ total_kas }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart and Calendar Row -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="calendar">
+                        <h3>Oktober 2024</h3>
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="chart-box">
+                        <h3>Statistik Jumlah Kas Huria</h3>
+                        <canvas id="kasHuriaChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Stats and Pie Chart -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="chart-box">
+                        <h3>Statistik Jumlah Persembahan Bulanan</h3>
+                        <canvas id="persembahanChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-box-pie">
+                        <h3>Statistik Anggota Jemaat</h3>
+                        <canvas id="anggotaChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS and Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Dummy data for charts
+    const ctx1 = document.getElementById('kasHuriaChart').getContext('2d');
+    new Chart(ctx1, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [{
+                label: 'Kas Huria',
+                data: [{{ kas["Jan"] }}, {{ kas["Feb"] }}, {{ kas["Mar"] }}, {{ kas["Apr"] }}, {{ kas["May"] }}, {{ kas["Jun"] }}, {{ kas["Jul"] }}, {{ kas["Aug"] }}, {{ kas["Sep"] }}, {{ kas["Oct"] }}, {{ kas["Nov"] }}, {{ kas["Dec"] }}],
+                borderColor: '#0066cc',
+                fill: false
+            }]
+        }
+    });
+
+    const ctx2 = document.getElementById('persembahanChart').getContext('2d');
+    new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [{
+                label: 'Persembahan Bulanan',
+                data: [{{ jan }}, {{ feb }}, {{ mar }}, {{ apr }}, {{ may}}, {{ jun }}, {{ jul }}, {{ aug }}, {{ sep }}, {{ oct }}, {{ nov }}, {{dec}}],
+                borderColor: '#000066',
+                fill: false
+            }]
+        }
+    });
+
+    const ctx3 = document.getElementById('anggotaChart').getContext('2d');
+    new Chart(ctx3, {
+        type: 'pie',
+        data: {
+            labels: ['Laki-laki', 'Perempuan'],
+            datasets: [{
+                data: [{{ laki }}, {{ perempuan }}],
+                backgroundColor: ['#00ccff', '#002855']
+            }]
+        }
+    });
+
+    // Calendar Initialization
+    function generateCalendar(month, year) {
+        const calendar = document.getElementById("calendar");
+        const firstDay = new Date(year, month).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Clear previous cells
+        calendar.innerHTML = "";
+
+        // Create header
+        const header = document.createElement("div");
+        header.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-3");
+        header.innerHTML = `
+            <button id="prevMonth" class="btn btn-outline-primary">&lt;</button>
+            <span>${new Date(year, month).toLocaleString('default', { month: 'long' })} ${year}</span>
+            <button id="nextMonth" class="btn btn-outline-primary">&gt;</button>
+        `;
+        calendar.appendChild(header);
+
+        // Add event listeners for navigation buttons
+        document.getElementById("prevMonth").addEventListener("click", function() {
+            if (month === 0) {
+                month = 11;
+                year--;
+            } else {
+                month--;
+            }
+            generateCalendar(month, year);
+        });
+
+        document.getElementById("nextMonth").addEventListener("click", function() {
+            if (month === 11) {
+                month = 0;
+                year++;
+            } else {
+                month++;
+            }
+            generateCalendar(month, year);
+        });
+
+        // Create days row
+        const daysRow = document.createElement("div");
+        daysRow.classList.add("d-flex");
+        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach(day => {
+            const dayEl = document.createElement("div");
+            dayEl.classList.add("p-2", "border");
+            dayEl.style.flex = "1";
+            dayEl.innerText = day;
+            daysRow.appendChild(dayEl);
+        });
+        calendar.appendChild(daysRow);
+
+        // Generate calendar cells
+        let date = 1;
+        for (let i = 0; i < 6; i++) {
+            const weekRow = document.createElement("div");
+            weekRow.classList.add("d-flex");
+
+            for (let j = 0; j < 7; j++) {
+                const dayCell = document.createElement("div");
+                dayCell.classList.add("p-2", "border");
+                dayCell.style.flex = "1";
+
+                if (i === 0 && j < firstDay) {
+                    dayCell.innerText = "";
+                } else if (date > daysInMonth) {
+                    dayCell.innerText = "";
+                } else {
+                    dayCell.innerText = date;
+                    date++;
+                }
+
+                weekRow.appendChild(dayCell);
+            }
+            calendar.appendChild(weekRow);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const today = new Date();
+        generateCalendar(today.getMonth(), today.getFullYear());
+    });
+</script>
+</body>
+</html>
