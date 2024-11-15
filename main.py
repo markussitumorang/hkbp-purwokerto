@@ -6,7 +6,10 @@ from datetime import datetime
 import locale
 
 locale.setlocale(locale.LC_ALL, 'id_ID.UTF-8')
-
+try:
+    db = sqlite3.connect("data/database.db", check_same_thread=False)
+except sqlite3.Error as e:
+    print(f"Error connecting to SQLite: {e}")
 db = sqlite3.connect("data/database.db", check_same_thread=False)
 cursor = db.cursor()
 #create database with id automate generate
