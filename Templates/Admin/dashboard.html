@@ -8,13 +8,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-    }
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
 
-    h1, h3, p {
-    font-family: 'Poppins', sans-serif;
-    }
+        h1, h3, p {
+            font-family: 'Poppins', sans-serif;
+        }
         .sidebar {
             background-color: #002855;
             color: white;
@@ -45,7 +45,6 @@
         .sidebar ul li:hover {
             background-color: #004080;
         }
-
         .stat-box {
             background-color: #ffffff;
             border: 1px solid #dee2e6;
@@ -53,75 +52,138 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             padding: 20px 14px;
             text-align: left;
-            width: 240px;
-            height: 100px;
+            width: 100%;
+            height: 100%;
         }
+
         .stat-box h3 {
             font-size: 14px;
             color: #333;
             margin-bottom: 10px;
         }
+
         .stat-box p {
             font-size: 24px;
             font-weight: bold;
             color: #002855;
         }
+
         .chart-box {
             background-color: #ffffff;
             border: 1px solid #dee2e6;
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+           
         }
+
         .chart-box h3 {
-            font-size: 18px;
+            font-size: 14px;
         }
+
         .chart-box-pie {
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-        .calendar {
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .calendar h3 {
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .row box {
-            gap: 3px;
-        }
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 100%; /* Agar chart memenuhi tinggi box */
+}
+.calendar {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+
+.calendar h3 {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+#calendar {
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar .days-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.calendar .day-cell {
+    flex: 1 1 14.285%; /* Membagi lebar secara rata (7 hari dalam seminggu) */
+    text-align: center;
+    padding: 15px;
+    margin: 2px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.calendar .day-cell.empty {
+    background-color: #f9f9f9;
+}
+
+.calendar .day-cell:hover {
+    background-color: #f1f1f1;
+}
+
+.calendar .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.calendar .calendar-header button {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.calendar .calendar-header button:hover {
+    background-color: #f0f0f0;
+}
+
+
+.chart-box-pie h3 {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+
         .icon {
-         margin-right: 20px;  /* Memberikan jarak 20px antara ikon dan teks */
-         vertical-align: middle;  /* Menjaga ikon sejajar dengan teks secara vertikal */
+            margin-right: 20px;
+            vertical-align: middle;
         }
 
         .header-logo {
-        display: flex;               /* Menggunakan Flexbox untuk menata elemen di dalamnya */
-        align-items: center;         /* Menyelaraskan elemen secara vertikal di tengah */
-        color: white;                /* Agar teks tetap berwarna putih sesuai tema */
-        gap: 20px;
+            display: flex;
+            align-items: center;
+            color: white;
+            gap: 20px;
         }
 
         .logo {
-            width: 55px;                 /* Atur lebar logo sesuai kebutuhan agar sesuai */
-            height: auto;                /* Menjaga proporsi logo */
+            width: 55px;
+            height: auto;
         }
+
         .header-text {
-            line-height: 1.2;              /* Mengatur jarak antar baris teks */
+            line-height: 1.2;
+        }
+        .row.mb-4 {
+            display: flex;
+            align-items: stretch; /* Ensure columns have equal height */
         }
     </style>
 </head>
 <body>
-
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
@@ -196,73 +258,52 @@
                 <img src="/Static/assets/heroicons-outline_logout.svg" alt="Keluar" class="icon">Keluar
             </a>
         </div>
-        
+
         <!-- Main Content -->
         <div class="col-md-10 p-4">
-            <h1 class="mb-3">Halo, Admin!</h1>
-            <p>Rabu, 10 Oktober 2024</p>
+            <h1 class="mb-3" style="color: #002855;">Halo, Admin!</h1>
+            <p id="date"></p>
 
             <!-- Stats Container -->
-            <div class="row mb-4 box">
-                <div class="col-md-3">
+            <div class="row mb-4">
+                <div class="col-md-4">
                     <div class="stat-box">
                         <h3>Jumlah User</h3>
                         <p>{{ users }}</p>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="stat-box">
                         <h3>Anggota Jemaat</h3>
                         <p>{{ keluarga }}</p>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="stat-box">
                         <h3>Warta Terbit</h3>
                         <p>{{ data }}</p>
                     </div>
                 </div>
-            </div>
-
-            <div class="row mb-4">
-                <div class="col-md-3">
+                <div class="col-md-4 mt-3">
                     <div class="stat-box">
                         <h3>Total Persembahan Bulanan</h3>
                         <p>{{ total }}</p>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4 mt-3">
                     <div class="stat-box">
                         <h3>Total Hamauliateon</h3>
                         <p>{{ hamauliateon }}</p>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4 mt-3">
                     <div class="stat-box">
                         <h3>Total Kas Huria</h3>
                         <p>{{ total_kas }}</p>
                     </div>
                 </div>
             </div>
-
-            <!-- Chart and Calendar Row -->
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <div class="calendar">
-                        <h3>Oktober 2024</h3>
-                        <div id="calendar"></div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="chart-box-pie">
-                        <h3>Statistik Anggota Jemaat</h3>
-                        <canvas id="anggotaChart"></canvas>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Additional Stats and Pie Chart -->
+            <!-- Additional Stats and Charts -->
             <div class="row mb-4">
                 <div class="col-md-6">
                     <div class="chart-box">
@@ -277,6 +318,21 @@
                     </div>
                 </div>
             </div>
+            <!-- Chart and Calendar Row -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="calendar">
+                        <h3>Kalender</h3>
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-box-pie">
+                        <h3>Statistik Anggota Jemaat</h3>
+                        <canvas id="anggotaChart"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -285,6 +341,24 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+        // Array untuk nama-nama hari
+        const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+    
+    // Array untuk nama-nama bulan
+    const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", 
+                    "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+    
+    // Membuat objek Date untuk mendapatkan tanggal dan waktu saat ini
+    const today = new Date();
+    
+    // Mengambil informasi hari, tanggal, bulan, dan tahun
+    const dayOfWeek = days[today.getDay()]; // Menentukan hari (dalam format bahasa Indonesia)
+    const day = today.getDate();            // Menentukan tanggal (1-31)
+    const month = months[today.getMonth()]; // Menentukan bulan (dalam format bahasa Indonesia)
+    const year = today.getFullYear();      // Menentukan tahun (misalnya 2024)
+    
+    // Menampilkan informasi tanggal dan hari di elemen dengan ID "date"
+    document.getElementById('date').innerHTML = `${dayOfWeek}, ${day} ${month} ${year}`;
     // Dummy data for charts
     const ctx1 = document.getElementById('kasHuriaChart').getContext('2d');
     new Chart(ctx1, {
@@ -326,88 +400,89 @@
         }
     });
 
-    // Calendar Initialization
-    function generateCalendar(month, year) {
-        const calendar = document.getElementById("calendar");
-        const firstDay = new Date(year, month).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
+// Calendar Initialization
+function generateCalendar(month, year) {
+    const calendar = document.getElementById("calendar");
+    const firstDay = new Date(year, month).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-        // Clear previous cells
-        calendar.innerHTML = "";
+    // Clear previous cells
+    calendar.innerHTML = "";
 
-        // Create header
-        const header = document.createElement("div");
-        header.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-3");
-        header.innerHTML = `
-            <button id="prevMonth" class="btn btn-outline-primary">&lt;</button>
-            <span>${new Date(year, month).toLocaleString('default', { month: 'long' })} ${year}</span>
-            <button id="nextMonth" class="btn btn-outline-primary">&gt;</button>
-        `;
-        calendar.appendChild(header);
+    // Create header
+    const header = document.createElement("div");
+    header.classList.add("calendar-header");
+    header.innerHTML = `
+        <button id="prevMonth" class="btn btn-outline-primary">&lt;</button>
+        <span>${new Date(year, month).toLocaleString('default', { month: 'long' })} ${year}</span>
+        <button id="nextMonth" class="btn btn-outline-primary">&gt;</button>
+    `;
+    calendar.appendChild(header);
 
-        // Add event listeners for navigation buttons
-        document.getElementById("prevMonth").addEventListener("click", function() {
-            if (month === 0) {
-                month = 11;
-                year--;
-            } else {
-                month--;
-            }
-            generateCalendar(month, year);
-        });
-
-        document.getElementById("nextMonth").addEventListener("click", function() {
-            if (month === 11) {
-                month = 0;
-                year++;
-            } else {
-                month++;
-            }
-            generateCalendar(month, year);
-        });
-
-        // Create days row
-        const daysRow = document.createElement("div");
-        daysRow.classList.add("d-flex");
-        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach(day => {
-            const dayEl = document.createElement("div");
-            dayEl.classList.add("p-2", "border");
-            dayEl.style.flex = "1";
-            dayEl.innerText = day;
-            daysRow.appendChild(dayEl);
-        });
-        calendar.appendChild(daysRow);
-
-        // Generate calendar cells
-        let date = 1;
-        for (let i = 0; i < 6; i++) {
-            const weekRow = document.createElement("div");
-            weekRow.classList.add("d-flex");
-
-            for (let j = 0; j < 7; j++) {
-                const dayCell = document.createElement("div");
-                dayCell.classList.add("p-2", "border");
-                dayCell.style.flex = "1";
-
-                if (i === 0 && j < firstDay) {
-                    dayCell.innerText = "";
-                } else if (date > daysInMonth) {
-                    dayCell.innerText = "";
-                } else {
-                    dayCell.innerText = date;
-                    date++;
-                }
-
-                weekRow.appendChild(dayCell);
-            }
-            calendar.appendChild(weekRow);
+    // Add event listeners for navigation buttons
+    document.getElementById("prevMonth").addEventListener("click", function() {
+        if (month === 0) {
+            month = 11;
+            year--;
+        } else {
+            month--;
         }
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        const today = new Date();
-        generateCalendar(today.getMonth(), today.getFullYear());
+        generateCalendar(month, year);
     });
+
+    document.getElementById("nextMonth").addEventListener("click", function() {
+        if (month === 11) {
+            month = 0;
+            year++;
+        } else {
+            month++;
+        }
+        generateCalendar(month, year);
+    });
+
+    // Create days row
+    const daysRow = document.createElement("div");
+    daysRow.classList.add("days-row");
+
+    ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach(day => {
+        const dayEl = document.createElement("div");
+        dayEl.classList.add("day-cell");
+        dayEl.innerText = day;
+        daysRow.appendChild(dayEl);
+    });
+    calendar.appendChild(daysRow);
+
+    // Generate calendar cells
+    let date = 1;
+    for (let i = 0; i < 6; i++) {
+        const weekRow = document.createElement("div");
+        weekRow.classList.add("days-row");
+
+        for (let j = 0; j < 7; j++) {
+            const dayCell = document.createElement("div");
+            dayCell.classList.add("day-cell");
+
+            if (i === 0 && j < firstDay) {
+                dayCell.classList.add("empty");
+            } else if (date > daysInMonth) {
+                break;
+            } else {
+                dayCell.innerText = date;
+                date++;
+            }
+
+            weekRow.appendChild(dayCell);
+        }
+        calendar.appendChild(weekRow);
+        if (date > daysInMonth) break;
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const today = new Date();
+    generateCalendar(today.getMonth(), today.getFullYear());
+});
+
 </script>
 </body>
 </html>
