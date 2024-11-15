@@ -3,16 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Display Image</title>
-    <link rel="icon" type="image/svg" href="/Static/foto/logo hkbp.svg">
+    <title>Bukti Pembayaran</title>
+    <link rel="icon" type="image/svg+xml" href="/Static/foto/logo hkbp.svg">
+    <style>
+        /* Reset beberapa default margin dan padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Atur latar belakang dan font default */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            padding: 20px;
+        }
+
+        /* Wrapper untuk konten */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Heading utama */
+        h1 {
+            text-align: center;
+            color: #2a2a2a;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* Desain untuk elemen embed atau gambar */
+        .embed-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .embed-container embed,
+        .embed-container img {
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .embed-container img {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+        }
+
+        .embed-container embed {
+            width: 100%;
+            max-width: 600px;
+            height: 500px;
+        }
+
+        /* Pesan jika file tidak ada */
+        .message {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #888;
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
-    {% if pdf %}
-    <h1>PDF Viewer</h1>
-    <embed src="{{ url_for('static', filename=filename) }}" width="600" height="500" type="application/pdf">
-    {% else %}
-    <h1>Gambar dari Folder Static</h1>
-    <img src="{{ url_for('static', filename=filename) }}" style="width: 400px; height: auto;">
-    {% endif %}
+    <div class="container">
+        {% if pdf %}
+        <h1>PDF Viewer</h1>
+        <div class="embed-container">
+            <embed src="{{ url_for('static', filename=filename) }}" type="application/pdf">
+        </div>
+        {% else %}
+        <h1>Bukti Transfer</h1>
+        <div class="embed-container">
+            <img src="{{ url_for('static', filename=filename) }}" alt="Bukti Pembayaran">
+        </div>
+        {% endif %}
+    </div>
 </body>
 </html>
