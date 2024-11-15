@@ -45,6 +45,7 @@
         .sidebar ul li:hover {
             background-color: #004080;
         }
+
         .stat-box {
             background-color: #ffffff;
             border: 1px solid #dee2e6;
@@ -71,6 +72,9 @@
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .chart-box h3 {
+            font-size: 18px;
         }
         .chart-box-pie {
             background-color: #ffffff;
@@ -200,19 +204,19 @@
 
             <!-- Stats Container -->
             <div class="row mb-4 box">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="stat-box">
                         <h3>Jumlah User</h3>
                         <p>{{ users }}</p>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="stat-box">
                         <h3>Anggota Jemaat</h3>
                         <p>{{ keluarga }}</p>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="stat-box">
                         <h3>Warta Terbit</h3>
                         <p>{{ data }}</p>
@@ -221,19 +225,19 @@
             </div>
 
             <div class="row mb-4">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="stat-box">
                         <h3>Total Persembahan Bulanan</h3>
                         <p>{{ total }}</p>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="stat-box">
                         <h3>Total Hamauliateon</h3>
                         <p>{{ hamauliateon }}</p>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="stat-box">
                         <h3>Total Kas Huria</h3>
                         <p>{{ total_kas }}</p>
@@ -249,12 +253,13 @@
                         <div id="calendar"></div>
                     </div>
                 </div>
-                <div class="col-md-8">
-                    <div class="chart-box">
-                        <h3>Statistik Jumlah Kas Huria</h3>
-                        <canvas id="kasHuriaChart"></canvas>
+                <div class="col-md-6">
+                    <div class="chart-box-pie">
+                        <h3>Statistik Anggota Jemaat</h3>
+                        <canvas id="anggotaChart"></canvas>
                     </div>
                 </div>
+
             </div>
 
             <!-- Additional Stats and Pie Chart -->
@@ -266,9 +271,9 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="chart-box-pie">
-                        <h3>Statistik Anggota Jemaat</h3>
-                        <canvas id="anggotaChart"></canvas>
+                    <div class="chart-box">
+                        <h3>Statistik Jumlah Kas Huria</h3>
+                        <canvas id="kasHuriaChart"></canvas>
                     </div>
                 </div>
             </div>
