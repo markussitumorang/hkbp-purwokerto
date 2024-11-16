@@ -8,10 +8,14 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-        }
+     @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    h1, h3, p {
+    font-family: 'Poppins', sans-serif;
+    }
         .container {
             margin-top: 20px;
         }
@@ -197,25 +201,25 @@
                 </div>
         {% elif user and page == "hamauliateon" %}
                 <div class="card">
-                    <div class="card-header">hamauliateon</div>
+                    <div class="card-header">Hamauliateon</div>
                     <div class="card-body">
-                        <p><span class="info-label">username:</span> {{ user[1] }}</p>
-                        <p><span class="info-label">nama:</span> {{ user[2] }}</p>
-                        <p><span class="info-label">Huria:</span> {{ user[3] }}</p>
-                        <p><span class="info-label">Pembangunan:</span> {{ user[4] }}</p>
-                        <p><span class="info-label">Diakonia:</span> {{ user[5] }}</p>
-                        <p><span class="info-label">Pendeta:</span> {{ user[6] }}</p>
-                        <p><span class="info-label">Sintua:</span> {{ user[7] }}</p>
-                        <p><span class="info-label">Perhalado:</span> {{ user[8] }}</p>
-                        <p><span class="info-label">AMA:</span> {{ user[9] }}</p>
-                        <p><span class="info-label">INA:</span> {{ user[10] }}</p>
-                        <p><span class="info-label">NHKBP:</span> {{ user[11] }}</p>
-                        <p><span class="info-label">Remaja:</span> {{ user[12] }}</p>
-                        <p><span class="info-label">Sekolah Minggu:</span> {{ user[13] }}</p>
-                        <p><span class="info-label">Pemusik:</span> {{ user[14] }}</p>
-                        <p><span class="info-label">Multimedia:</span> {{ user[15] }}</p>
-                        <p><span class="info-label">Song Leader:</span> {{ user[16] }}</p>
-                        <p><span class="info-label">Total:</span> {{ user[17] }}</p>
+                        <p><span class="info-label">Username        : </span> {{ user[1] }}</p>
+                        <p><span class="info-label">Nama            : </span> {{ user[2] }}</p>
+                        <p><span class="info-label">Huria           : </span> {{ user[3] }}</p>
+                        <p><span class="info-label">Pembangunan     : </span> {{ user[4] }}</p>
+                        <p><span class="info-label">Diakonia        : </span> {{ user[5] }}</p>
+                        <p><span class="info-label">Pendeta         : </span> {{ user[6] }}</p>
+                        <p><span class="info-label">Sintua          : </span> {{ user[7] }}</p>
+                        <p><span class="info-label">Perhalado       : </span> {{ user[8] }}</p>
+                        <p><span class="info-label">AMA             : </span> {{ user[9] }}</p>
+                        <p><span class="info-label">INA             : </span> {{ user[10] }}</p>
+                        <p><span class="info-label">NHKBP           : </span> {{ user[11] }}</p>
+                        <p><span class="info-label">Remaja          : </span> {{ user[12] }}</p>
+                        <p><span class="info-label">Sekolah Minggu  : </span> {{ user[13] }}</p>
+                        <p><span class="info-label">Pemusik         : </span> {{ user[14] }}</p>
+                        <p><span class="info-label">Multimedia      : </span> {{ user[15] }}</p>
+                        <p><span class="info-label">Song Leader     : </span> {{ user[16] }}</p>
+                        <p><span class="info-label">Total           : </span> {{ user[17] }}</p>
                     </div>
                 </div>    
         
