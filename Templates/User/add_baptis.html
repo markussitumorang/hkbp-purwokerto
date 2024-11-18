@@ -47,14 +47,7 @@
         .sidebar ul li:hover {
             background-color: #004080;
         }
-        .card-content {
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 15px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-top: 20px;
-        }
+
         .stat-box h3 {
             font-size: 14px;
             color: #666666;
@@ -65,13 +58,40 @@
             font-weight: bold;
             color: #002855;
         }
+        .card-content {
+            background-color: white;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
         .btn-primary-custom {
             background-color: #002855;
             border: none;
             color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background 0.3s ease, transform 0.2s ease;
         }
+
         .btn-primary-custom:hover {
             background-color: #004080;
+            transform: scale(1.02);
+        }
+
+        .btn-primary-custom:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 40, 85, 0.5);
+        }
+
+        .form-control:focus {
+            border-color: #002855;
+            box-shadow: 0 0 5px rgba(0, 40, 85, 0.2);
         }
         .icon {
             margin-right: 20px;
@@ -134,7 +154,7 @@
         <!-- Main Content Card -->
         <div class="col-md-10 p-4">
             <div class="card card-content">
-                <h2 class="header-title mb-4 text-center">Form Pengajuan Baptis</h2>
+                <h2 class="header-title text-center">Form Pengajuan Baptis</h2>
                 <form method="POST" action="/addbaptis">
                     <div class="mb-3">
                         <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
@@ -143,7 +163,7 @@
                     <div class="mb-3">
                         <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
                         <select class="form-select" id="jenis_kelamin" name="jenis_kelamin" required>
-                            <option value="" disabled>Pilih Jenis Kelamin</option>
+                            <option value="" disabled selected>Pilih Jenis Kelamin</option>
                             <option value="Laki - Laki">Laki-Laki</option>
                             <option value="Perempuan">Perempuan</option>
                         </select>
@@ -162,11 +182,7 @@
                         <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir" placeholder="Tempat Lahir" required>
                         <input type="date" class="form-control mt-2" id="tanggal_lahir" name="tanggal_lahir" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="tanggal_baptis" class="form-label">Tanggal Baptis</label>
-                        <input type="date" class="form-control" id="tanggal_baptis" name="tanggal_baptis" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary-custom">Submit</button>
+                    <button type="submit" class="btn btn-primary-custom w-100">Submit</button>
                 </form>
             </div>
         </div>
