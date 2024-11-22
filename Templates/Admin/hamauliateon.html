@@ -299,6 +299,7 @@
                 <div class="table-container">
                     <div class="d-flex justify-content-between mb-3">
                         <input type="text" class="search-bar" id="searchInput" placeholder="Cari Hamauliateon...">
+                        <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#laporanModal">Laporan</button>
                         <script>
                             const searchInput = document.getElementById("searchInput");
                             searchInput.addEventListener("keypress", function(event) {
@@ -327,16 +328,16 @@
                                 {% for user in users %}
                                 <tr>
                                     <td>{{ user[2] }}</td>
-                                    <td>{{ user[17] }}</td>
-                                    <td>{{ user[19] }}</td>
+                                    <td>{{ user[18] }}</td>
+                                    <td>{{ user[20] }}</td>
                                     <td class="text-center">
-                                        {%if user[19] == "pending" %}
+                                        {%if user[20] == "pending" %}
                                         <a href="/verifiedhamauliateon?id={{ user[0] }}"><button class="btn btn-action">Verify</button></a>
                                         {% else %}
                                         <button class="btn btn-action" disabled>verified</button>
                                         {% endif %}
                                         <a href="/lihat?id={{ user[0] }}&page=hamauliateon" target="_blank"><button class="btn btn-action">Detail</button></a>
-                                        <a href="/{{ user[18] }}" target="_blank"><button class="btn btn-action">Bukti</button></a>
+                                        <a href="/{{ user[19] }}" target="_blank"><button class="btn btn-action">Bukti</button></a>
                                         <a href="/deletehamauliateon?id={{ user[0] }}"><button class="btn btn-action">Hapus</button></a>
                                     </td>
                                 </tr>
@@ -351,11 +352,54 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal Laporan -->
+<div class="modal fade" id="laporanModal" tabindex="-1" aria-labelledby="laporanModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="laporanModalLabel">Laporan</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="laporanForm">
+            <div class="mb-3">
+              <label for="tanggalAwal" class="form-label">Tanggal Awal</label>
+              <input type="date" class="form-control" id="tanggalAwal" name="tanggalAwal">
+            </div>
+            <div class="mb-3">
+              <label for="tanggalAkhir" class="form-label">Tanggal Akhir</label>
+              <input type="date" class="form-control" id="tanggalAkhir" name="tanggalAkhir">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="submit" class="btn btn-primary-custom" onclick="redirectToReport()">Lihat</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
     </div>
 </div>
 
 <!-- Bootstrap 5 JS and Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function redirectToReport() {
+        const tanggalAwal = document.getElementById('tanggalAwal').value;
+        const tanggalAkhir = document.getElementById('tanggalAkhir').value;
+  
+        if (tanggalAwal && tanggalAkhir) {
+            // Navigasi ke halaman laporan dengan parameter tanggal
+            window.location.href = `laporan_hamauliateon.html?tanggalAwal=${encodeURIComponent(tanggalAwal)}&tanggalAkhir=${encodeURIComponent(tanggalAkhir)}`;
+        } else {
+            alert('Harap isi tanggal awal dan tanggal akhir!');
+        }
+    }
+  </script>
+  
 </body>
 </html>

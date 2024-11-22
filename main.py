@@ -154,6 +154,7 @@ command = """CREATE TABLE IF NOT EXISTS bulanan(
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
     username TEXT,
     nama TEXT,
+    tanggal TEXT
     nominal INTEGER,
     bulan TEXT,
     bukti TEXT,
@@ -164,6 +165,7 @@ command = """CREATE TABLE IF NOT EXISTS hamauliateon(
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
     username TEXT,
     nama TEXT,
+    tanggal TEXT,
     huria INTEGER,
     pembangunan INTEGER,
     diakonia INTEGER,
@@ -1214,7 +1216,7 @@ def verify_hamauliateon():
         user = cursor.fetchone()
         nama = "Hamauliateon"
         tanggal = datetime.now().strftime("%Y-%m-%d")
-        total_pemasukan = user[17]
+        total_pemasukan = user[18]
         data = (nama, tanggal, 0, 0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0, total_pemasukan, 0)
         command = """
                 INSERT INTO financial_data (
@@ -1253,8 +1255,8 @@ def hamauliateon_admin():
             # print(len(bulanan))
             if len(users) > 0:
                 for i in users:
-                    if i[19] == "verified":
-                        nominal += int(i[17])
+                    if i[20] == "verified":
+                        nominal += int(i[18])
                         count += 1
                     else:
                         pending += 1
@@ -2088,8 +2090,8 @@ def hamauliateon_user():
         # print(len(bulanan))
         if count > 0:
             for i in bulanan:
-                if i[19] == "verified":
-                    nominal += int(i[17])
+                if i[20] == "verified":
+                    nominal += int(i[18])
                 else:
                     pending += 1
         str_nominal = locale.currency(nominal, grouping=True)[:-3]
@@ -2114,14 +2116,30 @@ def addhamauliateon():
         pemusik = request.form.get("pemusik") or 0
         multimedia = request.form.get("multimedia") or 0
         song_leader = request.form.get("song_leader") or 0
+
+        # Hitung total
         total = int(huria) + int(pembangunan) + int(diakonia) + int(pendeta) + int(sintua) + int(perhalado) + int(ama) + int(ina) + int(nhkbp) + int(remaja) + int(sekolah_minggu) + int(pemusik) + int(multimedia) + int(song_leader)
+        
         status = "pending"
+
+        # Dapatkan tanggal saat ini
+        tanggal = datetime.now().strftime('%Y-%m-%d')
+
+        # Upload file jika ada
         bukti_persembahan = request.files.get('bukti')
         file_path = None
         if bukti_persembahan:
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], bukti_persembahan.filename)
             bukti_persembahan.save(file_path)
-        command = f"INSERT INTO hamauliateon (username, nama, huria, pembangunan, diakonia, pendeta, sintua, perhalado, ama, ina, nhkbp, remaja, sekolah_minggu, pemusik, multimedia, song_leader, total, status, bukti, nama_keluarga) VALUES ('{username}', '{nama}', {huria}, {pembangunan}, {diakonia}, {pendeta}, {sintua}, {perhalado}, {ama}, {ina}, {nhkbp}, {remaja}, {sekolah_minggu}, {pemusik}, {multimedia}, {song_leader}, {total}, '{status}', '{file_path}', '{nama_keluarga}')"
+        
+        # Tambahkan tanggal ke database
+        command = f"""
+            INSERT INTO hamauliateon (
+                username, nama, huria, pembangunan, diakonia, pendeta, sintua, perhalado, ama, ina, nhkbp, remaja, sekolah_minggu, pemusik, multimedia, song_leader, total, status, bukti, nama_keluarga, tanggal
+            ) VALUES (
+                '{username}', '{nama}', {huria}, {pembangunan}, {diakonia}, {pendeta}, {sintua}, {perhalado}, {ama}, {ina}, {nhkbp}, {remaja}, {sekolah_minggu}, {pemusik}, {multimedia}, {song_leader}, {total}, '{status}', '{file_path}', '{nama_keluarga}', '{tanggal}'
+            )
+        """
         cursor.execute(command)
         db.commit()
         return redirect(url_for("hamauliateon_user"))
