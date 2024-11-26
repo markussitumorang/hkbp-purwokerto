@@ -262,15 +262,16 @@
         </div>
         
         <!-- Main Content -->
+                 <!-- Main Content -->
         <div class="col-md-10 p-4">
             <div class="container container-box">
-                <h2 class="header-title mb-4">Hamauliateon / Persembahan Ucapan Syukur</h2>
+                <h2 class="header-title mb-4">Pembayaran Hamauliateon</h2>
                 <div class="container my-4">
                     <div class="row text-center">
                         <!-- Card 1 -->
                         <div class="col-md-4">
                             <div class="card shadow-sm border-0">
-                                <div class="financial-card">
+                                <div class="card-body">
                                     <h6 class="text-muted">User Yang Sudah Bayar</h6>
                                     <h3 class="header-title fw-bold">{{ verified }}</h3>
                                 </div>
@@ -279,7 +280,7 @@
                         <!-- Card 2 -->
                         <div class="col-md-4">
                             <div class="card shadow-sm border-0">
-                                <div class="financial-card">
+                                <div class="card-body">
                                     <h6 class="text-muted">Perlu Di Verifikasi</h6>
                                     <h3 class="header-title fw-bold">{{ pending }}</h3>
                                 </div>
@@ -288,7 +289,7 @@
                         <!-- Card 3 -->
                         <div class="col-md-4">
                             <div class="card shadow-sm border-0">
-                                <div class="financial-card">
+                                <div class="card-body">
                                     <h6 class="text-muted">Total Persembahan</h6>
                                     <h3 class="header-title fw-bold">{{ total }}</h3>
                                 </div>
@@ -299,7 +300,6 @@
                 <div class="table-container">
                     <div class="d-flex justify-content-between mb-3">
                         <input type="text" class="search-bar" id="searchInput" placeholder="Cari Hamauliateon...">
-                        <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#laporanModal">Laporan</button>
                         <script>
                             const searchInput = document.getElementById("searchInput");
                             searchInput.addEventListener("keypress", function(event) {
@@ -312,6 +312,7 @@
                                 }
                             });
                         </script>
+                        <button class="btn btn-primary btn-primary-custom" data-bs-toggle="modal" data-bs-target="#laporan">Laporan</button>
                     </div>
                     <table class="table table-striped table-bordered">
                         <thead>
@@ -328,16 +329,16 @@
                                 {% for user in users %}
                                 <tr>
                                     <td>{{ user[2] }}</td>
-                                    <td>{{ user[18] }}</td>
-                                    <td>{{ user[20] }}</td>
+                                    <td>{{ user[17] }}</td>
+                                    <td>{{ user[19] }}</td>
                                     <td class="text-center">
-                                        {%if user[20] == "pending" %}
+                                        {%if user[19] == "pending" %}
                                         <a href="/verifiedhamauliateon?id={{ user[0] }}"><button class="btn btn-action">Verify</button></a>
                                         {% else %}
                                         <button class="btn btn-action" disabled>verified</button>
                                         {% endif %}
                                         <a href="/lihat?id={{ user[0] }}&page=hamauliateon" target="_blank"><button class="btn btn-action">Detail</button></a>
-                                        <a href="/{{ user[19] }}" target="_blank"><button class="btn btn-action">Bukti</button></a>
+                                        <a href="/{{ user[18] }}" target="_blank"><button class="btn btn-action">Bukti</button></a>
                                         <a href="/deletehamauliateon?id={{ user[0] }}"><button class="btn btn-action">Hapus</button></a>
                                     </td>
                                 </tr>
@@ -352,35 +353,27 @@
                 </div>
             </div>
         </div>
-
-        <!-- Modal Laporan -->
-<div class="modal fade" id="laporanModal" tabindex="-1" aria-labelledby="laporanModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="laporanModalLabel">Laporan</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="laporanForm">
-            <div class="mb-3">
-              <label for="tanggalAwal" class="form-label">Tanggal Awal</label>
-              <input type="date" class="form-control" id="tanggalAwal" name="tanggalAwal">
-            </div>
-            <div class="mb-3">
-              <label for="tanggalAkhir" class="form-label">Tanggal Akhir</label>
-              <input type="date" class="form-control" id="tanggalAkhir" name="tanggalAkhir">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-          <button type="submit" class="btn btn-primary-custom" onclick="redirectToReport()">Lihat</button>
-        </div>
-      </div>
     </div>
-  </div>
-  
+</div>
+<div class="modal fade" id="laporan" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserModalLabel">Laporan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="/dashboard/hamauliateon/laporan" class="mb-4">
+                <div class="mb-3">
+                    <label for="tanggalawal" class="form-label">Tanggal Awal</label>
+                    <input type="date" id="tanggalawal" name="tanggalawal" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="tanggalakhir" class="form-label">Tanggal Akhir</label>
+                    <input type="date" id="tanggalakhir" name="tanggalakhir" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary-custom w-100">Laporan</button>
+            </form>
+        </div>
     </div>
 </div>
 
