@@ -197,7 +197,10 @@
          margin-right: 20px;  /* Memberikan jarak 20px antara ikon dan teks */
          vertical-align: middle;  /* Menjaga ikon sejajar dengan teks secara vertikal */
         }
-
+        .text-primary {
+    --bs-text-opacity: 1;
+    color:#002855 !important;
+}
     </style>
 </head>
 <body>
@@ -284,103 +287,117 @@
         <div class="col-md-10 p-4">
             <div class="container container-box shadow-lg rounded bg-light">
                 <div class="container-fluid p-4">
-                    <h2 class="header-title mb-4 text-center text-primary">Ulang Tahun</h2>
-                    <div class="container-box d-flex flex-wrap justify-content-center">
-                        <form method="POST" action="/dashboard/search-jemaat" class="mb-4 w-100" style="max-width: 500px;">
-                            <div class="mb-3">
-                                <label for="fromDate" class="form-label">Dari Tanggal</label>
-                                <div class="d-flex gap-2">
-                                    <input type="number" name="from_day" id="fromDate" class="form-control" min="1" max="31" placeholder="Hari" required>
-                                    <select name="from_month" class="form-select">
-                                        <option value="" selected disabled>Pilih bulan</option>
-                                        <option value="1">Januari</option>
-                                        <option value="2">Februari</option>
-                                        <option value="3">Maret</option>
-                                        <option value="4">April</option>
-                                        <option value="5">Mei</option>
-                                        <option value="6">Juni</option>
-                                        <option value="7">Juli</option>
-                                        <option value="8">Agustus</option>
-                                        <option value="9">September</option>
-                                        <option value="10">Oktober</option>
-                                        <option value="11">November</option>
-                                        <option value="12">Desember</option>
-                                    </select>
+                    <h2 class="header-title mb-4 text-center text-primary">Ulang Tahun Jemaat</h2>
+                    <!-- Form Pencarian dengan posisi di tengah dan background seperti awal -->
+                    <div class="d-flex justify-content-center mb-4">
+                        <div class="container-box rounded p-4" style="width: 100%; background-color: #ffffff;">
+                            <form method="POST" action="/dashboard/search-jemaat">
+                                <div class="mb-3">
+                                    <label for="fromDate" class="form-label">Dari Tanggal</label>
+                                    <div class="d-flex gap-2">
+                                        <select name="from_day" id="from_day" class="form-control" required>
+                                            {% for i in range(1, 32) %}
+                                                <option value="{{ i }}" {% if request.form.from_day == i %}selected{% endif %}>{{ i }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <select name="from_month" id="from_month" class="form-select" onchange="updateDays()">
+                                            <option value="" disabled>Pilih bulan</option>
+                                            <option value="1" {% if request.form.from_month == '1' %}selected{% endif %}>Januari</option>
+                                            <option value="2" {% if request.form.from_month == '2' %}selected{% endif %}>Februari</option>
+                                            <option value="3" {% if request.form.from_month == '3' %}selected{% endif %}>Maret</option>
+                                            <option value="4" {% if request.form.from_month == '4' %}selected{% endif %}>April</option>
+                                            <option value="5" {% if request.form.from_month == '5' %}selected{% endif %}>Mei</option>
+                                            <option value="6" {% if request.form.from_month == '6' %}selected{% endif %}>Juni</option>
+                                            <option value="7" {% if request.form.from_month == '7' %}selected{% endif %}>Juli</option>
+                                            <option value="8" {% if request.form.from_month == '8' %}selected{% endif %}>Agustus</option>
+                                            <option value="9" {% if request.form.from_month == '9' %}selected{% endif %}>September</option>
+                                            <option value="10" {% if request.form.from_month == '10' %}selected{% endif %}>Oktober</option>
+                                            <option value="11" {% if request.form.from_month == '11' %}selected{% endif %}>November</option>
+                                            <option value="12" {% if request.form.from_month == '12' %}selected{% endif %}>Desember</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="toDate" class="form-label">Sampai Tanggal</label>
-                                <div class="d-flex gap-2">
-                                    <input type="number" name="to_day" id="toDate" class="form-control" min="1" max="31" placeholder="Hari" required>
-                                    <select name="to_month" class="form-select">
-                                        <option value="" selected disabled>Pilih bulan</option>
-                                        <option value="1">Januari</option>
-                                        <option value="2">Februari</option>
-                                        <option value="3">Maret</option>
-                                        <option value="4">April</option>
-                                        <option value="5">Mei</option>
-                                        <option value="6">Juni</option>
-                                        <option value="7">Juli</option>
-                                        <option value="8">Agustus</option>
-                                        <option value="9">September</option>
-                                        <option value="10">Oktober</option>
-                                        <option value="11">November</option>
-                                        <option value="12">Desember</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="user" id="radio1" name="option">
-                                <label class="form-check-label" for="radio1">Pernikahan</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="keluarga" id="radio2" name="option">
-                                <label class="form-check-label" for="radio2">Ulang Tahun</label>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100 mt-3">Cari</button>
-                        </form>
         
-                        {% if results %}
-                            <div class="table-container w-100 mt-4">
-                                <table class="table table-striped table-bordered text-center">
-                                    <thead class="table-dark">
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Nama Jemaat</th>
-                                            {% if user == "keluarga" %}
+                                <div class="mb-3">
+                                    <label for="toDate" class="form-label">Sampai Tanggal</label>
+                                    <div class="d-flex gap-2">
+                                        <select name="to_day" id="to_day" class="form-control" required>
+                                            {% for i in range(1, 32) %}
+                                                <option value="{{ i }}" {% if request.form.to_day == i %}selected{% endif %}>{{ i }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <select name="to_month" id="to_month" class="form-select" onchange="updateDays()">
+                                            <option value="" disabled>Pilih bulan</option>
+                                            <option value="1" {% if request.form.to_month == '1' %}selected{% endif %}>Januari</option>
+                                            <option value="2" {% if request.form.to_month == '2' %}selected{% endif %}>Februari</option>
+                                            <option value="3" {% if request.form.to_month == '3' %}selected{% endif %}>Maret</option>
+                                            <option value="4" {% if request.form.to_month == '4' %}selected{% endif %}>April</option>
+                                            <option value="5" {% if request.form.to_month == '5' %}selected{% endif %}>Mei</option>
+                                            <option value="6" {% if request.form.to_month == '6' %}selected{% endif %}>Juni</option>
+                                            <option value="7" {% if request.form.to_month == '7' %}selected{% endif %}>Juli</option>
+                                            <option value="8" {% if request.form.to_month == '8' %}selected{% endif %}>Agustus</option>
+                                            <option value="9" {% if request.form.to_month == '9' %}selected{% endif %}>September</option>
+                                            <option value="10" {% if request.form.to_month == '10' %}selected{% endif %}>Oktober</option>
+                                            <option value="11" {% if request.form.to_month == '11' %}selected{% endif %}>November</option>
+                                            <option value="12" {% if request.form.to_month == '12' %}selected{% endif %}>Desember</option>
+                                        </select>
+                                    </div>
+                                </div>
+        
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" value="user" id="radio1" name="option" {% if request.form.option == 'user' %}checked{% endif %}>
+                                    <label class="form-check-label" for="radio1">Pernikahan</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" value="keluarga" id="radio2" name="option" {% if request.form.option == 'keluarga' %}checked{% endif %}>
+                                    <label class="form-check-label" for="radio2">Ulang Tahun</label>
+                                </div>
+        
+                                <button type="submit" class="btn btn-primary w-100 mt-3">Cari</button>
+                            </form>
+                        </div>
+                    </div>
+        
+                    <!-- Menampilkan Tabel Hasil Pencarian -->
+                    {% if results %}
+                        <div class="table-container w-100 mt-4">
+                            <table class="table table-striped table-bordered text-center">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Jemaat</th>
+                                        {% if user == "keluarga" %}
                                             <th>Tanggal Lahir</th>
-                                            {% elif user == "user" %}
+                                        {% elif user == "user" %}
                                             <th>Tanggal Pernikahan</th>
-                                            {% endif %}
-                                            <th>Umur</th>
-                                            <th>Wijk</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for row in results %}
+                                        {% endif %}
+                                        <th>Umur</th>
+                                        <th>Wijk</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in results %}
                                         <tr>
                                             <td>{{ loop.index }}</td>
-                                            <td>{{ row.nama }}</td>
+                                            <td class="text-start">{{ row.nama }}</td>
                                             <td>{{ row.tanggal_lahir }}</td>
-                                            <td>{{ row.umur }} Tahun</td>
+                                            <td>{{ row.umur }}</td>
                                             <td>{{ row.wijk }}</td>
                                         </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        {% if request.method == 'POST' %}
+                            <div class="alert alert-warning mt-4 text-center" role="alert">
+                                Tidak ada hasil untuk tanggal yang dipilih.
                             </div>
-                        {% else %}
-                            {% if request.method == 'POST' %}
-                                <div class="alert alert-warning mt-4 text-center" role="alert">
-                                    Tidak ada hasil untuk tanggal yang dipilih.
-                                </div>
-                            {% endif %}
                         {% endif %}
-                    </div>
+                    {% endif %}
                 </div>
             </div>
-        </div>
-        
+        </div>              
     </div>
 </div>
 
@@ -388,20 +405,68 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    document.getElementById("checklistForm").addEventListener("submit", function(event) {
-        const checkboxes = document.querySelectorAll('input[name="checkbox"]');
-        let isChecked = false;
+    function updateDays() {
+        const months31 = [1, 3, 5, 7, 8, 10, 12]; // months with 31 days
+        const months30 = [4, 6, 9, 11]; // months with 30 days
+        const monthFrom = document.getElementById('from_month').value;
+        const monthTo = document.getElementById('to_month').value;
 
-        checkboxes.forEach((checkbox) => {
-            if (checkbox.checked) {
-                isChecked = true;
+        // Helper function to update day options
+        function updateDayOptions(month, daySelect) {
+            let daysInMonth = 31;
+            if (months30.includes(parseInt(month))) {
+                daysInMonth = 30;
+            } else if (month == 2) {
+                // Handle February: Check for leap year
+                const year = new Date().getFullYear();
+                daysInMonth = (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) ? 29 : 28;
             }
-        });
-        if (!isChecked) {
-            event.preventDefault();
-            document.getElementById("alertMessage").classList.remove("d-none");
+            
+            // Clear existing options
+            daySelect.innerHTML = '';
+            
+            // Add the new day options
+            for (let i = 1; i <= daysInMonth; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                daySelect.appendChild(option);
+            }
         }
-    });
+
+        const fromDaySelect = document.getElementById('from_day');
+        const toDaySelect = document.getElementById('to_day');
+        
+        if (monthFrom) {
+            updateDayOptions(monthFrom, fromDaySelect);
+        }
+        if (monthTo) {
+            updateDayOptions(monthTo, toDaySelect);
+        }
+    }
+
+    // Function to set default date (today)
+    function setDefaultDate() {
+        const today = new Date();
+        const currentDay = today.getDate(); // Get current day
+        const currentMonth = today.getMonth() + 1; // Get current month (1-based)
+
+        // Set default month and day
+        document.getElementById('from_month').value = currentMonth;
+        document.getElementById('to_month').value = currentMonth;
+
+        // Populate days for the current month
+        updateDays();
+        
+        // Set the current day for both from_day and to_day (if available in the month)
+        document.getElementById('from_day').value = currentDay;
+        document.getElementById('to_day').value = currentDay;
+    }
+
+    // Initialize default date on page load
+    window.onload = function() {
+        setDefaultDate();
+    };
 </script>
 </body>
 </html>

@@ -262,7 +262,6 @@
         </div>
         
         <!-- Main Content -->
-                 <!-- Main Content -->
         <div class="col-md-10 p-4">
             <div class="container container-box">
                 <h2 class="header-title mb-4">Pembayaran Hamauliateon</h2>
@@ -358,11 +357,11 @@
 <div class="modal fade" id="laporan" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="background-color: #002855; color: white;">
                 <h5 class="modal-title" id="addUserModalLabel">Laporan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="/dashboard/hamauliateon/laporan" class="mb-4">
+            <form method="POST" action="/dashboard/hamauliateon/laporan" class="mb-4" style="padding: 20px;">
                 <div class="mb-3">
                     <label for="tanggalawal" class="form-label">Tanggal Awal</label>
                     <input type="date" id="tanggalawal" name="tanggalawal" class="form-control">
@@ -370,6 +369,13 @@
                 <div class="mb-3">
                     <label for="tanggalakhir" class="form-label">Tanggal Akhir</label>
                     <input type="date" id="tanggalakhir" name="tanggalakhir" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="tanggalakhir" class="form-label">Laporan</label>
+                    <select name="data" class="form-select">
+                        <option value="pemasukan">Pemasukan</option>
+                        <option value="pengeluaran">Pengeluaran</option>
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-primary-custom w-100">Laporan</button>
             </form>

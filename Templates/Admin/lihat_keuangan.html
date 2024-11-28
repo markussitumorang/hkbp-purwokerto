@@ -32,71 +32,72 @@
                     <!-- Nama/Keluarga -->
                     <div class="mb-3">
                         <label for="keluarga" class="form-label">Nama/Keluarga</label>
-                        <input type="text" class="form-control" value="{{ user[20] }}" id="nama_keluarga" readonly>
+                        <input readonly type="text" class="form-control" value="{{ user[20] }}" id="nama_keluarga">
                     </div>
 
                     <!-- Nama -->
                     <div class="mb-3">
                         <label for="nama" class="form-label">Nama</label>
-                        <input type="text" class="form-control" value="{{ user[2] }}" id="nama" readonly>
+                        <input readonly type="text" class="form-control" value="{{ user[2] }}" id="nama">
                     </div>
 
                     <!-- Total Persembahan -->
                     <div class="mb-3">
                         <label for="total" class="form-label">Total Persembahan</label>
-                        <input type="text" class="form-control" value="{{ user[17] }}" id="total" readonly>
+                        <input readonly type="text" class="form-control" value="{{ user[17] }}" id="total">
                     </div>
 
                     <!-- Bukti Pembayaran -->
                     <div class="mb-3">
                         <label for="bukti" class="form-label">Bukti Pembayaran</label>
-                        <input type="file" class="form-control" value="{{ user[18] }}" id="bukti" readonly>
+                        <a href="/{{ user[18] }}" target="_blank" class="form-control">{{ user[18] }}</a>
+                        
                     </div>
 
                     <!-- Pos Hamauliateon -->
                     <div class="fw-bold mb-3">Pos Hamauliateon</div>
                     <div class="row g-3">
                         <div class="col-md-4">
-                            <input type="text" class="form-control" value="{{ user[3] }}" id="huria" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[3] }}" id="huria">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" value="{{ user[4] }}" id="pembangunan" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[4] }}" id="pembangunan">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" value="{{ user[5] }}" id="diakonia" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[5] }}" id="diakonia">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" value="{{ user[6] }}" id="pendeta" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[6] }}" id="pendeta">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" value="{{ user[7] }}" id="sintua" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[7] }}" id="sintua">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" value="{{ user[8] }}" id="parhalado" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[8] }}" id="parhalado">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" value="{{ user[9] }}" id="ama" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[9] }}" id="ama">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" value="{{ user[10] }}" id="ina" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[10] }}" id="ina">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" value="{{ user[11] }}" id="nhkbp" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[11] }}" id="nhkbp">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" value="{{ user[12] }}" id="remaja" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[12] }}" id="remaja">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" value="{{ user[13] }}" id="sekolah_minggu" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[13] }}" id="sekolah_minggu">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" value="{{ user[14] }}" id="pemusik" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[14] }}" id="pemusik">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" value="{{ user[15] }}" id="multimedia" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[15] }}" id="multimedia">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" value="{{ user[16] }}" id="song_leader" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[16] }}" id="song_leader">
                         </div>
                     </div>
                 </form>
@@ -116,35 +117,35 @@
                         <!-- Nama Keluarga -->
                         <div class="col-md-6">
                             <label for="namaKeluarga" class="form-label">Nama Keluarga</label>
-                            <input type="text" class="form-control" value="{{ user[2] }}" id="namaKeluarga" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[2] }}" id="namaKeluarga">
                         </div>
-                
+
                         <!-- Nominal Persembahan -->
                         <div class="col-md-6">
                             <label for="nominalPersembahan" class="form-label">Nominal Persembahan</label>
-                            <input type="text" class="form-control" value="{{ user[3] }}" id="nominal" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[3] }}" id="nominal">
                         </div>
-                
+
                         <!-- Status -->
                         <div class="col-md-6">
                             <label for="status" class="form-label">Status</label>
-                            <input type="text" class="form-control" value="{{ user[6] }}" id="status" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[6] }}" id="status">
                         </div>
-                
+
                         <!-- Bulan -->
                         <div class="col-md-6">
                             <label for="bulan" class="form-label">Bulan</label>
-                            <input type="text" class="form-control" value="{{ user[4] }}" id="bulan" readonly>
+                            <input readonly type="text" class="form-control" value="{{ user[4] }}" id="bulan">
                         </div>
-                
+
                         <!-- Bukti Pembayaran -->
                         <div class="col-md-6">
                             <label for="buktiPembayaran" class="form-label">Bukti Pembayaran</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" value="{{ user[5] }}" id="bukti" readonly>
-                                <a href="/path/to/bukti/pembayaran/{{user[5] }}" class="btn btn-outline-secondary" download>
+                                <input readonly type="text" class="form-control" value="{{ user[5] }}" id="bukti" readonly>
+                                <button class="btn btn-outline-secondary" type="button">
                                     <i class="bi bi-download"></i>
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -154,57 +155,61 @@
     </section>
     {% elif page == "pemasukan" %}
     <div class="container">
-        <div class="form-container">
-          <h3>Pemasukan</h3>
-          <form>
-            <div class="mb-3">
-              <label for="keterangan" class="form-label">Keterangan</label>
-              <input type="text" class="form-control" value="{{ user[1] }}" id="keterangan" readonly>
-            </div>
-    
-            <div class="mb-3">
-              <label for="jenisPemasukan" class="form-label">Jenis Pemasukan</label>
-              <input type="text" class="form-control" value="{{ user[3] }}" id="jenisPemasukan" readonly>
-            </div>
-    
-            <div class="mb-3">
-                <label for="nominalPemasukan" class="form-label">Nominal</label>
-                <input type="text" class="form-control" value="{{ user[4] }}" id="nominalPemasukan" readonly>
-            </div>
-    
-            <div class="mb-3">
-              <label for="tanggalPemasukan" class="form-label">Tanggal</label>
-              <input type="date" class="form-control" value="{{ user[2] }}" id="tanggalPemasukan" readonly>
-            </div>
-          </form>
+            <div class="card">
+                <div class="card-header" style="background-color: #002855; color: white;">
+                    <h5 class="fw-bold">Data Pemasukan</h5>
+                </div>
+                <form style="padding: 10px;">
+                    <div class="mb-3">
+                    <label for="keterangan" class="form-label">Keterangan</label>
+                    <input readonly type="text" class="form-control" value="{{ user[1] }}" id="keterangan">
+                    </div>
+            
+                    <div class="mb-3">
+                    <label for="jenisPemasukan" class="form-label">Jenis Pemasukan</label>
+                    <input readonly type="text" class="form-control" value="{{ user[3] }}" id="pemasukan">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="jenisPemasukan" class="form-label">Nominal</label>
+                        <input readonly type="text" class="form-control" value="{{ user[4] }}" id="nominal">
+                    </div>
+
+                    <div class="mb-3">
+                    <label for="tanggal" class="form-label">Tanggal</label>
+                    <input readonly type="date" class="form-control" value="{{ user[2] }}" id="tanggal">
+                    </div>
+                </form>
         </div>
     </div>
     {% elif page == "pengeluaran" %}
     <div class="container">
-        <div class="form-container">
-          <h3>Pengeluaran</h3>
-          <form>
-            <div class="mb-3">
-              <label for="keteranganPengeluaran" class="form-label">Keterangan</label>
-              <input type="text" class="form-control" value="{{ user[1] }}" id="keteranganPengeluaran">
+            <div class="card">
+                <div class="card-header" style="background-color: #002855; color: white;">
+                    <h5 class="fw-bold">Data Pengeluaran</h5>
+                </div>
+                <form style="padding: 10px;">
+                    <div class="mb-3">
+                    <label for="keterangan" class="form-label">Keterangan</label>
+                    <input readonly type="text" class="form-control" value="{{ user[1] }}" id="keterangan">
+                    </div>
+            
+                    <div class="mb-3">
+                    <label for="jenisPemasukan" class="form-label">Jenis Pengeluaran</label>
+                    <input readonly type="text" class="form-control" value="{{ user[3] }}" id="pengeluaran">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="jenisPemasukan" class="form-label">Nominal</label>
+                        <input readonly type="text" class="form-control" value="{{ user[4] }}" id="nominal">
+                    </div>
+
+                    <div class="mb-3">
+                    <label for="tanggal" class="form-label">Tanggal</label>
+                    <input readonly type="date" class="form-control" value="{{ user[2] }}" id="tanggal">
+                    </div>
+                </form>
             </div>
-    
-            <div class="mb-3">
-              <label for="jenisPengeluaran" class="form-label">Jenis Pengeluaran</label>
-              <input type="text" class="form-control" value="{{ user[3] }}" id="jenisPengeluaran">
-            </div>
-    
-            <div class="mb-3">
-                <label for="nominalPengeluaran" class="form-label">Nominal</label>
-                <input type="text" class="form-control" value="{{ user[4] }}" id="nominalPengeluaran">
-            </div>
-    
-            <div class="mb-3">
-              <label for="tanggalPengeluaran" class="form-label">Tanggal</label>
-              <input type="date" class="form-control" value="{{ user[2] }}" id="tanggalPengeluaran">
-            </div>
-          </form>
-        </div>
     </div>
     {% else %}
     <div class="container">

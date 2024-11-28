@@ -261,7 +261,7 @@
                                 {% if id == "pengeluaran" %}
                                 <div class="mb-3">
                                     <label for="jenis_pengeluaran" class="form-label">Jenis Pengeluaran</label>
-                                    <select class="form-select" id="jenis_pengeluaran" name="jenis_pengeluaran">
+                                    <select class="form-select" id="jenis_pengeluaran" name="jenis_pengeluaran" required>
                                         <option selected disabled>Pilih Jenis Pengeluaran</option>
                                         <option value="Huria">Huria</option>
                                         <option value="Pembangunan">Pembangunan</option>
@@ -287,7 +287,7 @@
                                 {% else %}
                                 <div class="mb-3">
                                     <label for="jenis_pemasukan" class="form-label">Jenis Pemasukan</label>
-                                    <select class="form-select" id="jenis_pemasukan" name="jenis_pemasukan">
+                                    <select class="form-select" id="jenis_pemasukan" name="jenis_pemasukan" required>
                                         <option selected disabled>Pilih Jenis Pemasukan</option>
                                         <option value="Pelean Ibadah Minggu Pagi">Pelean Ibadah Minggu Pagi</option>
                                         <option value="Pelean Ibadah Minggu Sore">Pelean Ibadah Minggu Sore</option>
@@ -316,11 +316,11 @@
                                 <!-- Tanggal -->
                                 <div class="mb-3">
                                     <label for="tanggal" class="form-label">Tanggal</label>
-                                    <input type="date" class="form-control" id="tanggal" name="tanggal" placeholder="Masukkan Keterangan">
+                                    <input type="date" class="form-control" id="tanggal" name="tanggal" placeholder="Masukkan Keterangan" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="nominal" class="form-label">Nominal</label>
-                                    <input type="number" class="form-control" id="nominal" name="nominal" placeholder="Masukkan Keterangan">
+                                    <input type="number" class="form-control" id="nominal" name="nominal" placeholder="Masukkan Nominal"required>
                                 </div>
                                 <!-- Buttons -->
                                 <div class="d-flex justify-content-end gap-2">
