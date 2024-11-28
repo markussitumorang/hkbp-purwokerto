@@ -131,7 +131,7 @@
   font-size: 2.5em !important;
   font-weight: bold !important;
   overflow: hidden !important;
-  border-right: 0.15em solid orange !important; /* Garis berkedip di kanan */
+  border-right: 0.15em solid blue !important; /* Garis berkedip di kanan */
   white-space: nowrap !important;
   display: inline-block !important;
   animation: cursor-blink 0.75s steps(1) infinite !important; /* Efek berkedip */
@@ -139,7 +139,7 @@
 
 /* Keyframes untuk animasi berkedip */
 @keyframes cursor-blink {
-  0%, 100% { border-color: orange; }
+  0%, 100% { border-color: blue; }
   50% { border-color: transparent; }
 }
 
@@ -472,7 +472,7 @@
         // Menghilangkan garis berkedip setelah animasi selesai
         setTimeout(() => {
           textElement.style.borderRight = "none";
-        }, 500); // Menunggu sedikit agar terlihat lebih natural
+        }, 100); // Menunggu sedikit agar terlihat lebih natural
       }
     }
 
