@@ -364,15 +364,15 @@
             <form method="POST" action="/dashboard/hamauliateon/laporan" class="mb-4" style="padding: 20px;">
                 <div class="mb-3">
                     <label for="tanggalawal" class="form-label">Tanggal Awal</label>
-                    <input type="date" id="tanggalawal" name="tanggalawal" class="form-control">
+                    <input type="date" id="tanggalawal" name="tanggalawal" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label for="tanggalakhir" class="form-label">Tanggal Akhir</label>
-                    <input type="date" id="tanggalakhir" name="tanggalakhir" class="form-control">
+                    <input type="date" id="tanggalakhir" name="tanggalakhir" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label for="tanggalakhir" class="form-label">Laporan</label>
-                    <select name="data" class="form-select">
+                    <select name="data" class="form-select" required>
                         <option value="pemasukan">Pemasukan</option>
                         <option value="pengeluaran">Pengeluaran</option>
                     </select>
