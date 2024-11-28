@@ -246,7 +246,11 @@ tanggal = {
     "pernikahan":"tanggal_pernikahan",
     "meninggal":"monding",
     "kebaktian":"tanggal",
-    "pelayanan":"tanggal_tahbisan"
+    "pelayanan":"tanggal_tahbisan",
+    "pemasukan":"tanggal",
+    "pengeluaran":"tanggal",
+    "hamauliateon":"tanggal",
+    "bulanan":"tanggal"
 }
 
 app = Flask(__name__, static_folder="Static", template_folder="Templates")
@@ -319,7 +323,7 @@ def signin_admin():
     username = request.form.get("username")
     password = request.form.get("password")
     kode = request.form.get("kode")
-    if username == "Admin" and password == "Admin" and kode == "182101":
+    if username == "Admin" and password == "G422A1" and kode == "182101":
         session["username"] = username
         session["password"] = password
         session["status"] = "Admin"
@@ -1157,6 +1161,14 @@ def verify_pembayaran():
             """
         cursor.execute(command, data)
         db.commit()
+        data = (keterangan, tanggal, jenis_pemasukan, nominal)
+        command = """
+                INSERT INTO pemasukan (
+                keterangan, tanggal, jenis_pemasukan, nominal
+                ) VALUES (?, ?, ?, ?)
+            """
+        cursor.execute(command, data)
+        db.commit()
         return redirect(url_for("pembayaran"))
     else:
         return redirect(url_for("index"))
@@ -1198,13 +1210,16 @@ def deletebulanan():
 
 def addbulanan_admin():
     if "status" in session:
-        username = "None"
         nama_keluarga = request.form.get('nama')
         nominal_persembahan = request.form.get('nominal')
         persembahan_bulan = request.form.get('bulan')
         status = request.form.get("status")
         bukti_persembahan = request.files.get('bukti')
         tanggal_sekarang = datetime.now().date()
+        commad = "SELECT * FROM user WHERE nama=?"
+        cursor.execute(commad, (nama_keluarga,))
+        user = cursor.fetchone()
+        username = user[1]
         file_path = None
         print(bukti_persembahan)
         if bukti_persembahan:
@@ -1231,6 +1246,14 @@ def addbulanan_admin():
                 """
             cursor.execute(command, data)
             db.commit()
+            data = (keterangan, tanggal, jenis_pemasukan, nominal)
+            command = """
+                    INSERT INTO pemasukan (
+                    keterangan, tanggal, jenis_pemasukan, nominal
+                    ) VALUES (?, ?, ?, ?)
+                """
+            cursor.execute(command, data)
+            db.commit()
         return redirect(url_for("pembayaran"))
     else:
         return redirect(url_for("index"))
@@ -1254,6 +1277,14 @@ def verify_hamauliateon():
                 INSERT INTO finansial (
                 keterangan, tanggal, jenis, nominal, keuangan, id_pembayaran
                 ) VALUES (?, ?, ?, ?, ?, ?)
+            """
+        cursor.execute(command, data)
+        db.commit()
+        data = (keterangan, tanggal, jenis_pemasukan, nominal)
+        command = """
+                INSERT INTO pemasukan (
+                keterangan, tanggal, jenis_pemasukan, nominal
+                ) VALUES (?, ?, ?, ?)
             """
         cursor.execute(command, data)
         db.commit()
@@ -1288,13 +1319,74 @@ def hamauliateon_admin():
                         count += 1
                     else:
                         pending += 1
+            command = f"SELECT * FROM pemasukan"
+            cursor.execute(command)
+            pemasukan = cursor.fetchall()
+            if len(pemasukan) > 0:
+                for i in pemasukan:
+                        if i[3] == "Huria":
+                            nominal += int(i[4])
+                        elif i[3] == "Pembangunan":
+                            nominal += int(i[4])
+                        elif i[3] == "Diakonia":
+                            nominal += int(i[4])
+                        elif i[3] == "Pendeta":
+                            nominal += int(i[4])
+                        elif i[3] == "Sintua":
+                            nominal += int(i[4])
+                        elif i[3] == "Perhalado":
+                            nominal += int(i[4])
+                        elif i[3] == "Ama":
+                            nominal += int(i[4])
+                        elif i[3] == "Ina":
+                            nominal += int(i[4])
+                        elif i[3] == "NHKBP":
+                            nominal += int(i[4])
+                        elif i[3] == "Remaja":
+                            nominal += int(i[4])
+                        elif i[3] == "Sekolah Minggu":
+                            nominal += int(i[4])
+                        elif i[3] == "Pemusik":
+                            nominal += int(i[4])
+                        elif i[3] == "Multimedia":
+                            nominal += int(i[4])
+                        elif i[3] == "Song Leader":
+                            nominal += int(i[4])
             pen = 0
-            command = f"SELECT * FROM finansial WHERE keterangan='Hamauliateon' AND keuangan='pengeluaran' "
+            command = f"SELECT * FROM finansial WHERE keuangan='pengeluaran' "
             cursor.execute(command)
             data = cursor.fetchall()
             for i in data:
-                pen += int(i[4])
+                if i[3] == "Huria":
+                    pen += int(i[4])
+                elif i[3] == "Pembangunan":
+                    pen += int(i[4])
+                elif i[3] == "Diakonia":
+                    pen += int(i[4])
+                elif i[3] == "Pendeta":
+                    pen += int(i[4])
+                elif i[3] == "Sintua":
+                    pen += int(i[4])
+                elif i[3] == "Perhalado":
+                    pen += int(i[4])
+                elif i[3] == "Ama":
+                    pen += int(i[4])
+                elif i[3] == "Ina":
+                    pen += int(i[4])
+                elif i[3] == "NHKBP":
+                    pen += int(i[4])
+                elif i[3] == "Remaja":
+                    pen += int(i[4])
+                elif i[3] == "Sekolah Minggu":
+                    pen += int(i[4])
+                elif i[3] == "Pemusik":
+                    pen += int(i[4])
+                elif i[3] == "Multimedia":
+                    pen += int(i[4])
+                elif i[3] == "Song Leader":
+                    pen += int(i[4])
             nominal -= pen
+            print(pen)
             str_nominal = locale.currency(nominal, grouping=True)[:-3]
             query = request.args.get("query")
             if query:
@@ -1310,9 +1402,7 @@ def hamauliateon_laporan():
     if session and session["status"] == "Admin":
         tanggalawal = request.form.get("tanggalawal")
         tanggalakhir = request.form.get("tanggalakhir")
-        command = f"SELECT * FROM hamauliateon WHERE tanggal BETWEEN '{tanggalawal}' AND '{tanggalakhir}'"
-        cursor.execute(command)
-        users = cursor.fetchall()
+        jenis_laporan = request.form.get("data")
         huria = 0
         pembangunan = 0
         diakonia = 0
@@ -1327,90 +1417,98 @@ def hamauliateon_laporan():
         pemusik = 0
         multimedia = 0
         song_leader = 0
-        if len(users) > 0:
-            for i in users:
-                huria += int(i[3])
-                pembangunan += int(i[4])
-                diakonia += int(i[5])
-                pendeta += int(i[6])
-                sintua += int(i[7])
-                perhalado += int(i[8])
-                ama += int(i[9])
-                ina += int(i[10])
-                nhkbp += int(i[11])
-                remaja += int(i[12])
-                sekolah_minggu += int(i[13])
-                pemusik += int(i[14])
-                multimedia += int(i[15])
-                song_leader += int(i[16])
-            command = f"SELECT * FROM finansial WHERE tanggal BETWEEN '{tanggalawal}' AND '{tanggalakhir}'"
+        list_pengeluaran = []
+        if jenis_laporan == "pemasukan":
+            command = f"SELECT * FROM hamauliateon WHERE tanggal BETWEEN '{tanggalawal}' AND '{tanggalakhir}'"
             cursor.execute(command)
-            pengeluaran = cursor.fetchall()
-            if len(pengeluaran) > 0:
-                for i in pengeluaran:
-                    if i[5] == "pemasukan":
-                        if i[3] == "Huria":
-                            huria += int(i[4])
-                        elif i[3] == "Pembangunan":
-                            pembangunan += int(i[4])
-                        elif i[3] == "Diakonia":
-                            diakonia += int(i[4])
-                        elif i[3] == "Pendeta":
-                            pendeta += int(i[4])
-                        elif i[3] == "Sintua":
-                            sintua += int(i[4])
-                        elif i[3] == "Perhalado":
-                            perhalado += int(i[4])
-                        elif i[3] == "Ama":
-                            ama += int(i[4])
-                        elif i[3] == "Ina":
-                            ina += int(i[4])
-                        elif i[3] == "NHKBP":
-                            nhkbp += int(i[4])
-                        elif i[3] == "Remaja":
-                            remaja += int(i[4])
-                        elif i[3] == "Sekolah Minggu":
-                            sekolah_minggu += int(i[4])
-                        elif i[3] == "Pemusik":
-                            pemusik += int(i[4])
-                        elif i[3] == "Multimedia":
-                            multimedia += int(i[4])
-                        elif i[3] == "Song Leader":
-                            remaja += int(i[4])
-            command = f"SELECT * FROM finansial WHERE tanggal BETWEEN '{tanggalawal}' AND '{tanggalakhir}'"
-            cursor.execute(command)
-            pengeluaran = cursor.fetchall()
-            if len(pengeluaran) > 0:
-                for i in pengeluaran:
-                    if i[5] == "pengeluaran":
-                        if i[3] == "Huria":
-                            huria -= int(i[4])
-                        elif i[3] == "Pembangunan":
-                            pembangunan -= int(i[4])
-                        elif i[3] == "Diakonia":
-                            diakonia -= int(i[4])
-                        elif i[3] == "Pendeta":
-                            pendeta -= int(i[4])
-                        elif i[3] == "Sintua":
-                            sintua -= int(i[4])
-                        elif i[3] == "Perhalado":
-                            perhalado -= int(i[4])
-                        elif i[3] == "Ama":
-                            ama -= int(i[4])
-                        elif i[3] == "Ina":
-                            ina -= int(i[4])
-                        elif i[3] == "NHKBP":
-                            nhkbp -= int(i[4])
-                        elif i[3] == "Remaja":
-                            remaja -= int(i[4])
-                        elif i[3] == "Sekolah Minggu":
-                            sekolah_minggu -= int(i[4])
-                        elif i[3] == "Pemusik":
-                            pemusik -= int(i[4])
-                        elif i[3] == "Multimedia":
-                            multimedia -= int(i[4])
-                        elif i[3] == "Song Leader":
-                            remaja -= int(i[4])
+            users = cursor.fetchall()
+            if len(users) > 0:
+                for i in users:
+                    huria += int(i[3])
+                    pembangunan += int(i[4])
+                    diakonia += int(i[5])
+                    pendeta += int(i[6])
+                    sintua += int(i[7])
+                    perhalado += int(i[8])
+                    ama += int(i[9])
+                    ina += int(i[10])
+                    nhkbp += int(i[11])
+                    remaja += int(i[12])
+                    sekolah_minggu += int(i[13])
+                    pemusik += int(i[14])
+                    multimedia += int(i[15])
+                    song_leader += int(i[16])
+                command = f"SELECT * FROM finansial WHERE tanggal BETWEEN '{tanggalawal}' AND '{tanggalakhir}'"
+                cursor.execute(command)
+                pengeluaran = cursor.fetchall()
+                if len(pengeluaran) > 0:
+                    for i in pengeluaran:
+                        if i[5] == "pemasukan":
+                            if i[3] == "Huria":
+                                huria += int(i[4])
+                            elif i[3] == "Pembangunan":
+                                pembangunan += int(i[4])
+                            elif i[3] == "Diakonia":
+                                diakonia += int(i[4])
+                            elif i[3] == "Pendeta":
+                                pendeta += int(i[4])
+                            elif i[3] == "Sintua":
+                                sintua += int(i[4])
+                            elif i[3] == "Perhalado":
+                                perhalado += int(i[4])
+                            elif i[3] == "Ama":
+                                ama += int(i[4])
+                            elif i[3] == "Ina":
+                                ina += int(i[4])
+                            elif i[3] == "NHKBP":
+                                nhkbp += int(i[4])
+                            elif i[3] == "Remaja":
+                                remaja += int(i[4])
+                            elif i[3] == "Sekolah Minggu":
+                                sekolah_minggu += int(i[4])
+                            elif i[3] == "Pemusik":
+                                pemusik += int(i[4])
+                            elif i[3] == "Multimedia":
+                                multimedia += int(i[4])
+                            elif i[3] == "Song Leader":
+                                remaja += int(i[4])
+        elif jenis_laporan == "pengeluaran":
+                command = f"SELECT * FROM finansial WHERE tanggal BETWEEN '{tanggalawal}' AND '{tanggalakhir}'"
+                cursor.execute(command)
+                pengeluaran = cursor.fetchall()
+                print(pengeluaran)
+                if len(pengeluaran) > 0:
+                    for i in pengeluaran:
+                        if i[5] == "pengeluaran":
+                            if i[3] == "Huria":
+                                huria += int(i[4])
+                            elif i[3] == "Pembangunan":
+                                pembangunan += int(i[4])
+                            elif i[3] == "Diakonia":
+                                diakonia += int(i[4])
+                            elif i[3] == "Pendeta":
+                                pendeta += int(i[4])
+                            elif i[3] == "Sintua":
+                                sintua += int(i[4])
+                            elif i[3] == "Perhalado":
+                                perhalado += int(i[4])
+                            elif i[3] == "Ama":
+                                ama += int(i[4])
+                            elif i[3] == "Ina":
+                                ina += int(i[4])
+                            elif i[3] == "NHKBP":
+                                nhkbp += int(i[4])
+                            elif i[3] == "Remaja":
+                                remaja += int(i[4])
+                            elif i[3] == "Sekolah Minggu":
+                                sekolah_minggu += int(i[4])
+                            elif i[3] == "Pemusik":
+                                pemusik += int(i[4])
+                            elif i[3] == "Multimedia":
+                                multimedia += int(i[4])
+                            elif i[3] == "Song Leader":
+                                remaja += int(i[4])
+                            list_pengeluaran.append(i)
         str_huria = locale.currency(huria, grouping=True)[:-3]
         str_pembangunan = locale.currency(pembangunan, grouping=True)[:-3]
         str_diakonia = locale.currency(diakonia, grouping=True)[:-3]
@@ -1425,7 +1523,10 @@ def hamauliateon_laporan():
         str_pemusik = locale.currency(pemusik, grouping=True)[:-3]
         str_multimedia = locale.currency(multimedia, grouping=True)[:-3]
         str_song_leader = locale.currency(song_leader, grouping=True)[:-3]
-        return render_template("Admin/hamauliateon_laporan.html", users=users, huria=str_huria, pembangunan=str_pembangunan, diakonia=str_diakonia, pendeta=str_pendeta, sintua=str_sintua, parhalado=str_perhalado, ama=str_ama, ina=str_ina, nhkbp=str_nhkbp, remaja=str_remaja, sekolah_minggu=str_sekolah_minggu, pemusik=str_pemusik,multimedia=str_multimedia, song_leader=str_song_leader) 
+        if jenis_laporan == "pemasukan":
+            return render_template("Admin/hamauliateon_laporan.html", jenis_laporan=jenis_laporan, users=users, huria=str_huria, pembangunan=str_pembangunan, diakonia=str_diakonia, pendeta=str_pendeta, sintua=str_sintua, parhalado=str_perhalado, ama=str_ama, ina=str_ina, nhkbp=str_nhkbp, remaja=str_remaja, sekolah_minggu=str_sekolah_minggu, pemusik=str_pemusik,multimedia=str_multimedia, song_leader=str_song_leader) 
+        else:
+            return render_template("Admin/hamauliateon_laporan.html", jenis_laporan=jenis_laporan, users=list_pengeluaran, huria=str_huria, pembangunan=str_pembangunan, diakonia=str_diakonia, pendeta=str_pendeta, sintua=str_sintua, parhalado=str_perhalado, ama=str_ama, ina=str_ina, nhkbp=str_nhkbp, remaja=str_remaja, sekolah_minggu=str_sekolah_minggu, pemusik=str_pemusik,multimedia=str_multimedia, song_leader=str_song_leader) 
     else:
         return redirect(url_for("index"))
 
@@ -1496,7 +1597,7 @@ def tambah_pemasukan():
         """
         cursor.execute(command, data)
         db.commit()
-        return redirect("/dashboard/add-finansial")
+        return redirect("/dashboard/warta_keuangan")
 
 def tambah_pengeluaran():
     if session and session["status"] == "Admin":
@@ -1516,7 +1617,7 @@ def tambah_pengeluaran():
         command = "SELECT * FROM pengeluaran"
         cursor.execute(command)
         pemasukan_data = cursor.fetchall()
-        my_id = len(pemasukan_data) + 1
+        my_id = len(pemasukan_data)
         data = (keterangan, tanggal, jenis_pemasukan, nominal, "pengeluaran", my_id)
         command = """
             INSERT INTO finansial (
@@ -1525,7 +1626,7 @@ def tambah_pengeluaran():
         """
         cursor.execute(command, data)
         db.commit()
-        return redirect("/dashboard/add-finansial")
+        return redirect("/dashboard/warta_keuangan")
 
 # def finansial_edit():
 #     if session and session["status"] == "Admin":
