@@ -323,11 +323,14 @@ def signin_admin():
     username = request.form.get("username")
     password = request.form.get("password")
     kode = request.form.get("kode")
-    if username == "Admin" and password == "G422A1" and kode == "182101":
-        session["username"] = username
-        session["password"] = password
-        session["status"] = "Admin"
-        return redirect(url_for("dashboard"))
+    with open("data/adminn.json") as file:
+        data = json.load(file)
+    for datum in data:
+        if username == datum["username"] and password == datum["password"] and kode == str(datum["kode"]):
+            session["username"] = username
+            session["password"] = password
+            session["status"] = "Peserta"
+            return redirect(url_for("dashboard"))
     else:
         return redirect("/login/admin?error=Data%20tidak%20valid")
 
