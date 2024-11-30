@@ -244,6 +244,14 @@
             <div class="container container-box">
                 <div class="container mt-5">
                     <div class="card shadow">
+                        {% if error %}
+                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                            <div>
+                            {{ error }}
+                            </div>
+                        </div>
+                        {% endif %}
                         <div class="card-body">
                             {% if id == "pengeluaran" %}
                             <h2 class="header-title mb-4">Tambah Data Pengeluaran</h2>
@@ -261,7 +269,7 @@
                                 {% if id == "pengeluaran" %}
                                 <div class="mb-3">
                                     <label for="jenis_pengeluaran" class="form-label">Jenis Pengeluaran</label>
-                                    <select class="form-select" id="jenis_pengeluaran" name="jenis_pengeluaran" required>
+                                    <select class="form-select" id="jenis_pengeluaran" name="jenis_pengeluaran">
                                         <option selected disabled>Pilih Jenis Pengeluaran</option>
                                         <option value="Huria">Huria</option>
                                         <option value="Pembangunan">Pembangunan</option>
@@ -287,7 +295,7 @@
                                 {% else %}
                                 <div class="mb-3">
                                     <label for="jenis_pemasukan" class="form-label">Jenis Pemasukan</label>
-                                    <select class="form-select" id="jenis_pemasukan" name="jenis_pemasukan" required>
+                                    <select class="form-select" id="jenis_pemasukan" name="jenis_pemasukan">
                                         <option selected disabled>Pilih Jenis Pemasukan</option>
                                         <option value="Pelean Ibadah Minggu Pagi">Pelean Ibadah Minggu Pagi</option>
                                         <option value="Pelean Ibadah Minggu Sore">Pelean Ibadah Minggu Sore</option>
@@ -311,16 +319,39 @@
                                         <option value="Song Leader">Song Leader</option>
                                     </select>
                                 </div>
+                                <div class="mb-3">
+                                    <input type="checkbox" id="toggleKeterangan" />
+                                    <label for="toggleKeterangan">Pemasukan Hamauliateon</label>
+                                </div>
+                                <div class="mb-3" id="keteranganField" style="display: none;">
+                                        <label for="nama_keluarga" class="form-label">Nama Lengkap</label>
+                                        <input list="nama_keluarga_list" class="form-control" id="nama_keluarga" name="nama_keluarga">
+                                        <datalist id="nama_keluarga_list">
+                                            {% for nam in nama %}
+                                            <option value="{{ nam[2] }}"></option>
+                                            {% endfor %}
+                                        </datalist>
+                                </div>
+                                <script>
+                                    document.getElementById("toggleKeterangan").addEventListener("change", function () {
+                                        const keteranganField = document.getElementById("keteranganField");
+                                        if (this.checked) {
+                                            keteranganField.style.display = "block";
+                                        } else {
+                                            keteranganField.style.display = "none";
+                                        }
+                                    });
+                                </script>
                                 {% endif %}
-            
+                                
                                 <!-- Tanggal -->
                                 <div class="mb-3">
                                     <label for="tanggal" class="form-label">Tanggal</label>
-                                    <input type="date" class="form-control" id="tanggal" name="tanggal" placeholder="Masukkan Keterangan" required>
+                                    <input type="date" class="form-control" id="tanggal" name="tanggal" placeholder="Masukkan Keterangan">
                                 </div>
                                 <div class="mb-3">
                                     <label for="nominal" class="form-label">Nominal</label>
-                                    <input type="number" class="form-control" id="nominal" name="nominal" placeholder="Masukkan Nominal"required>
+                                    <input type="number" class="form-control" id="nominal" name="nominal" placeholder="Masukkan Keterangan">
                                 </div>
                                 <!-- Buttons -->
                                 <div class="d-flex justify-content-end gap-2">

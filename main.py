@@ -23,7 +23,7 @@ command = """CREATE TABLE IF NOT EXISTS user(
     wjik VARCHAR(255),
     tanggal_registrasi TEXT,
     tanggal_menikah TEXT,
-    Alamat Text
+    Alamat TEXT
     )"""
 cursor.execute(command)
 command = """CREATE TABLE IF NOT EXISTS baptis(
@@ -186,30 +186,6 @@ command = """CREATE TABLE IF NOT EXISTS hamauliateon(
     tanggal TEXT
     )"""
 cursor.execute(command)
-# command = """ CREATE TABLE IF NOT EXISTS financial_data (
-#             id INTEGER PRIMARY KEY AUTOINCREMENT,
-#             nama_minggu TEXT,
-#             tanggal TEXT,
-#             pemasukan_pagi INTEGER,
-#             pemasukan_sore INTEGER,
-#             pemasukan_sekolah INTEGER,
-#             pemasukan_kasual INTEGER,
-#             pemasukan_partangiangan INTEGER,
-#             pemasukan_kategori INTEGER,
-#             transitori INTEGER,
-#             pemasukan_lainnya INTEGER,
-#             konven_pendeta INTEGER,
-#             transport INTEGER,
-#             rumah_tangga INTEGER,
-#             diakonia INTEGER,
-#             koinonia INTEGER,
-#             marturia INTEGER,
-#             biaya_operasional INTEGER,
-#             pengeluaran_lainnya INTEGER,
-#             total_pemasukan INTEGER,
-#             total_pengeluaran INTEGER
-#         )"""
-# cursor.execute(command)
 command = """ CREATE TABLE IF NOT EXISTS pemasukan (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             Keterangan TEXT,
@@ -291,15 +267,11 @@ def index():
     else:
         return render_template("User/index.html", warta_jemaat=warta_jemaat, pelayanan=pelayanan, berita=berita, logged="Not Login")
 
-# def warta_user():
-#     with open("data/warta_jemaat.json", "r") as f:
-#         data = json.load(f)
-#     return render_template("User/warta.html", data=data)
-
 def warta_user():
     # Load JSON data
     with open("data/warta_jemaat.json", "r") as f:
         data = json.load(f)
+    data = list(reversed(data))
     page = request.args.get('page', 1, type=int)  # Get the current page number from query params
     per_page = 5  # Number of items per page
     total_pages = (len(data) + per_page - 1) // per_page  # Calculate total number of pages
@@ -323,14 +295,16 @@ def signin_admin():
     username = request.form.get("username")
     password = request.form.get("password")
     kode = request.form.get("kode")
-    with open("data/adminn.json") as file:
+    with open("data/admin.json") as file:
         data = json.load(file)
     for datum in data:
-        if username == datum["username"] and password == datum["password"] and kode == str(datum["kode"]):
+        if username == datum["user"] and password == datum["pass"] and str(kode) == str(datum["kode"]):
             session["username"] = username
             session["password"] = password
-            session["status"] = "Peserta"
+            session["status"] = "Admin"
             return redirect(url_for("dashboard"))
+        else:
+            return redirect("/login/admin?error=Data%20tidak%20valid")
     else:
         return redirect("/login/admin?error=Data%20tidak%20valid")
 
@@ -339,12 +313,6 @@ def signin():
         password = request.form.get("password")
         print(username)
         print(password)
-    # if username == "Admin" and password == "Admin":
-    #     session["username"] = username
-    #     session["password"] = password
-    #     session["status"] = "Admin"
-    #     return redirect(url_for("dashboard"))
-    # else:
         command = f"SELECT * FROM user WHERE username='{username}' AND password='{password}'"
         cursor.execute(command)
         myData = cursor.fetchone()
@@ -544,12 +512,10 @@ def adduser():
             wijk = request.form.get("wijk")
             status = "Peserta"
             command = f"INSERT INTO user(username, password, status, registrasi, tanggal_registrasi, tanggal_menikah, nama, Alamat, wjik) VALUES('{username}', '{password}', '{status}', '{registrasi}', '{tanggal_registrasi}', '{tanggal_menikah}', '{nama}', '{Alamat}', '{wijk}')"
-            # command = f"INSERT INTO user(username, password, status) VALUES('{username}', '{password}', '{status}')"
             cursor.execute(command)
             db.commit()
             new_json = []
             filename = f"data/{username}.json"
-            #create a new json file
             with open(filename, "w") as f:
                 json.dump(new_json, f)
             return redirect(url_for("management_user"))
@@ -632,13 +598,16 @@ def baptis():
                 command += f" WHERE nama_lengkap LIKE '%{query}%'"
             cursor.execute(command)
             users = cursor.fetchall()
-            return render_template("Admin/baptis.html", users=users, wijk=wijk)
+            command = "SELECT * FROM keluarga"
+            cursor.execute(command)
+            keluarga = cursor.fetchall()
+            return render_template("Admin/baptis.html", users=users, wijk=wijk, nama=keluarga)
     else:
         return redirect(url_for("index"))
 
 def addbaptis():
     if "status" in session:
-            nama_lengkap = request.form.get("nama_lengkap")
+            nama_lengkap = request.form.get("nama_keluarga")
             jenis_kelamin = request.form.get("jenis_kelamin")
             tempat_lahir = request.form.get("tempat_lahir")
             tanggal_lahir = request.form.get("tanggal_lahir")
@@ -647,6 +616,14 @@ def addbaptis():
             command = f"INSERT INTO baptis(nama_lengkap, jenis_kelamin, tempat_lahir, tanggal_lahir, wijk, tanggal_baptis) VALUES('{nama_lengkap}', '{jenis_kelamin}', '{tempat_lahir}', '{tanggal_lahir}', '{wijk}', '{tanggal_baptis}')"
             cursor.execute(command)
             db.commit()
+            command = f"SELECT * FROM keluarga WHERE nama='{nama_lengkap}'"
+            cursor.execute(command)
+            keluarga = cursor.fetchone()
+            if keluarga:
+                #set tanggal baptis = tanggal baptis where nama = nama lengkap di database keluarga
+                command = f"UPDATE keluarga SET tanggal_baptis=? WHERE nama=?"
+                cursor.execute(command, (tanggal_baptis, nama_lengkap))
+                db.commit()            
             if session["status"] == "Admin":
                 return redirect(url_for("jemaat_baptis"))
             else:
@@ -675,14 +652,16 @@ def sidi():
                 command += f" WHERE nama_lengkap LIKE '%{query}%'"
             cursor.execute(command)
             users = cursor.fetchall()
-            return render_template("Admin/sidi.html", users=users, wijk=wijk)
+            command = "SELECT * FROM keluarga"
+            cursor.execute(command)
+            keluarga = cursor.fetchall()
+            return render_template("Admin/sidi.html", users=users, wijk=wijk, nama=keluarga)
     else:
         return redirect(url_for("index"))
-
+#siniya
 def addsidi():
-    print("debug 0")
     if "status" in session:
-            nama_lengkap = request.form.get("nama_lengkap")
+            nama_lengkap = request.form.get("nama_keluarga")
             jenis_kelamin = request.form.get("jenis_kelamin")
             tempat_lahir = request.form.get("tempat_lahir")
             tanggal_lahir = request.form.get("tanggal_lahir")
@@ -692,6 +671,14 @@ def addsidi():
             command = f"INSERT INTO sidi(nama_lengkap, jenis_kelamin, tempat_lahir, tanggal_lahir, wijk, tanggal_baptis, tanggal_sidi) VALUES('{nama_lengkap}', '{jenis_kelamin}', '{tempat_lahir}', '{tanggal_lahir}', '{wijk}', '{tanggal_baptis}', '{tanggal_sidi}')"
             cursor.execute(command)
             db.commit()
+            command = f"SELECT * FROM keluarga WHERE nama='{nama_lengkap}'"
+            cursor.execute(command)
+            keluarga = cursor.fetchone()
+            if keluarga:
+                #set tanggal baptis = tanggal baptis where nama = nama lengkap di database keluarga
+                command = f"UPDATE keluarga SET tanggal_sidi=? WHERE nama=?"
+                cursor.execute(command, (tanggal_sidi, nama_lengkap))
+                db.commit()            
             if session["status"] == "Admin":
                 return redirect(url_for("jemaat_sidi"))
             else:
@@ -715,24 +702,44 @@ def lahir():
         if session["status"] == "Admin":
             with open("data/nama_wjik.txt", "r") as f:
                 wijk = f.read().split("\n")
+            command = "SELECT * FROM user"
+            cursor.execute(command)
+            nama = cursor.fetchall()
             query = request.args.get("query")
             command = "SELECT * FROM anak_lahir"
             if query:
                 command += f" WHERE nama_lengkap LIKE '%{query}%' OR wijk LIKE '%{query}%'"
             cursor.execute(command)
             users = cursor.fetchall()
-            return render_template("Admin/anak_lahir.html", users=users, wijk=wijk)
+            return render_template("Admin/anak_lahir.html", users=users, wijk=wijk, nama=nama)
     else:
         return redirect(url_for("index"))
-
+#nyampek
 def addlahir():
     if "status" in session:
+            nama_keluarga = request.form.get("nama_keluarga")
             nama_lengkap = request.form.get("nama_lengkap")
             jenis_kelamin = request.form.get("jenis_kelamin")
             tempat_lahir = request.form.get("tempat_lahir")
             tanggal_lahir = request.form.get("tanggal_lahir")
             wijk = request.form.get("wijk")
             command = f"INSERT INTO anak_lahir(nama_lengkap, jenis_kelamin, tempat_lahir, tanggal_lahir, wijk) VALUES('{nama_lengkap}', '{jenis_kelamin}', '{tempat_lahir}', '{tanggal_lahir}', '{wijk}')"
+            cursor.execute(command)
+            db.commit()
+            command = f"SELECT * FROM user WHERE nama = ?"
+            cursor.execute(command, (nama_keluarga,))
+            user = cursor.fetchone()
+            id = user[0]
+            nama = nama_lengkap
+            status = "Anak"
+            tanggal_baptis = None
+            tanggal_sidi = None
+            pekerjaan = None
+            pendidikan = None
+            alamat = user[9]
+            wijk = user[6]
+            registrasi = user[5]
+            command = f"INSERT INTO keluarga(myid, nama, status, jenis_kelamin, tempat_lahir, tanggal_lahir, tanggal_baptis, tanggal_sidi, pekerjaan, pendidikan, alamat, wijk, registrasi) VALUES({id}, '{nama}', '{status}', '{jenis_kelamin}', '{tempat_lahir}', '{tanggal_lahir}', '{tanggal_baptis}', '{tanggal_sidi}', '{pekerjaan}', '{pendidikan}', '{alamat}', '{wijk}', '{registrasi}')"
             cursor.execute(command)
             db.commit()
             if session["status"] == "Admin":
@@ -908,12 +915,19 @@ def meninggal_dunia():
 def addmeninggal():
     if "status" in session:
         if session["status"] == "Admin":
+            nama_keluarga = request.form.get("nama_keluarga")
             nama_lengkap = request.form.get("nama_lengkap")
             jenis_kelamin = request.form.get("jenis_kelamin")
             monding = request.form.get("monding")
             wijk = request.form.get("wijk")
             command = f"INSERT INTO meninggal(nama_lengkap, jenis_kelamin, monding, wijk) VALUES('{nama_lengkap}', '{jenis_kelamin}', '{monding}', '{wijk}')"
             cursor.execute(command)
+            db.commit()
+            command = "SELECT * FROM user WHERE nama = ?"
+            cursor.execute(command, (nama_keluarga,))
+            user = cursor.fetchone()
+            command = "DELETE FROM keluarga WHERE myid=? AND nama=?"
+            cursor.execute(command, (user[0], nama_keluarga))
             db.commit()
             return redirect(url_for("meninggal_dunia"))
     else:
@@ -996,7 +1010,6 @@ def addpelayanan():
             status_pelayanan = request.form.get("status_pelayanan")
             jenis_pelayanan = request.form.get("jenis_pelayanan")
             tanggal_tahbisan = request.form.get("tanggal_tahbisan")
-            #masukkan data diatas ke database pelayanan
             command = f"INSERT INTO pelayanan(nama_lengkap, jenis_kelamin, status_pelayanan, jenis_pelayanan, tanggal_tahbisan) VALUES('{nama_lengkap}', '{jenis_kelamin}', '{status_pelayanan}', '{jenis_pelayanan}', '{tanggal_tahbisan}')"
             cursor.execute(command)
             db.commit()
@@ -1084,7 +1097,6 @@ def addberita():
             deskripsi = isi
         with open("data/berita.json", "r") as file:
             data = json.load(file)
-        #ambil tanggal dengan format hh//mm/yyyy
         tanggal = datetime.now().strftime("%d//%m//%Y")
         new_data = {
             "judul": judul,
@@ -1122,7 +1134,6 @@ def pembayaran():
             nominal = 0
             pending = 0
             count = 0
-            # print(len(bulanan))
             if len(users) > 0:
                 for i in users:
                     if i[6] == "verified":
@@ -1569,7 +1580,12 @@ def finansial_page():
 def tambah_data():
     if session and session["status"] == "Admin":
         id = request.args.get("id")
-        return render_template("Admin/tambah_data.html", id=id)
+        error = request.args.get("error") or ""
+        print(error)
+        command = "SELECT * FROM keluarga"
+        cursor.execute(command)
+        keluarga_data = cursor.fetchall()
+        return render_template("Admin/tambah_data.html", id=id, error=error, nama=keluarga_data)
     else:
         return redirect("/")
 
@@ -1577,9 +1593,48 @@ def tambah_pemasukan():
     if session and session["status"] == "Admin":
         keterangan = request.form.get("keterangan")
         tanggal = request.form.get("tanggal")
-        print(request.form)
+        nama_lengkap = request.form.get("nama_keluarga")
         jenis_pemasukan = request.form.get("jenis_pemasukan")
         nominal = request.form.get("nominal")
+        if nama_lengkap:
+            command = "SELECT myid FROM keluarga WHERE nama=?"
+            cursor.execute(command, (nama_lengkap,))
+            myid = cursor.fetchone()[0]
+            command = "SELECT * FROM user WHERE id = ?"
+            cursor.execute(command, (myid,))
+            user_data = cursor.fetchone()
+            username = user_data[1]
+            if jenis_pemasukan == "Huria":
+                new_data = (username, nama_lengkap, nominal, 0,0,0,0,0,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+            elif jenis_pemasukan == "Pembangunan":
+                new_data = (username, nama_lengkap, 0,nominal,0,0,0,0,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+            elif jenis_pemasukan == "Diakonia":
+                new_data = (username, nama_lengkap, 0,0,nominal,0,0,0,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+            elif jenis_pemasukan == "Pendeta":
+                new_data = (username, nama_lengkap, 0,0,0,nominal,0,0,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+            elif jenis_pemasukan == "Sintua":
+                new_data = (username, nama_lengkap, 0,0,0,0,nominal,0,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+            elif jenis_pemasukan == "Perhalado":
+                new_data = (username, nama_lengkap, 0,0,0,0,0,nominal,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+            elif jenis_pemasukan == "Ama":
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,nominal,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+            elif jenis_pemasukan == "Ina":
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,nominal,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+            elif jenis_pemasukan == "NHKBP":
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,nominal,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+            elif jenis_pemasukan == "Remaja":
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,nominal,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+            elif jenis_pemasukan == "Sekolah Minggu":
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,nominal,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+            elif jenis_pemasukan == "Pemusik":
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,0,nominal,0,0,nominal,"verified",None,user_data[4], tanggal)
+            elif jenis_pemasukan == "Multimedia":
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,0,0,nominal,0,nominal,"verified",None,user_data[4], tanggal)
+            elif jenis_pemasukan == "Song Leader":
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,0,0,0,nominal,nominal,"verified",None,user_data[4], tanggal)
+            command = "INSERT INTO hamauliateon (username, nama, huria, pembangunan, diakonia, pendeta, sintua, perhalado, ama, ina, nhkbp, remaja, sekolah_minggu, pemusik, multimedia, song_leader, total, status, bukti, nama_keluarga, tanggal) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+            cursor.execute(command, new_data)
+            db.commit()
         data = (keterangan, tanggal, jenis_pemasukan, nominal)
         command = """
             INSERT INTO pemasukan (
@@ -1606,9 +1661,191 @@ def tambah_pengeluaran():
     if session and session["status"] == "Admin":
         keterangan = request.form.get("keterangan")
         tanggal = request.form.get("tanggal")
-        print(request.form)
         jenis_pemasukan = request.form.get("jenis_pengeluaran")
         nominal = request.form.get("nominal")
+        pemasukan = 0
+        if jenis_pemasukan == "Huria":
+            command = "SELECT huria FROM hamauliateon"
+            cursor.execute(command)
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan += int(com[0])
+            command = "SELECT nominal FROM pengeluaran WHERE jenis_pengeluaran=?"
+            cursor.execute(command, ("Huria",))
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan -= int(com[0])
+            if pemasukan < int(nominal):
+                return redirect("/dashboard/add-finansial?id=pengeluaran&error=Jumlah%20yang%20dibutuhkan%20melebihi%20jumlah%20yang%20ada")
+        elif jenis_pemasukan == "Pembangunan":
+            command = "SELECT pembangunan FROM hamauliateon"
+            cursor.execute(command)
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan += int(com[0])
+            command = "SELECT nominal FROM pengeluaran WHERE jenis_pengeluaran=?"
+            cursor.execute(command, ("Pembangunan",))
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan -= int(com[0])
+            if pemasukan < int(nominal):
+                return redirect("/dashboard/add-finansial?id=pengeluaran&error=Jumlah%20yang%20dibutuhkan%20melebihi%20jumlah%20yang%20ada")
+        elif jenis_pemasukan == "Diakonia":
+            command = "SELECT diakonia FROM hamauliateon"
+            cursor.execute(command)
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan += int(com[0])
+            command = "SELECT nominal FROM pengeluaran WHERE jenis_pengeluaran=?"
+            cursor.execute(command, ("Diakonia",))
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan -= int(com[0])
+            if pemasukan < int(nominal):
+                return redirect("/dashboard/add-finansial?id=pengeluaran&error=Jumlah%20yang%20dibutuhkan%20melebihi%20jumlah%20yang%20ada")
+        elif jenis_pemasukan == "Pendeta":
+            command = "SELECT pendeta FROM hamauliateon"
+            cursor.execute(command)
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan += int(com[0])
+            command = "SELECT nominal FROM pengeluaran WHERE jenis_pengeluaran=?"
+            cursor.execute(command, ("Pendeta",))
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan -= int(com[0])
+            if pemasukan < int(nominal):
+                return redirect("/dashboard/add-finansial?id=pengeluaran&error=Jumlah%20yang%20dibutuhkan%20melebihi%20jumlah%20yang%20ada")
+        elif jenis_pemasukan == "Sintua":
+            command = "SELECT sintua FROM hamauliateon"
+            cursor.execute(command)
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan += int(com[0])
+            command = "SELECT nominal FROM pengeluaran WHERE jenis_pengeluaran=?"
+            cursor.execute(command, ("Sintua",))
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan -= int(com[0])
+            if pemasukan < int(nominal):
+                return redirect("/dashboard/add-finansial?id=pengeluaran&error=Jumlah%20yang%20dibutuhkan%20melebihi%20jumlah%20yang%20ada")
+        elif jenis_pemasukan == "Perhalado":
+            command = "SELECT perhalado FROM hamauliateon"
+            cursor.execute(command)
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan += int(com[0])
+            command = "SELECT nominal FROM pengeluaran WHERE jenis_pengeluaran=?"
+            cursor.execute(command, ("Perhalado",))
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan -= int(com[0])
+            if pemasukan < int(nominal):
+                return redirect("/dashboard/add-finansial?id=pengeluaran&error=Jumlah%20yang%20dibutuhkan%20melebihi%20jumlah%20yang%20ada")
+        elif jenis_pemasukan == "Ama":
+            command = "SELECT ama FROM hamauliateon"
+            cursor.execute(command)
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan += int(com[0])
+            command = "SELECT nominal FROM pengeluaran WHERE jenis_pengeluaran=?"
+            cursor.execute(command, ("Ama",))
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan -= int(com[0])
+            if pemasukan < int(nominal):
+                return redirect("/dashboard/add-finansial?id=pengeluaran&error=Jumlah%20yang%20dibutuhkan%20melebihi%20jumlah%20yang%20ada")
+        elif jenis_pemasukan == "Ina":
+            command = "SELECT ina FROM hamauliateon"
+            cursor.execute(command)
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan += int(com[0])
+            command = "SELECT nominal FROM pengeluaran WHERE jenis_pengeluaran=?"
+            cursor.execute(command, ("Ina",))
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan -= int(com[0])
+            if pemasukan < int(nominal):
+                return redirect("/dashboard/add-finansial?id=pengeluaran&error=Jumlah%20yang%20dibutuhkan%20melebihi%20jumlah%20yang%20ada")
+        elif jenis_pemasukan == "NHKBP":
+            command = "SELECT nhkbp FROM hamauliateon"
+            cursor.execute(command)
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan += int(com[0])
+            command = "SELECT nominal FROM pengeluaran WHERE jenis_pengeluaran=?"
+            cursor.execute(command, ("NHKBP",))
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan -= int(com[0])
+            if pemasukan < int(nominal):
+                return redirect("/dashboard/add-finansial?id=pengeluaran&error=Jumlah%20yang%20dibutuhkan%20melebihi%20jumlah%20yang%20ada")
+        elif jenis_pemasukan == "Remaja":
+            command = "SELECT remaja FROM hamauliateon"
+            cursor.execute(command)
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan += int(com[0])
+            command = "SELECT nominal FROM pengeluaran WHERE jenis_pengeluaran=?"
+            cursor.execute(command, ("Remaja",))
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan -= int(com[0])
+            if pemasukan < int(nominal):
+                return redirect("/dashboard/add-finansial?id=pengeluaran&error=Jumlah%20yang%20dibutuhkan%20melebihi%20jumlah%20yang%20ada")
+        elif jenis_pemasukan == "Sekolah Minggu":
+            command = "SELECT sekolah_minggu FROM hamauliateon"
+            cursor.execute(command)
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan += int(com[0])
+            command = "SELECT nominal FROM pengeluaran WHERE jenis_pengeluaran=?"
+            cursor.execute(command, ("Sekolah Minggu",))
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan -= int(com[0])
+            if pemasukan < int(nominal):
+                return redirect("/dashboard/add-finansial?id=pengeluaran&error=Jumlah%20yang%20dibutuhkan%20melebihi%20jumlah%20yang%20ada")
+        elif jenis_pemasukan == "Pemusik":
+            command = "SELECT pemusik FROM hamauliateon"
+            cursor.execute(command)
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan += int(com[0])
+            command = "SELECT nominal FROM pengeluaran WHERE jenis_pengeluaran=?"
+            cursor.execute(command, ("Pemusik",))
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan -= int(com[0])
+            if pemasukan < int(nominal):
+                return redirect("/dashboard/add-finansial?id=pengeluaran&error=Jumlah%20yang%20dibutuhkan%20melebihi%20jumlah%20yang%20ada")
+        elif jenis_pemasukan == "Multimedia":
+            command = "SELECT multimedia FROM hamauliateon"
+            cursor.execute(command)
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan += int(com[0])
+            command = "SELECT nominal FROM pengeluaran WHERE jenis_pengeluaran=?"
+            cursor.execute(command, ("Multimedia",))
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan -= int(com[0])
+            if pemasukan < int(nominal):
+                return redirect("/dashboard/add-finansial?id=pengeluaran&error=Jumlah%20yang%20dibutuhkan%20melebihi%20jumlah%20yang%20ada")
+        elif jenis_pemasukan == "Song Leader":
+            command = "SELECT song_leader FROM hamauliateon"
+            cursor.execute(command)
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan += int(com[0])
+            command = "SELECT nominal FROM pengeluaran WHERE jenis_pengeluaran=?"
+            cursor.execute(command, ("Song Leader",))
+            com_data = cursor.fetchall()
+            for com in com_data:
+                pemasukan -= int(com[0])
+            if pemasukan < int(nominal):
+                return redirect("/dashboard/add-finansial?id=pengeluaran&error=Jumlah%20yang%20dibutuhkan%20melebihi%20jumlah%20yang%20ada")
         data = (keterangan, tanggal, jenis_pemasukan, nominal)
         command = """
             INSERT INTO pengeluaran (
@@ -1630,111 +1867,6 @@ def tambah_pengeluaran():
         cursor.execute(command, data)
         db.commit()
         return redirect("/dashboard/warta_keuangan")
-
-# def finansial_edit():
-#     if session and session["status"] == "Admin":
-#         req = request.args.get("id")
-#         command = f"SELECT * FROM financial_data WHERE id={req}"
-#         cursor.execute(command)
-#         user = cursor.fetchone()
-#         return render_template("Admin/warta_keuangan_edit.html", user=user)
-#     else:
-#         return redirect(url_for("index"))
-
-# def submit_financial_data():
-#     if "status" in session:
-#         if session["status"] == "Admin":
-#             nama = request.form['namaMinggu']
-#             tanggal = request.form['tanggal']
-#             aa = request.form.get('pemasukanPagi', 0)
-#             ab = request.form.get('pemasukanSore', 0)
-#             ac = request.form.get('pemasukanSekolah', 0)
-#             ad = request.form.get('pemasukanKasual', 0)
-#             ae = request.form.get('pemasukanPartangiangan', 0)
-#             af = request.form.get('pemasukanKategori', 0)
-#             ag = request.form.get('transitori', 0)
-#             ai = request.form.get('pemasukanLainnya', 0)
-#             ba = request.form.get('konvenPendeta', 0)
-#             bb = request.form.get('transport', 0)
-#             bc = request.form.get('rumahTangga', 0)
-#             bd = request.form.get('diakonia', 0)
-#             be = request.form.get('koinonia', 0)
-#             bf = request.form.get('marturia', 0)
-#             bg = request.form.get('biayaOperasional', 0)
-#             bh = request.form.get('pengeluaranLainnya', 0)
-#             total_pemasukan = int(aa) + int(ab) + int(ac) + int(ad) + int(ae) + int(af) + int(ag) + int(ai)
-#             total_pengeluaran = int(ba) + int(bb) + int(bc) + int(bd) + int(be) + int(bf) + int(bg) + int(bh)
-#             data = (nama, tanggal, aa, ab, ac, ad,ae,af,ag,ai,ba,bb,bc,bd,be,bf,bg,bh, total_pemasukan, total_pengeluaran)
-#             command = """
-#                 INSERT INTO financial_data (
-#                 nama_minggu, tanggal, pemasukan_pagi, pemasukan_sore,
-#                 pemasukan_sekolah, pemasukan_kasual, pemasukan_partangiangan,
-#                 pemasukan_kategori, transitori, pemasukan_lainnya,
-#                 konven_pendeta, transport, rumah_tangga, diakonia, koinonia,
-#                 marturia, biaya_operasional, pengeluaran_lainnya, total_pemasukan, total_pengeluaran
-#                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-#             """
-#             cursor.execute(command, data)
-#             db.commit()
-#             return(redirect(url_for("warta_keuangan")))
-#     else:
-#         return redirect(url_for("index"))
-
-# def edit_financial_data():
-#     if "status" in session:
-#         if session["status"] == "Admin":
-#             id = request.form['id']
-#             nama = request.form['namaMinggu']
-#             tanggal = request.form['tanggal']
-#             aa = request.form.get('pemasukanPagi', 0)
-#             ab = request.form.get('pemasukanSore', 0)
-#             ac = request.form.get('pemasukanSekolah', 0)
-#             ad = request.form.get('pemasukanKasual', 0)
-#             ae = request.form.get('pemasukanPartangiangan', 0)
-#             af = request.form.get('pemasukanKategori', 0)
-#             ag = request.form.get('transitori', 0)
-#             ai = request.form.get('pemasukanLainnya', 0)
-#             ba = request.form.get('konvenPendeta', 0)
-#             bb = request.form.get('transport', 0)
-#             bc = request.form.get('rumahTangga', 0)
-#             bd = request.form.get('diakonia', 0)
-#             be = request.form.get('koinonia', 0)
-#             bf = request.form.get('marturia', 0)
-#             bg = request.form.get('biayaOperasional', 0)
-#             bh = request.form.get('pengeluaranLainnya', 0)
-#             total_pemasukan = int(aa) + int(ab) + int(ac) + int(ad) + int(ae) + int(af) + int(ag) + int(ai)
-#             total_pengeluaran = int(ba) + int(bb) + int(bc) + int(bd) + int(be) + int(bf) + int(bg) + int(bh)
-#             data = (nama, tanggal, aa, ab, ac, ad,ae,af,ag,ai,ba,bb,bc,bd,be,bf,bg,bh, total_pemasukan, total_pengeluaran, id)
-#             #make command UPDATE data finansial_data where id is id
-#             command = f"""
-#                         UPDATE financial_data
-#                         SET nama_minggu = ?,
-#                             tanggal = ?,
-#                             pemasukan_pagi = ?,
-#                             pemasukan_sore = ?,
-#                             pemasukan_sekolah = ?,
-#                             pemasukan_kasual = ?,
-#                             pemasukan_partangiangan = ?,
-#                             pemasukan_kategori = ?,
-#                             transitori = ?,
-#                             pemasukan_lainnya = ?,
-#                             konven_pendeta = ?,
-#                             transport = ?,
-#                             rumah_tangga = ?,
-#                             diakonia = ?,
-#                             koinonia = ?,
-#                             marturia = ?,
-#                             biaya_operasional = ?,
-#                             pengeluaran_lainnya = ?,
-#                             total_pemasukan = ?,
-#                             total_pengeluaran = ?
-#                             WHERE id = ?
-#                             """
-#             cursor.execute(command, data)
-#             db.commit()
-#             return(redirect(url_for("warta_keuangan")))
-#     else:
-#         return redirect(url_for("index"))
 
 def editlahir():
     if "status" in session:
@@ -1915,16 +2047,13 @@ def editmeninggal():
         return redirect(url_for("index"))
 
 def editpelayan():
-    # Ensure the user is an admin (check session status)
     if "status" in session and session["status"] == "Admin":
-        # Retrieve form data
         id = request.form['modal_id']
         nama_lengkap = request.form['modal_nama_lengkap']
         jenis_kelamin = request.form['modal_jenis_kelamin']
         status_pelayanan = request.form['modal_status_pelayanan']
         jenis_pelayanan = request.form['modal_jenis_pelayanan']
         tanggal_tahbisan = request.form['modal_tanggal_tahbisan']
-        
         cursor.execute("""
             UPDATE pelayan
             SET nama_lengkap = ?,
@@ -2316,8 +2445,8 @@ def editkeluarga():
     jenis_kelamin = request.form.get("modal_jenis_kelamin")
     tempat_lahir = request.form.get("modal_tempat_lahir")
     tanggal_lahir = request.form.get("modal_tanggal_lahir")
-    tanggal_baptis = request.form.get("modal_tanggal_baptis")
-    tanggal_sidi = request.form.get("modal_tanggal_sidi")
+    tanggal_baptis = None
+    tanggal_sidi = None
     pekerjaan = request.form.get("modal_pekerjaan")
     pendidikan = request.form.get("modal_pendidikan")
     #sql edit data in keluarga
@@ -2438,7 +2567,7 @@ def user_anaklahir():
     with open("data/nama_wjik.txt", "r") as f:
         wijk = f.read().split("\n")
     if "nama" in session:
-        return render_template("User/add_anaklahir.html", wijk=wijk)
+        return render_template("User/add_anaklahir.html", wijk=wijk, nama=session["nama"])
     else:
         return redirect(url_for("profile"))
 
@@ -2446,7 +2575,10 @@ def user_baptis():
     if "nama" in session:
         with open("data/nama_wjik.txt", "r") as f:
             wijk = f.read().split("\n")
-        return render_template("User/add_baptis.html", wijk=wijk)
+        command = "SELECT * FROM keluarga WHERE myid=?"
+        cursor.execute(command, (session["id"],))
+        keluarga = cursor.fetchall()        
+        return render_template("User/add_baptis.html", wijk=wijk, keluarga=keluarga)
     else:
         return redirect(url_for("profile"))
     
@@ -2470,7 +2602,10 @@ def user_sidi():
     if "nama" in session:
         with open("data/nama_wjik.txt", "r") as f:
             wijk = f.read().split("\n")
-        return render_template("User/add_sidi.html", wijk=wijk)
+        command = "SELECT * FROM keluarga WHERE myid=?"
+        cursor.execute(command, (session["id"],))
+        keluarga = cursor.fetchall()        
+        return render_template("User/add_sidi.html", wijk=wijk, nama=keluarga)
     else:
         return redirect(url_for("profile"))
 

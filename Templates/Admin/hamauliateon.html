@@ -354,6 +354,7 @@
         </div>
     </div>
 </div>
+<!-- Modal -->
 <div class="modal fade" id="laporan" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -364,15 +365,15 @@
             <form method="POST" action="/dashboard/hamauliateon/laporan" class="mb-4" style="padding: 20px;">
                 <div class="mb-3">
                     <label for="tanggalawal" class="form-label">Tanggal Awal</label>
-                    <input type="date" id="tanggalawal" name="tanggalawal" class="form-control" required>
+                    <input type="date" id="tanggalawal" name="tanggalawal" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label for="tanggalakhir" class="form-label">Tanggal Akhir</label>
-                    <input type="date" id="tanggalakhir" name="tanggalakhir" class="form-control" required>
+                    <input type="date" id="tanggalakhir" name="tanggalakhir" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label for="tanggalakhir" class="form-label">Laporan</label>
-                    <select name="data" class="form-select" required>
+                    <select name="data" class="form-select">
                         <option value="pemasukan">Pemasukan</option>
                         <option value="pengeluaran">Pengeluaran</option>
                     </select>
@@ -399,6 +400,5 @@
         }
     }
   </script>
-  
 </body>
 </html>
