@@ -422,17 +422,17 @@ def dashboard():
             monthly_pemasukan = {
                 "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, 
                 "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, 
-                "Nov": 0, "Dec": 0
+                "Nov": 0, "Des": 0
             }
             monthly_pengeluaran = {
                 "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, 
                 "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, 
-                "Nov": 0, "Dec": 0
+                "Nov": 0, "Des": 0
             }
             monthly_nominal = {
                 "Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, 
                 "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, 
-                "Nov": 0, "Dec": 0
+                "Nov": 0, "Des": 0
             }
             cursor.execute("""
                 SELECT tanggal, nominal, keuangan
@@ -487,6 +487,7 @@ def dashboard():
 def management_user():
     if "status" in session:
         if session["status"] == "Admin":
+            error = request.args.get("error") or ""
             with open("data/nama_wjik.txt", "r") as f:
                 wijk = f.read().split("\n")
             command = "SELECT * FROM user"
@@ -495,7 +496,7 @@ def management_user():
                 command += f" WHERE username LIKE '%{query}%'"
             cursor.execute(command)
             users = cursor.fetchall()
-            return render_template("Admin/management_user.html", users=users, wijk=wijk)
+            return render_template("Admin/management_user.html", users=users, wijk=wijk, error=error)
     else:
         return redirect(url_for("index"))
 
@@ -511,6 +512,11 @@ def adduser():
             Alamat = request.form.get("alamat")
             wijk = request.form.get("wijk")
             status = "Peserta"
+            command = "SELECT * from user WHERE username = ?"
+            cursor.execute(command, (username,))
+            exist = cursor.fetchone()
+            if exist:
+                return redirect("/dashboard/management_user?error=user%20sudah%20ada")
             command = f"INSERT INTO user(username, password, status, registrasi, tanggal_registrasi, tanggal_menikah, nama, Alamat, wjik) VALUES('{username}', '{password}', '{status}', '{registrasi}', '{tanggal_registrasi}', '{tanggal_menikah}', '{nama}', '{Alamat}', '{wijk}')"
             cursor.execute(command)
             db.commit()
@@ -527,6 +533,9 @@ def hapus():
         if session["status"] == "Admin":
             id = request.args.get("id")
             command = f"DELETE FROM user WHERE id={id}"
+            cursor.execute(command)
+            db.commit()
+            command = f"DELETE FROM keluarga WHERE myid={id}"
             cursor.execute(command)
             db.commit()
             return redirect(url_for("management_user"))
@@ -798,7 +807,7 @@ def deleterpp():
         return redirect(url_for("rpp"))
     else:
         return redirect(url_for("index"))
-
+#martumpol
 def martumpol():
     if "status" in session:
         if session["status"] == "Admin":
@@ -810,7 +819,17 @@ def martumpol():
                 command += f" WHERE nama_lengkap_laki LIKE '%{query}%' OR wijk_laki LIKE '%{query}%' OR nama_lengkap_perempuan LIKE '%{query}%' OR wijk_perempuan LIKE '%{query}%'"
             cursor.execute(command)
             users = cursor.fetchall()
-            return render_template("Admin/martumpol.html", users=users, wijk=wijk)
+            laki = []
+            perempuan = []
+            command = "SELECT * FROM keluarga"
+            cursor.execute(command)
+            users_keluarga = cursor.fetchall()
+            for user in users_keluarga:
+                if user[4] == "Laki - Laki":
+                    laki.append(user)
+                else:
+                    perempuan.append(user)
+            return render_template("Admin/martumpol.html", users=users, wijk=wijk, laki=laki, perempuan=perempuan)
     else:
         return redirect(url_for("index"))
 
@@ -848,6 +867,7 @@ def deletemartumpol():
     else:
         return redirect(url_for("index"))
 
+#pernikahan
 def pernikahan():
     if "status" in session:
         if session["status"] == "Admin":
@@ -859,7 +879,17 @@ def pernikahan():
                 command += f" WHERE nama_lengkap_laki LIKE '%{query}%' OR wijk_laki LIKE '%{query}%' OR nama_lengkap_perempuan LIKE '%{query}%' OR wijk_perempuan LIKE '%{query}%'"
             cursor.execute(command)
             users = cursor.fetchall()
-            return render_template("Admin/pernikahan.html", users=users, wijk=wijk)
+            laki = []
+            perempuan = []
+            command = "SELECT * FROM keluarga"
+            cursor.execute(command)
+            users_keluarga = cursor.fetchall()
+            for user in users_keluarga:
+                if user[4] == "Laki - Laki":
+                    laki.append(user)
+                else:
+                    perempuan.append(user)
+            return render_template("Admin/pernikahan.html", users=users, wijk=wijk, laki=laki, perempuan=perempuan)
     else:
         return redirect(url_for("index"))
 
@@ -1127,6 +1157,7 @@ def deleteberita():
 
 def pembayaran():
     if "status" in session:
+        error = request.args.get("error") or ""
         if session["status"] == "Admin":
             command = f"SELECT * FROM bulanan"
             cursor.execute(command)
@@ -1150,7 +1181,7 @@ def pembayaran():
             command = "SELECT * FROM user"
             cursor.execute(command)
             data = cursor.fetchall()
-            return render_template("Admin/bulanan.html", users=users, verified=count, pending=pending, total=str_nominal, data=data)
+            return render_template("Admin/bulanan.html", users=users, verified=count, pending=pending, total=str_nominal, data=data, error=error)
     else:
         return redirect(url_for("index"))
     
@@ -1238,7 +1269,10 @@ def addbulanan_admin():
         print(bukti_persembahan)
         if bukti_persembahan:
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], bukti_persembahan.filename)
-            bukti_persembahan.save(file_path)
+            if file_path.endswith("jpg") or file_path.endswith("jpeg") or file_path.endswith("png"):
+                bukti_persembahan.save(file_path)
+            else:
+                return redirect("/dashboard/bulanann?error=file%20tidak%20didukung")
         
         command = f"INSERT INTO bulanan (username, nama, nominal, bulan, bukti, status, tanggal) VALUES ('{username}', '{nama_keluarga}', {nominal_persembahan}, '{persembahan_bulan}', '{file_path}', '{status}', '{tanggal_sekarang}') "
         cursor.execute(command)
@@ -1604,34 +1638,43 @@ def tambah_pemasukan():
             cursor.execute(command, (myid,))
             user_data = cursor.fetchone()
             username = user_data[1]
+            bukti_persembahan = request.files.get('bukti')
+            file_path = None
+            if bukti_persembahan:
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], bukti_persembahan.filename)
+                bukti_persembahan.save(file_path)
+
             if jenis_pemasukan == "Huria":
-                new_data = (username, nama_lengkap, nominal, 0,0,0,0,0,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+                new_data = (username, nama_lengkap, nominal, 0,0,0,0,0,0,0,0,0,0,0,0,0,nominal,"verified",file_path,user_data[4], tanggal)
             elif jenis_pemasukan == "Pembangunan":
-                new_data = (username, nama_lengkap, 0,nominal,0,0,0,0,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+                new_data = (username, nama_lengkap, 0,nominal,0,0,0,0,0,0,0,0,0,0,0,0,nominal,"verified",file_path,user_data[4], tanggal)
             elif jenis_pemasukan == "Diakonia":
-                new_data = (username, nama_lengkap, 0,0,nominal,0,0,0,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+                new_data = (username, nama_lengkap, 0,0,nominal,0,0,0,0,0,0,0,0,0,0,0,nominal,"verified",file_path,user_data[4], tanggal)
             elif jenis_pemasukan == "Pendeta":
-                new_data = (username, nama_lengkap, 0,0,0,nominal,0,0,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+                new_data = (username, nama_lengkap, 0,0,0,nominal,0,0,0,0,0,0,0,0,0,0,nominal,"verified",file_path,user_data[4], tanggal)
             elif jenis_pemasukan == "Sintua":
-                new_data = (username, nama_lengkap, 0,0,0,0,nominal,0,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+                new_data = (username, nama_lengkap, 0,0,0,0,nominal,0,0,0,0,0,0,0,0,0,nominal,"verified",file_path,user_data[4], tanggal)
             elif jenis_pemasukan == "Perhalado":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,nominal,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+                new_data = (username, nama_lengkap, 0,0,0,0,0,nominal,0,0,0,0,0,0,0,0,nominal,"verified",file_path,user_data[4], tanggal)
             elif jenis_pemasukan == "Ama":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,nominal,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,nominal,0,0,0,0,0,0,0,nominal,"verified",file_path,user_data[4], tanggal)
             elif jenis_pemasukan == "Ina":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,nominal,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,nominal,0,0,0,0,0,0,nominal,"verified",file_path,user_data[4], tanggal)
             elif jenis_pemasukan == "NHKBP":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,nominal,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,nominal,0,0,0,0,0,nominal,"verified",file_path,user_data[4], tanggal)
             elif jenis_pemasukan == "Remaja":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,nominal,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,nominal,0,0,0,0,nominal,"verified",file_path,user_data[4], tanggal)
             elif jenis_pemasukan == "Sekolah Minggu":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,nominal,0,0,0,nominal,"verified",None,user_data[4], tanggal)
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,nominal,0,0,0,nominal,"verified",file_path,user_data[4], tanggal)
             elif jenis_pemasukan == "Pemusik":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,0,nominal,0,0,nominal,"verified",None,user_data[4], tanggal)
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,0,nominal,0,0,nominal,"verified",file_path,user_data[4], tanggal)
             elif jenis_pemasukan == "Multimedia":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,0,0,nominal,0,nominal,"verified",None,user_data[4], tanggal)
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,0,0,nominal,0,nominal,"verified",file_path,user_data[4], tanggal)
             elif jenis_pemasukan == "Song Leader":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,0,0,0,nominal,nominal,"verified",None,user_data[4], tanggal)
+                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,0,0,0,nominal,nominal,"verified",file_path,user_data[4], tanggal)
+            else:
+                return redirect("/dashboard/add-finansial?id=pemasukan&error=Jenis%20pemasukan%20bukan%20berupa%20hamauliateon")
+
             command = "INSERT INTO hamauliateon (username, nama, huria, pembangunan, diakonia, pendeta, sintua, perhalado, ama, ina, nhkbp, remaja, sekolah_minggu, pemusik, multimedia, song_leader, total, status, bukti, nama_keluarga, tanggal) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
             cursor.execute(command, new_data)
             db.commit()
