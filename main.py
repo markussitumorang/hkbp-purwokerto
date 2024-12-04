@@ -1638,36 +1638,6 @@ def tambah_pemasukan():
             cursor.execute(command, (myid,))
             user_data = cursor.fetchone()
             username = user_data[1]
-<<<<<<< HEAD
-            if jenis_pemasukan == "Huria":
-                new_data = (username, nama_lengkap, nominal, 0,0,0,0,0,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
-            elif jenis_pemasukan == "Pembangunan":
-                new_data = (username, nama_lengkap, 0,nominal,0,0,0,0,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
-            elif jenis_pemasukan == "Diakonia":
-                new_data = (username, nama_lengkap, 0,0,nominal,0,0,0,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
-            elif jenis_pemasukan == "Pendeta":
-                new_data = (username, nama_lengkap, 0,0,0,nominal,0,0,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
-            elif jenis_pemasukan == "Sintua":
-                new_data = (username, nama_lengkap, 0,0,0,0,nominal,0,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
-            elif jenis_pemasukan == "Perhalado":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,nominal,0,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
-            elif jenis_pemasukan == "Ama":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,nominal,0,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
-            elif jenis_pemasukan == "Ina":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,nominal,0,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
-            elif jenis_pemasukan == "NHKBP":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,nominal,0,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
-            elif jenis_pemasukan == "Remaja":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,nominal,0,0,0,0,nominal,"verified",None,user_data[4], tanggal)
-            elif jenis_pemasukan == "Sekolah Minggu":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,nominal,0,0,0,nominal,"verified",None,user_data[4], tanggal)
-            elif jenis_pemasukan == "Pemusik":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,0,nominal,0,0,nominal,"verified",None,user_data[4], tanggal)
-            elif jenis_pemasukan == "Multimedia":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,0,0,nominal,0,nominal,"verified",None,user_data[4], tanggal)
-            elif jenis_pemasukan == "Song Leader":
-                new_data = (username, nama_lengkap, 0,0,0,0,0,0,0,0,0,0,0,0,0,nominal,nominal,"verified",None,user_data[4], tanggal)
-=======
             bukti_persembahan = request.files.get('bukti')
             file_path = None
             if bukti_persembahan:
@@ -1705,7 +1675,6 @@ def tambah_pemasukan():
             else:
                 return redirect("/dashboard/add-finansial?id=pemasukan&error=Jenis%20pemasukan%20bukan%20berupa%20hamauliateon")
 
->>>>>>> 90b6ba12387e8e841aaed16d23d0093b60c877a8
             command = "INSERT INTO hamauliateon (username, nama, huria, pembangunan, diakonia, pendeta, sintua, perhalado, ama, ina, nhkbp, remaja, sekolah_minggu, pemusik, multimedia, song_leader, total, status, bukti, nama_keluarga, tanggal) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
             cursor.execute(command, new_data)
             db.commit()
