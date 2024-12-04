@@ -308,11 +308,20 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addUserModalLabel">Tambah Data Anak</h5>
+                        <h5 class="modal-title" id="addUserModalLabel">Tambah Data Baru</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form method="POST" action="/addlahir">
                         <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="nama_keluarga" class="form-label">Nama Keluarga</label>
+                                <input list="nama_keluarga_list" class="form-control" id="nama_keluarga" name="nama_keluarga" required>
+                                <datalist id="nama_keluarga_list">
+                                    {% for nam in nama %}
+                                    <option value="{{ nam[4] }}"></option>
+                                    {% endfor %}
+                                </datalist>
+                            </div>
                             <div class="mb-3">
                                 <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
                                 <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" required>

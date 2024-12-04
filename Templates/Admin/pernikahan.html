@@ -326,7 +326,16 @@
                                     <h6><strong>Calon Pengantin Laki-laki</strong></h6>
                                     <div class="mb-3">
                                         <label for="nama_lengkap_laki" class="form-label">Nama Lengkap</label>
-                                        <input type="text" class="form-control" id="nama_lengkap_laki" name="nama_lengkap_laki" required>
+                                        <input list="nama_laki_list" class="form-control" id="nama_lengkap_laki" name="nama_lengkap_laki" required>
+                                        <datalist id="nama_laki_list">
+                                            {% for nam in laki %}
+                                            <option value="{{ nam[2] }}" 
+                                                    data-wijk="{{ nam[12] }}" 
+                                                    data-tempat-lahir="{{ nam[5] }}" 
+                                                    data-tanggal-lahir="{{ nam[6] }}"> {{ nam[4] }}
+                                            </option>
+                                            {% endfor %}
+                                        </datalist>
                                     </div>
                                     <div class="mb-3">
                                         <label for="nama_ayah_laki" class="form-label">Nama Ayah</label>
@@ -356,7 +365,16 @@
                                     <h6><strong>Calon Pengantin Perempuan</strong></h6>
                                     <div class="mb-3">
                                         <label for="nama_lengkap_perempuan" class="form-label">Nama Lengkap</label>
-                                        <input type="text" class="form-control" id="nama_lengkap_perempuan" name="nama_lengkap_perempuan" required>
+                                        <input list="nama_perempuan_list" class="form-control" id="nama_lengkap_perempuan" name="nama_lengkap_perempuan" required>
+                                        <datalist id="nama_perempuan_list">
+                                            {% for nam in perempuan %}
+                                            <option value="{{ nam[2] }}" 
+                                                    data-wijk="{{ nam[12] }}" 
+                                                    data-tempat-lahir="{{ nam[5] }}" 
+                                                    data-tanggal-lahir="{{ nam[6] }}"> {{ nam[4] }}
+                                            </option>
+                                            {% endfor %}
+                                        </datalist>
                                     </div>
                                     <div class="mb-3">
                                         <label for="nama_ayah_perempuan" class="form-label">Nama Ayah</label>
@@ -530,6 +548,32 @@
         document.getElementById("modal_tanggal_pernikahan").value = tanggal_pernikahan
         document.getElementById("modal_pukul_pernikahan").value = pukul_pernikahan
     }
+</script>
+<script>
+    document.getElementById('nama_lengkap_laki').addEventListener('input', function () {
+        const selectedOption = Array.from(document.getElementById('nama_laki_list').options)
+            .find(option => option.value === this.value);
+
+        if (selectedOption) {
+            // Update the fields based on the selected option's data attributes
+            document.getElementById('wijk_laki').value = selectedOption.dataset.wijk;
+            document.getElementById('tempat_lahir_laki').value = selectedOption.dataset.tempatLahir;
+            // document.getElementById('tanggal_lahir').value = selectedOption.dataset.tanggalLahir;
+        }
+    });
+</script>
+<script>
+    document.getElementById('nama_lengkap_perempuan').addEventListener('input', function () {
+        const selectedOption = Array.from(document.getElementById('nama_perempuan_list').options)
+            .find(option => option.value === this.value);
+
+        if (selectedOption) {
+            // Update the fields based on the selected option's data attributes
+            document.getElementById('wijk_perempuan').value = selectedOption.dataset.wijk;
+            document.getElementById('tempat_lahir_perempuan').value = selectedOption.dataset.tempatLahir;
+            // document.getElementById('tanggal_lahir').value = selectedOption.dataset.tanggalLahir;
+        }
+    });
 </script>
 </body>
 </html>
