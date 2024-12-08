@@ -2,7 +2,7 @@ from flask import *
 import sqlite3
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 import locale
 from openpyxl import Workbook
 import pandas as pd
@@ -234,6 +234,32 @@ UPLOAD_FOLDER = 'static/pdf'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = "y1A0A2m9U3A8n4b7b5I6b1t5y2l6d"
 
+#session
+app.permanent_session_lifetime = timedelta(minutes=5)
+def check_session_timeout():
+    if "last_activity" in session:
+        last_activity = session["last_activity"]
+        
+        # Ensure last_activity is parsed correctly
+        if isinstance(last_activity, str):
+            last_activity = datetime.fromisoformat(last_activity)
+        elif not isinstance(last_activity, datetime):
+            last_activity = datetime.min.replace(tzinfo=timezone.utc)  # Fallback for invalid data
+
+        # Ensure both datetimes are timezone-aware
+        now = datetime.now(timezone.utc)  # Make 'now' timezone-aware
+        if last_activity.tzinfo is None:  # If last_activity is naive, assume it's UTC
+            last_activity = last_activity.replace(tzinfo=timezone.utc)
+
+        # Calculate inactivity period in seconds
+        inactivity_period = (now - last_activity).total_seconds()
+        if inactivity_period > 300:  # 300 seconds = 5 minutes
+            session.clear()  # Clear all session data
+            return redirect(url_for("login", error="Session expired due to inactivity."))
+    # Perbarui aktivitas terakhir
+    session["last_activity"] = datetime.now()
+app.before_request(check_session_timeout)
+
 def index():
     with open("data/warta_jemaat.json", "r") as f:
         data = json.load(f)
@@ -302,6 +328,7 @@ def signin_admin():
             session["username"] = username
             session["password"] = password
             session["status"] = "Admin"
+            session["last_activity"] = datetime.now()
             return redirect(url_for("dashboard"))
         else:
             return redirect("/login/admin?error=Data%20tidak%20valid")
@@ -329,6 +356,7 @@ def signin():
             session["tanggal_registrasi"] = tanggal_registrasi
             session["tanggal_menikah"] = tanggal_menikah
             session["alamat"] = alamat
+            session["last_activity"] = datetime.now()
             return redirect(url_for("index"))
         else:
             return redirect("/login?error=Data%20tidak%20valid")
@@ -496,7 +524,13 @@ def management_user():
                 command += f" WHERE username LIKE '%{query}%'"
             cursor.execute(command)
             users = cursor.fetchall()
-            return render_template("Admin/management_user.html", users=users, wijk=wijk, error=error)
+            page = request.args.get('page', 1, type=int)  # Get the current page number from query params
+            per_page = 5  # Number of items per page
+            total_pages = (len(users) + per_page - 1) // per_page  # Calculate total number of pages
+            start = (page - 1) * per_page
+            end = start + per_page
+            paginated_data = users[start:end]  # Get the data for the current page
+            return render_template("Admin/management_user.html", users=paginated_data, wijk=wijk, error=error, page=page, total_pages=total_pages)
     else:
         return redirect(url_for("index"))
 
@@ -610,7 +644,13 @@ def baptis():
             command = "SELECT * FROM keluarga"
             cursor.execute(command)
             keluarga = cursor.fetchall()
-            return render_template("Admin/baptis.html", users=users, wijk=wijk, nama=keluarga)
+            page = request.args.get('page', 1, type=int)  # Get the current page number from query params
+            per_page = 5  # Number of items per page
+            total_pages = (len(users) + per_page - 1) // per_page  # Calculate total number of pages
+            start = (page - 1) * per_page
+            end = start + per_page
+            paginated_data = users[start:end]  # Get the data for the current page
+            return render_template("Admin/baptis.html", users=paginated_data, wijk=wijk, nama=keluarga, page=page, total_pages=total_pages)
     else:
         return redirect(url_for("index"))
 
@@ -664,7 +704,13 @@ def sidi():
             command = "SELECT * FROM keluarga"
             cursor.execute(command)
             keluarga = cursor.fetchall()
-            return render_template("Admin/sidi.html", users=users, wijk=wijk, nama=keluarga)
+            page = request.args.get('page', 1, type=int)  # Get the current page number from query params
+            per_page = 5  # Number of items per page
+            total_pages = (len(users) + per_page - 1) // per_page  # Calculate total number of pages
+            start = (page - 1) * per_page
+            end = start + per_page
+            paginated_data = users[start:end]  # Get the data for the current page
+            return render_template("Admin/sidi.html", users=paginated_data, wijk=wijk, nama=keluarga, page=page, total_pages=total_pages)
     else:
         return redirect(url_for("index"))
 #siniya
@@ -720,7 +766,13 @@ def lahir():
                 command += f" WHERE nama_lengkap LIKE '%{query}%' OR wijk LIKE '%{query}%'"
             cursor.execute(command)
             users = cursor.fetchall()
-            return render_template("Admin/anak_lahir.html", users=users, wijk=wijk, nama=nama)
+            page = request.args.get('page', 1, type=int)  # Get the current page number from query params
+            per_page = 5  # Number of items per page
+            total_pages = (len(users) + per_page - 1) // per_page  # Calculate total number of pages
+            start = (page - 1) * per_page
+            end = start + per_page
+            paginated_data = users[start:end]  # Get the data for the current page
+            return render_template("Admin/anak_lahir.html", users=paginated_data, wijk=wijk, nama=nama, page=page, total_pages=total_pages)
     else:
         return redirect(url_for("index"))
 #nyampek
@@ -779,7 +831,13 @@ def rpp():
                 command += f" WHERE nama_lengkap LIKE '%{query}%' OR wijk LIKE '%{query}%'"
             cursor.execute(command)
             users = cursor.fetchall()
-            return render_template("Admin/rpp.html", users=users, wijk=wijk)
+            page = request.args.get('page', 1, type=int)  # Get the current page number from query params
+            per_page = 5  # Number of items per page
+            total_pages = (len(users) + per_page - 1) // per_page  # Calculate total number of pages
+            start = (page - 1) * per_page
+            end = start + per_page
+            paginated_data = users[start:end]  # Get the data for the current page
+            return render_template("Admin/rpp.html", users=paginated_data, wijk=wijk, page=page, total_pages=total_pages)
     else:
         return redirect(url_for("index"))
 
@@ -829,7 +887,13 @@ def martumpol():
                     laki.append(user)
                 else:
                     perempuan.append(user)
-            return render_template("Admin/martumpol.html", users=users, wijk=wijk, laki=laki, perempuan=perempuan)
+            page = request.args.get('page', 1, type=int)  # Get the current page number from query params
+            per_page = 5  # Number of items per page
+            total_pages = (len(users) + per_page - 1) // per_page  # Calculate total number of pages
+            start = (page - 1) * per_page
+            end = start + per_page
+            paginated_data = users[start:end]  # Get the data for the current page
+            return render_template("Admin/martumpol.html", users=paginated_data, wijk=wijk, laki=laki, perempuan=perempuan, page=page, total_pages=total_pages)
     else:
         return redirect(url_for("index"))
 
@@ -889,7 +953,13 @@ def pernikahan():
                     laki.append(user)
                 else:
                     perempuan.append(user)
-            return render_template("Admin/pernikahan.html", users=users, wijk=wijk, laki=laki, perempuan=perempuan)
+            page = request.args.get('page', 1, type=int)  # Get the current page number from query params
+            per_page = 5  # Number of items per page
+            total_pages = (len(users) + per_page - 1) // per_page  # Calculate total number of pages
+            start = (page - 1) * per_page
+            end = start + per_page
+            paginated_data = users[start:end]  # Get the data for the current page
+            return render_template("Admin/pernikahan.html", users=paginated_data, wijk=wijk, laki=laki, perempuan=perempuan, page=page, total_pages=total_pages)
     else:
         return redirect(url_for("index"))
 
@@ -938,7 +1008,13 @@ def meninggal_dunia():
                 command += f" WHERE nama_lengkap LIKE '%{query}%' OR wijk LIKE '%{query}%' "
             cursor.execute(command)
             users = cursor.fetchall()
-            return render_template("Admin/meninggal_dunia.html", users=users, wijk=wijk)
+            page = request.args.get('page', 1, type=int)  # Get the current page number from query params
+            per_page = 5  # Number of items per page
+            total_pages = (len(users) + per_page - 1) // per_page  # Calculate total number of pages
+            start = (page - 1) * per_page
+            end = start + per_page
+            paginated_data = users[start:end]  # Get the data for the current page
+            return render_template("Admin/meninggal_dunia.html", users=paginated_data, wijk=wijk, page=page, total_pages=total_pages)
     else:
         return redirect(url_for("index"))
 
@@ -1181,7 +1257,13 @@ def pembayaran():
             command = "SELECT * FROM user"
             cursor.execute(command)
             data = cursor.fetchall()
-            return render_template("Admin/bulanan.html", users=users, verified=count, pending=pending, total=str_nominal, data=data, error=error)
+            page = request.args.get('page', 1, type=int)  # Get the current page number from query params
+            per_page = 5  # Number of items per page
+            total_pages = (len(users) + per_page - 1) // per_page  # Calculate total number of pages
+            start = (page - 1) * per_page
+            end = start + per_page
+            paginated_data = users[start:end]  # Get the data for the current page
+            return render_template("Admin/bulanan.html", users=paginated_data, page=page, total_pages=total_pages, verified=count, pending=pending, total=str_nominal, data=data, error=error)
     else:
         return redirect(url_for("index"))
     
@@ -1442,7 +1524,13 @@ def hamauliateon_admin():
             print(command1)
             cursor.execute(command1)
             users = cursor.fetchall()
-            return render_template("Admin/hamauliateon.html", users=users, verified=count, pending=pending, total=str_nominal)
+            page = request.args.get('page', 1, type=int)  # Get the current page number from query params
+            per_page = 5  # Number of items per page
+            total_pages = (len(users) + per_page - 1) // per_page  # Calculate total number of pages
+            start = (page - 1) * per_page
+            end = start + per_page
+            paginated_data = users[start:end]  # Get the data for the current page
+            return render_template("Admin/hamauliateon.html", users=paginated_data, page=page, total_pages=total_pages, verified=count, pending=pending, total=str_nominal)
     else:
         return redirect(url_for("index"))
 
@@ -1530,33 +1618,46 @@ def hamauliateon_laporan():
                         if i[5] == "pengeluaran":
                             if i[3] == "Huria":
                                 huria += int(i[4])
+                                list_pengeluaran.append(i)
                             elif i[3] == "Pembangunan":
                                 pembangunan += int(i[4])
+                                list_pengeluaran.append(i)
                             elif i[3] == "Diakonia":
                                 diakonia += int(i[4])
+                                list_pengeluaran.append(i)
                             elif i[3] == "Pendeta":
                                 pendeta += int(i[4])
+                                list_pengeluaran.append(i)
                             elif i[3] == "Sintua":
                                 sintua += int(i[4])
+                                list_pengeluaran.append(i)
                             elif i[3] == "Perhalado":
                                 perhalado += int(i[4])
+                                list_pengeluaran.append(i)
                             elif i[3] == "Ama":
                                 ama += int(i[4])
+                                list_pengeluaran.append(i)
                             elif i[3] == "Ina":
                                 ina += int(i[4])
+                                list_pengeluaran.append(i)
                             elif i[3] == "NHKBP":
                                 nhkbp += int(i[4])
+                                list_pengeluaran.append(i)
                             elif i[3] == "Remaja":
                                 remaja += int(i[4])
+                                list_pengeluaran.append(i)
                             elif i[3] == "Sekolah Minggu":
                                 sekolah_minggu += int(i[4])
+                                list_pengeluaran.append(i)
                             elif i[3] == "Pemusik":
                                 pemusik += int(i[4])
+                                list_pengeluaran.append(i)
                             elif i[3] == "Multimedia":
                                 multimedia += int(i[4])
+                                list_pengeluaran.append(i)
                             elif i[3] == "Song Leader":
                                 remaja += int(i[4])
-                            list_pengeluaran.append(i)
+                                list_pengeluaran.append(i)
         str_huria = locale.currency(huria, grouping=True)[:-3]
         str_pembangunan = locale.currency(pembangunan, grouping=True)[:-3]
         str_diakonia = locale.currency(diakonia, grouping=True)[:-3]
@@ -1607,7 +1708,13 @@ def finansial_page():
             command += f" WHERE keterangan LIKE '%{query}%'"
         cursor.execute(command)
         users = cursor.fetchall()
-        return render_template("Admin/warta_keuangan_page.html", users=users, pemasukan=str_pemasukan, pengeluaran=str_pengeluaran, total=str_total)
+        page = request.args.get('page', 1, type=int)  # Get the current page number from query params
+        per_page = 5  # Number of items per page
+        total_pages = (len(users) + per_page - 1) // per_page  # Calculate total number of pages
+        start = (page - 1) * per_page
+        end = start + per_page
+        paginated_data = users[start:end]  # Get the data for the current page
+        return render_template("Admin/warta_keuangan_page.html", users=paginated_data, page=page, total_pages=total_pages, pemasukan=str_pemasukan, pengeluaran=str_pengeluaran, total=str_total)
     else:
         return redirect(url_for("index"))
 
@@ -2411,7 +2518,7 @@ def profile():
         total_keluarga = len(keluarga)
         tanggungan = 0
         for i in keluarga:
-            if i[3] == "tanggungan":
+            if i[3] == "Tanggungan":
                 tanggungan += 1
         command = f"SELECT * FROM pelayanan WHERE nama_lengkap='{nama}'"
         cursor.execute(command)
@@ -2445,6 +2552,8 @@ def profile():
                                jumlah_bulanan = str_nominal,
                                tanggungan = tanggungan,
                                hamauliateon= str_hamauliateon)
+    else:
+        return redirect(url_for("index"))
     
 def user_keluarga():
     if "nama" in session:
@@ -2461,6 +2570,8 @@ def user_keluarga():
         cursor.execute(command)
         keluarga = cursor.fetchall()
         return render_template("User/keluarga.html", user=user, families=keluarga)
+    else:
+        return redirect(url_for("index"))
 
 def addkeluarga():
     id = session["id"]
@@ -2511,6 +2622,8 @@ def deletekeluarga():
 def pelayanan_user():
     if "nama" in session:
         return render_template("User/layanan.html")
+    else:
+        return redirect(url_for("index"))
 
 def bulanan_user():
     if "nama" in session:
@@ -2532,7 +2645,8 @@ def bulanan_user():
                     pending += 1
         str_nominal = locale.currency(nominal, grouping=True)[:-3]
         return render_template("User/bulanan.html", nominal=str_nominal, pending=pending, count=count, nama=nama)
-
+    else:
+        return redirect(url_for("index"))
 def addbulanan():
     if "status" in session:
         username = session["username"]
@@ -2573,7 +2687,8 @@ def hamauliateon_user():
                     pending += 1
         str_nominal = locale.currency(nominal, grouping=True)[:-3]
         return render_template("User/hamauliateon.html", nominal=str_nominal, pending=pending, keluarga=keluarga, nama=nama)
-
+    else:
+        return redirect(url_for("index"))
 def addhamauliateon():
     if "status" in session:
         username = session["username"]
@@ -2610,9 +2725,9 @@ def user_anaklahir():
     with open("data/nama_wjik.txt", "r") as f:
         wijk = f.read().split("\n")
     if "nama" in session:
-        return render_template("User/add_anaklahir.html", wijk=wijk, nama=session["nama"])
+        return render_template("User/add_anaklahir.html", wijk=session["wijk"], nama=session["nama"])
     else:
-        return redirect(url_for("profile"))
+        return redirect(url_for("index"))
 
 def user_baptis():
     if "nama" in session:
@@ -2621,7 +2736,7 @@ def user_baptis():
         command = "SELECT * FROM keluarga WHERE myid=?"
         cursor.execute(command, (session["id"],))
         keluarga = cursor.fetchall()        
-        return render_template("User/add_baptis.html", wijk=wijk, keluarga=keluarga)
+        return render_template("User/add_baptis.html", wijk=session["wijk"], keluarga=keluarga, nama=session["nama"])
     else:
         return redirect(url_for("profile"))
     
@@ -2631,7 +2746,7 @@ def user_martumpol():
             wijk = f.read().split("\n")
         return render_template("User/add_martumpol.html", wijk=wijk)
     else:
-        return redirect(url_for("profile"))
+        return redirect(url_for("index"))
 
 def user_pernikahan():
     if "nama" in session:
@@ -2639,7 +2754,7 @@ def user_pernikahan():
             wijk = f.read().split("\n")
         return render_template("User/add_pernikahan.html", wijk=wijk)
     else:
-        return redirect(url_for("profile"))
+        return redirect(url_for("index"))
 
 def user_sidi():
     if "nama" in session:
@@ -2648,9 +2763,9 @@ def user_sidi():
         command = "SELECT * FROM keluarga WHERE myid=?"
         cursor.execute(command, (session["id"],))
         keluarga = cursor.fetchall()        
-        return render_template("User/add_sidi.html", wijk=wijk, nama=keluarga)
+        return render_template("User/add_sidi.html", wijk=session["wijk"], keluarga=keluarga, nama=session["nama"])
     else:
-        return redirect(url_for("profile"))
+        return redirect(url_for("index"))
 
 def user_berita():
     i = request.args.get("index")

@@ -127,10 +127,14 @@
                 <h2 class="header-title mb-4 text-center">Sidi</h2>
                 <form method="POST" action="/addsidi">
                     <div class="mb-3">
+                        <label for="nama_keluarga" class="form-label">Nama Keluarga</label>
+                        <input type="text" class="form-control" id="nama_keluarga" name="nama_keluarga" value="{{ nama }}" readonly>
+                    </div>
+                    <div class="mb-3">
                         <label for="nama_keluarga" class="form-label">Nama Lengkap</label>
                         <input list="nama_keluarga_list" class="form-control" id="nama_keluarga" name="nama_keluarga" required>
                         <datalist id="nama_keluarga_list">
-                            {% for nam in nama %}
+                            {% for nam in keluarga %}
                             <option value="{{ nam[2] }}" 
                                     data-jenis-kelamin="{{ nam[4] }}" 
                                     data-wijk="{{ nam[12] }}" 
@@ -150,13 +154,8 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="Wijk" class="form-label">Wijk</label>
-                        <select class="form-select" id="wijk" name="wijk" required>
-                            <option value="" disabled selected>Wijk</option>
-                            {% for w in wijk %}
-                            <option value="{{ w }}">{{ w }}</option>
-                            {% endfor %}
-                        </select>
+                        <label for="wijk" class="form-label">WIJK</label>
+                        <input type="text" class="form-control" id="wijk" name="wijk" value="{{ wijk }}" readonly>
                     </div>
                     <div class="mb-3">
                         <label for="tempat_lahir" class="form-label">Tempat Lahir</label>

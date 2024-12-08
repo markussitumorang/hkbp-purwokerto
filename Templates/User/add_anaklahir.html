@@ -159,6 +159,10 @@
                 <h2 class="header-title mb-4 text-center">Form Pengajuan Kelahiran Anak</h2>
                 <form method="POST" action="/addlahir">
                     <div class="mb-3">
+                        <label for="nama_keluarga" class="form-label">Nama Keluarga</label>
+                        <input type="text" class="form-control" id="nama_keluarga" name="nama_keluarga" value="{{ nama }}" readonly>
+                    </div>
+                    <div class="mb-3">
                         <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
                         <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" required>
                     </div>
@@ -171,13 +175,8 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="Wijk" class="form-label">Wijk</label>
-                        <select class="form-select" id="wijk" name="wijk" required>
-                            <option value="" disabled selected>Wijk</option>
-                            {% for w in wijk %}
-                            <option value="{{ w }}">{{ w }}</option>
-                            {% endfor %}
-                        </select>
+                        <label for="wijk" class="form-label">WIJK</label>
+                        <input type="text" class="form-control" id="wijk" name="wijk" value="{{ wijk }}" readonly>
                     </div>
                     <div class="mb-3">
                         <label for="tempat_lahir" class="form-label">Tempat Tanggal Lahir</label>
