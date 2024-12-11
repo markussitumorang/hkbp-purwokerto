@@ -305,10 +305,13 @@ def warta_user():
     end = start + per_page
     paginated_data = data[start:end]  # Get the data for the current page
     logged = ""
-    if session:
-        logged = session["status"]
-    return render_template("User/warta.html", data=paginated_data, page=page, total_pages=total_pages, logged=logged)
-
+    if "status" in session:
+        if session["status"] == "Admin":
+            return render_template("User/warta.html", data=paginated_data, page=page, total_pages=total_pages, logged="Admin")
+        elif session["status"] == "Peserta":
+            return render_template("User/warta.html", data=paginated_data, page=page, total_pages=total_pages, logged="Peserta")
+    else:
+        return render_template("User/warta.html", data=paginated_data, page=page, total_pages=total_pages, logged="Not Login")
 def login():
     error = request.args.get("error") or ""
     return render_template("User/login.html", error=error)
@@ -2777,24 +2780,41 @@ def user_berita():
 
 def koikonia():
     logged = ""
-    if session:
-        logged = session["status"]
-    return render_template("Koinonia.html", logged=logged)
+    if "status" in session:
+        if session["status"] == "Admin":
+            return render_template("Koinonia.html", logged="Admin")
+        elif session["status"] == "Peserta":
+            return render_template("Koinonia.html", logged="Peserta")
+    else:
+        return render_template("Koinonia.html", logged="Not Login")
+    
 def diakonia():
     logged = ""
-    if session:
-        logged = session["status"]
-    return render_template("Diakonia.html", logged=logged)
+    if "status" in session:
+        if session["status"] == "Admin":
+            return render_template("Diakonia.html", logged="Admin")
+        elif session["status"] == "Peserta":
+            return render_template("Diakonia.html", logged="Peserta")
+    else:
+        return render_template("Diakonia.html", logged="Not Login")
 def marturia():
     logged = ""
-    if session:
-        logged = session["status"]
-    return render_template("Marturia.html", logged=logged)
+    if "status" in session:
+        if session["status"] == "Admin":
+            return render_template("Marturia.html", logged="Admin")
+        elif session["status"] == "Peserta":
+            return render_template("Marturia.html", logged="Peserta")
+    else:
+        return render_template("Marturia.html", logged="Not Login")
 def organisasi():
     logged = ""
-    if session:
-        logged = session["status"]
-    return render_template("Organisasi.html", logged=logged)
+    if "status" in session:
+        if session["status"] == "Admin":
+            return render_template("Organisasi.html", logged="Admin")
+        elif session["status"] == "Peserta":
+            return render_template("Organisasi.html", logged="Peserta")
+    else:
+        return render_template("Organisasi.html", logged="Not Login")
 
 def url_rule_user():
     app.add_url_rule("/profile", "profile", profile)
