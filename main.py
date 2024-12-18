@@ -283,10 +283,10 @@ def index():
         #just take 3 latest data from data
         berita = beritadata[-3:]
     else:
-        berita = beritadata
+        berita = beritadata 
     berita = list(reversed(berita))
     if "status" in session:
-        if session["status"] == "Admin":
+        if "status" in session and session["status"] == "Admin":
             return render_template("User/index.html", warta_jemaat=warta_jemaat, pelayanan=pelayanan, berita=berita, logged="Admin")
         elif session["status"] == "Peserta":
             return render_template("User/index.html", warta_jemaat=warta_jemaat, pelayanan=pelayanan, berita=berita, logged="Peserta")
@@ -305,13 +305,10 @@ def warta_user():
     end = start + per_page
     paginated_data = data[start:end]  # Get the data for the current page
     logged = ""
-    if "status" in session:
-        if session["status"] == "Admin":
-            return render_template("User/warta.html", data=paginated_data, page=page, total_pages=total_pages, logged="Admin")
-        elif session["status"] == "Peserta":
-            return render_template("User/warta.html", data=paginated_data, page=page, total_pages=total_pages, logged="Peserta")
-    else:
-        return render_template("User/warta.html", data=paginated_data, page=page, total_pages=total_pages, logged="Not Login")
+    if session and "status" in session:
+        logged = session["status"]
+    return render_template("User/warta.html", data=paginated_data, page=page, total_pages=total_pages, logged=logged)
+
 def login():
     error = request.args.get("error") or ""
     return render_template("User/login.html", error=error)
@@ -365,8 +362,8 @@ def signin():
             return redirect("/login?error=Data%20tidak%20valid")
 
 def dashboard():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             command = "SELECT * FROM user"
             cursor.execute(command)
             users = cursor.fetchall()
@@ -516,8 +513,8 @@ def dashboard():
         return redirect(url_for("index"))
 
 def management_user():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             error = request.args.get("error") or ""
             with open("data/nama_wjik.txt", "r") as f:
                 wijk = f.read().split("\n")
@@ -538,8 +535,8 @@ def management_user():
         return redirect(url_for("index"))
 
 def adduser():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             username = request.form.get("username")
             password = request.form.get("password")
             registrasi = request.form.get("registrasi")
@@ -566,8 +563,8 @@ def adduser():
         return redirect(url_for("index"))
 
 def hapus():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             id = request.args.get("id")
             command = f"DELETE FROM user WHERE id={id}"
             cursor.execute(command)
@@ -584,8 +581,8 @@ def keluar():
     return redirect(url_for("index"))
 
 def ubah_data_jemaat():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             with open("data/nama_wjik.txt", "r") as f:
                 wjik = f.read().split("\n")
             print(wjik)
@@ -600,8 +597,8 @@ def ubah_data_jemaat():
         return redirect(url_for("index"))
 
 def keluarga():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             with open("data/nama_wjik.txt", "r") as f:
                 wijk = f.read().split("\n")
             id = request.args.get("id")
@@ -619,8 +616,8 @@ def keluarga():
         return redirect(url_for("index"))
 
 def edit_user():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             id = request.args.get("id")
             registrasi = request.form.get("registrasi")
             tanggal_registrasi = request.form.get("tanggal_registrasi")
@@ -634,8 +631,8 @@ def edit_user():
             return redirect(url_for("management_user"))
 
 def baptis():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             with open("data/nama_wjik.txt", "r") as f:
                 wijk = f.read().split("\n")
             command = "SELECT * FROM baptis"
@@ -658,7 +655,7 @@ def baptis():
         return redirect(url_for("index"))
 
 def addbaptis():
-    if "status" in session:
+    if session and "status" in session:
             nama_lengkap = request.form.get("nama_keluarga")
             jenis_kelamin = request.form.get("jenis_kelamin")
             tempat_lahir = request.form.get("tempat_lahir")
@@ -676,7 +673,7 @@ def addbaptis():
                 command = f"UPDATE keluarga SET tanggal_baptis=? WHERE nama=?"
                 cursor.execute(command, (tanggal_baptis, nama_lengkap))
                 db.commit()            
-            if session["status"] == "Admin":
+            if "status" in session and session["status"] == "Admin":
                 return redirect(url_for("jemaat_baptis"))
             else:
                 return redirect("/profile/jemaat_baptis")
@@ -684,7 +681,7 @@ def addbaptis():
         return redirect(url_for("index"))
 
 def deletebaptis():
-    if session["status"] == "Admin":
+    if session and "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
         command = f"DELETE FROM baptis WHERE id={id}"
         cursor.execute(command)
@@ -694,8 +691,8 @@ def deletebaptis():
         return redirect(url_for("index"))
 
 def sidi():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             with open("data/nama_wjik.txt", "r") as f:
                 wijk = f.read().split("\n")
             command = "SELECT * FROM sidi"
@@ -718,7 +715,7 @@ def sidi():
         return redirect(url_for("index"))
 #siniya
 def addsidi():
-    if "status" in session:
+    if session and "status" in session:
             nama_lengkap = request.form.get("nama_keluarga")
             jenis_kelamin = request.form.get("jenis_kelamin")
             tempat_lahir = request.form.get("tempat_lahir")
@@ -737,7 +734,7 @@ def addsidi():
                 command = f"UPDATE keluarga SET tanggal_sidi=? WHERE nama=?"
                 cursor.execute(command, (tanggal_sidi, nama_lengkap))
                 db.commit()            
-            if session["status"] == "Admin":
+            if "status" in session and session["status"] == "Admin":
                 return redirect(url_for("jemaat_sidi"))
             else:
                 print("debug 3")
@@ -746,7 +743,7 @@ def addsidi():
         return redirect(url_for("index"))
 
 def deletesidi():
-    if session["status"] == "Admin":
+    if session and "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
         command = f"DELETE FROM sidi WHERE id={id}"
         cursor.execute(command)
@@ -756,8 +753,8 @@ def deletesidi():
         return redirect(url_for("index"))
 
 def lahir():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             with open("data/nama_wjik.txt", "r") as f:
                 wijk = f.read().split("\n")
             command = "SELECT * FROM user"
@@ -780,7 +777,7 @@ def lahir():
         return redirect(url_for("index"))
 #nyampek
 def addlahir():
-    if "status" in session:
+    if session and "status" in session:
             nama_keluarga = request.form.get("nama_keluarga")
             nama_lengkap = request.form.get("nama_lengkap")
             jenis_kelamin = request.form.get("jenis_kelamin")
@@ -806,7 +803,7 @@ def addlahir():
             command = f"INSERT INTO keluarga(myid, nama, status, jenis_kelamin, tempat_lahir, tanggal_lahir, tanggal_baptis, tanggal_sidi, pekerjaan, pendidikan, alamat, wijk, registrasi) VALUES({id}, '{nama}', '{status}', '{jenis_kelamin}', '{tempat_lahir}', '{tanggal_lahir}', '{tanggal_baptis}', '{tanggal_sidi}', '{pekerjaan}', '{pendidikan}', '{alamat}', '{wijk}', '{registrasi}')"
             cursor.execute(command)
             db.commit()
-            if session["status"] == "Admin":
+            if "status" in session and session["status"] == "Admin":
                 return redirect(url_for("anak_lahir"))
             else:
                 return redirect("/profile/anak_lahir")
@@ -814,7 +811,7 @@ def addlahir():
         return redirect(url_for("index"))
 
 def deletelahir():
-    if session["status"] == "Admin":
+    if session and "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
         command = f"DELETE FROM anak_lahir WHERE id={id}"
         cursor.execute(command)
@@ -824,8 +821,8 @@ def deletelahir():
         return redirect(url_for("index"))
 
 def rpp():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             with open("data/nama_wjik.txt", "r") as f:
                 wijk = f.read().split("\n")
             command = "SELECT * FROM rpp"
@@ -845,8 +842,8 @@ def rpp():
         return redirect(url_for("index"))
 
 def addrpp():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             nama_lengkap = request.form.get("nama_lengkap")
             jenis_kelamin = request.form.get("jenis_kelamin")
             tanggal_rpp = request.form.get("tanggal_rpp")
@@ -860,7 +857,7 @@ def addrpp():
         return redirect(url_for("index"))
 
 def deleterpp():
-    if session["status"] == "Admin":
+    if "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
         command = f"DELETE FROM rpp WHERE id={id}"
         cursor.execute(command)
@@ -870,8 +867,8 @@ def deleterpp():
         return redirect(url_for("index"))
 #martumpol
 def martumpol():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             with open("data/nama_wjik.txt", "r") as f:
                 wijk = f.read().split("\n")
             command = "SELECT * FROM martumpol"
@@ -901,7 +898,7 @@ def martumpol():
         return redirect(url_for("index"))
 
 def addmartumpol():
-    if "status" in session:
+    if session and "status" in session:
             nama_lengkap_laki = request.form.get("nama_lengkap_laki")
             nama_ayah_laki = request.form.get("nama_ayah_laki")
             nama_ibu_laki = request.form.get("nama_ibu_laki")
@@ -917,7 +914,7 @@ def addmartumpol():
             command = f"INSERT INTO martumpol(nama_lengkap_laki, nama_ayah_laki, nama_ibu_laki, tempat_lahir_laki, wijk_laki, nama_lengkap_perempuan, nama_ayah_perempuan, nama_ibu_perempuan, tempat_lahir_perempuan, wijk_perempuan, tanggal_martumpol, pukul_martumpol) VALUES ('{nama_lengkap_laki}', '{nama_ayah_laki}', '{nama_ibu_laki}', '{tempat_lahir_laki}', '{wijk_laki}', '{nama_lengkap_perempuan}', '{nama_ayah_perempuan}', '{nama_ibu_perempuan}', '{tempat_lahir_perempuan}', '{wijk_perempuan}', '{tanggal_martumpol}', '{pukul_martumpol}')"
             cursor.execute(command)
             db.commit()
-            if session["status"] == "Admin":
+            if "status" in session and session["status"] == "Admin":
                 return redirect(url_for("martumpol"))
             else:
                 return redirect("/profile/martumpal")
@@ -925,7 +922,7 @@ def addmartumpol():
         return redirect(url_for("index"))
 
 def deletemartumpol():
-    if session["status"] == "Admin":
+    if "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
         command = f"DELETE FROM martumpol WHERE id={id}"
         cursor.execute(command)
@@ -936,8 +933,8 @@ def deletemartumpol():
 
 #pernikahan
 def pernikahan():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             with open("data/nama_wjik.txt", "r") as f:
                 wijk = f.read().split("\n")
             command = "SELECT * FROM pernikahan"
@@ -967,7 +964,7 @@ def pernikahan():
         return redirect(url_for("index"))
 
 def addpernikahan():
-    if "status" in session:
+    if session and "status" in session:
             nama_lengkap_laki = request.form.get("nama_lengkap_laki")
             nama_ayah_laki = request.form.get("nama_ayah_laki")
             nama_ibu_laki = request.form.get("nama_ibu_laki")
@@ -983,7 +980,7 @@ def addpernikahan():
             command = f"INSERT INTO pernikahan(nama_lengkap_laki, nama_ayah_laki, nama_ibu_laki, tempat_lahir_laki, wijk_laki, nama_lengkap_perempuan, nama_ayah_perempuan, nama_ibu_perempuan, tempat_lahir_perempuan, wijk_perempuan, tanggal_pernikahan, pukul_pernikahan) VALUES ('{nama_lengkap_laki}', '{nama_ayah_laki}', '{nama_ibu_laki}', '{tempat_lahir_laki}', '{wijk_laki}', '{nama_lengkap_perempuan}', '{nama_ayah_perempuan}', '{nama_ibu_perempuan}', '{tempat_lahir_perempuan}', '{wijk_perempuan}', '{tanggal_pernikahan}', '{pukul_pernikahan}')"
             cursor.execute(command)
             db.commit()
-            if session["status"] == "Admin":
+            if "status" in session and session["status"] == "Admin":
                 return redirect(url_for("pernikahan"))
             else:
                 return redirect("/profile/pernikahan")
@@ -991,7 +988,7 @@ def addpernikahan():
         return redirect(url_for("index"))
 
 def deletepernikahan():
-    if session["status"] == "Admin":
+    if "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
         command = f"DELETE FROM pernikahan WHERE id={id}"
         cursor.execute(command)
@@ -1002,7 +999,7 @@ def deletepernikahan():
 
 def meninggal_dunia():
     if "status" in  session:
-        if session["status"] == "Admin":
+        if "status" in session and session["status"] == "Admin":
             with open("data/nama_wjik.txt", "r") as f:
                 wijk = f.read().split("\n")
             command = "SELECT * FROM meninggal"
@@ -1022,8 +1019,8 @@ def meninggal_dunia():
         return redirect(url_for("index"))
 
 def addmeninggal():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             nama_keluarga = request.form.get("nama_keluarga")
             nama_lengkap = request.form.get("nama_lengkap")
             jenis_kelamin = request.form.get("jenis_kelamin")
@@ -1043,7 +1040,7 @@ def addmeninggal():
         return redirect(url_for("login"))
 
 def deletemeninggal():
-    if session["status"] == "Admin":
+    if "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
         command = f"DELETE FROM meninggal WHERE id={id}"
         cursor.execute(command)
@@ -1053,8 +1050,8 @@ def deletemeninggal():
         return redirect(url_for("index"))
 
 def kegiatan_kebaktian():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             command = "SELECT * FROM kebaktian"
             query = request.args.get("query")
             if query:
@@ -1066,7 +1063,7 @@ def kegiatan_kebaktian():
         return redirect(url_for("index"))
 
 def addkebaktian():
-    if "status" in session:
+    if session and "status" in session:
             nama_kebaktian = request.form.get("nama_kebaktian")
             tanggal = request.form.get("tanggal")
             pengkhotbah = request.form.get("pengkhotbah")
@@ -1088,7 +1085,7 @@ def addkebaktian():
             return redirect(url_for("kegiatan_kebaktian"))
 
 def deletekebaktian():
-    if session["status"] == "Admin":
+    if "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
         command = f"DELETE FROM kebaktian WHERE id={id}"
         cursor.execute(command)
@@ -1098,8 +1095,8 @@ def deletekebaktian():
         return redirect(url_for("index"))
     
 def data_pelayanan():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             with open("data/nama_wjik.txt", "r") as f:
                 wijk = f.read().split("\n")
             command = "SELECT * FROM pelayanan"
@@ -1113,7 +1110,7 @@ def data_pelayanan():
         return redirect(url_for("index"))
 
 def addpelayanan():
-    if "status" in session:
+    if session and "status" in session:
             nama_lengkap = request.form.get("nama_lengkap")
             jenis_kelamin = request.form.get("jenis_kelamin")
             status_pelayanan = request.form.get("status_pelayanan")
@@ -1127,7 +1124,7 @@ def addpelayanan():
         return redirect(url_for("login"))
 
 def deletepelayanan():
-    if session["status"] == "Admin":
+    if "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
         command = f"DELETE FROM pelayanan WHERE id={id}"
         cursor.execute(command)
@@ -1137,8 +1134,8 @@ def deletepelayanan():
         return redirect(url_for("index"))
 
 def warta():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             with open("data/warta_jemaat.json", "r") as file:
                 data = json.load(file)
             print(data)
@@ -1167,7 +1164,7 @@ def addwarta():
     return redirect(url_for("warta"))
 
 def deletewarta():
-    if session["status"] == "Admin":
+    if "status" in session and session["status"] == "Admin":
         myid = request.args.get("id")
         myid = int(myid) - 1
         with open("data/warta_jemaat.json", "r") as fil:
@@ -1181,8 +1178,8 @@ def deletewarta():
         return redirect(url_for("index"))
 
 def berita():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             with open("data/berita.json", "r") as file:
                 data = json.load(file)
             return render_template("Admin/berita.html", data=data)
@@ -1190,14 +1187,14 @@ def berita():
         return redirect(url_for("login"))
     
 def add_berita_page():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             return render_template("Admin/add_berita.html")
     else:
         return redirect(url_for("login"))
 
 def addberita():
-    if "status" in session:
+    if session and "status" in session:
         judul = request.form.get("judulberita")
         isi = request.form.get("isiberita")
         if len(isi) > 50:
@@ -1221,7 +1218,7 @@ def addberita():
         return redirect(url_for("login"))
 
 def deleteberita():
-    if session["status"] == "Admin":
+    if "status" in session and session["status"] == "Admin":
         myid = request.args.get("id")
         myid = int(myid) - 1
         with open("data/berita.json", "r") as fil:
@@ -1230,14 +1227,14 @@ def deleteberita():
         data.remove(data_remove)
         with open("data/berita.json", "w") as fil:
             json.dump(data, fil)
-        return redirect(url_for("warta"))
+        return redirect(url_for("berita"))
     else:
         return redirect(url_for("index"))
 
 def pembayaran():
-    if "status" in session:
+    if session and "status" in session:
         error = request.args.get("error") or ""
-        if session["status"] == "Admin":
+        if "status" in session and session["status"] == "Admin":
             command = f"SELECT * FROM bulanan"
             cursor.execute(command)
             users = cursor.fetchall()
@@ -1271,7 +1268,7 @@ def pembayaran():
         return redirect(url_for("index"))
     
 def verify_pembayaran():
-    if session["status"] == "Admin":
+    if "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
         command = f"UPDATE bulanan SET status='verified' WHERE id={id}"
         cursor.execute(command)
@@ -1291,20 +1288,20 @@ def verify_pembayaran():
             """
         cursor.execute(command, data)
         db.commit()
-        data = (keterangan, tanggal, jenis_pemasukan, nominal)
-        command = """
-                INSERT INTO pemasukan (
-                keterangan, tanggal, jenis_pemasukan, nominal
-                ) VALUES (?, ?, ?, ?)
-            """
-        cursor.execute(command, data)
-        db.commit()
+        # data = (keterangan, tanggal, jenis_pemasukan, nominal)
+        # command = """
+        #         INSERT INTO pemasukan (
+        #         keterangan, tanggal, jenis_pemasukan, nominal
+        #         ) VALUES (?, ?, ?, ?)
+        #     """
+        # cursor.execute(command, data)
+        # db.commit()
         return redirect(url_for("pembayaran"))
     else:
         return redirect(url_for("index"))
  
 def more_info():
-    if session["status"] == "Admin":
+    if "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
         page = request.args.get("page")
         command = f"SELECT * FROM {page} WHERE id={id}"
@@ -1323,23 +1320,25 @@ def show_bukti(filename):
         if filename.endswith('.pdf'):
             return render_template("Admin/bukti.html", filename=f"pdf/{filename}", pdf=True)
         else:
-            if session and session["status"] == "Admin":
+            if session and "status" in session and session["status"] == "Admin":
                 return render_template("Admin/bukti.html", filename=f"pdf/{filename}", pdf=False)
             else:
                 return redirect(url_for("index"))
 
 def deletebulanan():
-    if session["status"] == "Admin":
+    if "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
         command = f"DELETE FROM bulanan WHERE id={id}"
         cursor.execute(command)
         db.commit()
+        command = "DELETE FROM finansial WHERE keterangan=? AND id_pembayaran=?"
+        cursor.execute(command, ("Bulanan", id))
         return redirect(url_for("pembayaran"))
     else:
         return redirect(url_for("index"))
 
 def addbulanan_admin():
-    if "status" in session:
+    if session and "status" in session:
         nama_keluarga = request.form.get('nama')
         nominal_persembahan = request.form.get('nominal')
         persembahan_bulan = request.form.get('bulan')
@@ -1392,7 +1391,7 @@ def addbulanan_admin():
         return redirect(url_for("index"))
 
 def verify_hamauliateon():
-    if session["status"] == "Admin":
+    if "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
         #create sql command set status into verified where id is from variable call id
         command = f"UPDATE hamauliateon SET status='verified' WHERE id={id}"
@@ -1426,7 +1425,7 @@ def verify_hamauliateon():
         return redirect(url_for("index"))
 
 def deletehamauliateon():
-    if session["status"] == "Admin":
+    if "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
         command = f"DELETE FROM hamauliateon WHERE id={id}"
         cursor.execute(command)
@@ -1436,8 +1435,8 @@ def deletehamauliateon():
         return redirect(url_for("index"))
 
 def hamauliateon_admin():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             command1 = f"SELECT * FROM hamauliateon"
             cursor.execute(command1)
             users = cursor.fetchall()
@@ -1538,7 +1537,7 @@ def hamauliateon_admin():
         return redirect(url_for("index"))
 
 def hamauliateon_laporan():
-    if session and session["status"] == "Admin":
+    if session and "status" in session and session["status"] == "Admin":
         tanggalawal = request.form.get("tanggalawal")
         tanggalakhir = request.form.get("tanggalakhir")
         jenis_laporan = request.form.get("data")
@@ -1684,14 +1683,14 @@ def hamauliateon_laporan():
 
 
 def finansial_data():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             return render_template("Admin/warta_keuangan.html")
     else:
         return redirect(url_for("index"))
     
 def finansial_page():
-    if session and session["status"] == "Admin":
+    if session and "status" in session and session["status"] == "Admin":
         command = f"SELECT * FROM finansial"
         cursor.execute(command)
         users = cursor.fetchall()
@@ -1711,6 +1710,7 @@ def finansial_page():
             command += f" WHERE keterangan LIKE '%{query}%'"
         cursor.execute(command)
         users = cursor.fetchall()
+        users = list(reversed(users))
         page = request.args.get('page', 1, type=int)  # Get the current page number from query params
         per_page = 5  # Number of items per page
         total_pages = (len(users) + per_page - 1) // per_page  # Calculate total number of pages
@@ -1722,7 +1722,7 @@ def finansial_page():
         return redirect(url_for("index"))
 
 def tambah_data():
-    if session and session["status"] == "Admin":
+    if session and "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
         error = request.args.get("error") or ""
         print(error)
@@ -1734,7 +1734,7 @@ def tambah_data():
         return redirect("/")
 
 def tambah_pemasukan():
-    if session and session["status"] == "Admin":
+    if session and "status" in session and session["status"] == "Admin":
         keterangan = request.form.get("keterangan")
         tanggal = request.form.get("tanggal")
         nama_lengkap = request.form.get("nama_keluarga")
@@ -1811,7 +1811,7 @@ def tambah_pemasukan():
         return redirect("/dashboard/warta_keuangan")
 
 def tambah_pengeluaran():
-    if session and session["status"] == "Admin":
+    if session and "status" in session and session["status"] == "Admin":
         keterangan = request.form.get("keterangan")
         tanggal = request.form.get("tanggal")
         jenis_pemasukan = request.form.get("jenis_pengeluaran")
@@ -2022,8 +2022,8 @@ def tambah_pengeluaran():
         return redirect("/dashboard/warta_keuangan")
 
 def editlahir():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             id = request.form['modal_id']
             nama_lengkap = request.form['modal_nama_lengkap']
             jenis_kelamin = request.form['modal_jenis_kelamin']
@@ -2046,8 +2046,8 @@ def editlahir():
         return redirect(url_for("index"))
 
 def editbaptis():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             id = request.form['modal_id']
             nama_lengkap = request.form['modal_nama_lengkap']
             jenis_kelamin = request.form['modal_jenis_kelamin']
@@ -2072,8 +2072,8 @@ def editbaptis():
         return redirect(url_for("index"))
 
 def editmartumpol():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             id = request.form['modal_id']
             nama_lengkap_laki = request.form['modal_nama_lengkap_laki']
             nama_ayah_laki = request.form['modal_nama_ayah_laki']
@@ -2125,8 +2125,8 @@ def editmartumpol():
         return redirect(url_for("index"))
 
 def editpernikahan():
-    if "status" in session:
-        if session["status"] == "Admin":
+    if session and "status" in session:
+        if "status" in session and session["status"] == "Admin":
             id = request.form['modal_id']
             nama_lengkap_laki = request.form['modal_nama_lengkap_laki']
             nama_ayah_laki = request.form['modal_nama_ayah_laki']
@@ -2179,7 +2179,7 @@ def editpernikahan():
 
 def editmeninggal():
     # Check if the user is logged in and has Admin status
-    if "status" in session and session["status"] == "Admin":
+    if session and "status" in session and session["status"] == "Admin":
         # Get form data
         id = request.form['modal_id']
         nama_lengkap = request.form['modal_nama_lengkap']
@@ -2200,7 +2200,7 @@ def editmeninggal():
         return redirect(url_for("index"))
 
 def editpelayan():
-    if "status" in session and session["status"] == "Admin":
+    if session and "status" in session and session["status"] == "Admin":
         id = request.form['modal_id']
         nama_lengkap = request.form['modal_nama_lengkap']
         jenis_kelamin = request.form['modal_jenis_kelamin']
@@ -2223,7 +2223,7 @@ def editpelayan():
         return redirect(url_for("index"))
 
 def editrpp():
-    if "status" in session and session["status"] == "Admin":
+    if session and "status" in session and session["status"] == "Admin":
         id = request.form['modal_id']
         nama_lengkap = request.form['modal_nama_lengkap']
         jenis_kelamin = request.form['modal_jenis_kelamin']
@@ -2245,7 +2245,7 @@ def editrpp():
         return redirect(url_for("index"))
 
 def editsidi():
-    if "status" in session and session["status"] == "Admin":
+    if session and "status" in session and session["status"] == "Admin":
         id = request.form['modal_id']
         nama_lengkap = request.form['modal_nama_lengkap']
         jenis_kelamin = request.form['modal_jenis_kelamin']
@@ -2358,7 +2358,7 @@ def edit_user2():
     return redirect(url_for("management_user"))
 
 def hapuswijk():
-    if session and session["status"] == "Admin":
+    if session and "status" in session and session["status"] == "Admin":
         nomor = request.args.get("nomor")
         idx = int(nomor) - 1
         with open("data/nama_wjik.txt", "r") as f:
@@ -2371,7 +2371,7 @@ def hapuswijk():
         return redirect(url_for("ubah_data_jemaat"))
 
 def addwijk():
-    if session and session["status"] == "Admin":
+    if session and "status" in session and session["status"] == "Admin":
         wjik = request.form.get("namawijk")
         with open("data/nama_wjik.txt", "a") as f:
             f.write(f"\n{wjik}")
@@ -2380,7 +2380,7 @@ def addwijk():
         return redirect(url_for("index"))
 
 def laporan():
-    if session and session["status"] == "Admin":
+    if session and "status" in session and session["status"] == "Admin":
         return render_template("Admin/laporan.html")
     else:
         return redirect(url_for("index"))
@@ -2651,7 +2651,7 @@ def bulanan_user():
     else:
         return redirect(url_for("index"))
 def addbulanan():
-    if "status" in session:
+    if session and "status" in session:
         username = session["username"]
         nama_keluarga = request.form.get('nama')
         nominal_persembahan = request.form.get('nominal')
@@ -2693,7 +2693,7 @@ def hamauliateon_user():
     else:
         return redirect(url_for("index"))
 def addhamauliateon():
-    if "status" in session:
+    if session and "status" in session:
         username = session["username"]
         nama_keluarga = request.form.get('nama_keluarga')
         nama = request.form.get("nama")
@@ -2775,46 +2775,31 @@ def user_berita():
     i = int(i) - 1
     with open("data/berita.json", "r") as f:
         data = json.load(f)
+    data = list(reversed(data))
     news = data[i]
     return render_template("User/berita.html", user=news)
 
 def koikonia():
     logged = ""
-    if "status" in session:
-        if session["status"] == "Admin":
-            return render_template("Koinonia.html", logged="Admin")
-        elif session["status"] == "Peserta":
-            return render_template("Koinonia.html", logged="Peserta")
-    else:
-        return render_template("Koinonia.html", logged="Not Login")
-    
+    if session and "status" in session:
+        logged = session["status"]
+    return render_template("Koinonia.html", logged=logged)
 def diakonia():
     logged = ""
-    if "status" in session:
-        if session["status"] == "Admin":
-            return render_template("Diakonia.html", logged="Admin")
-        elif session["status"] == "Peserta":
-            return render_template("Diakonia.html", logged="Peserta")
-    else:
-        return render_template("Diakonia.html", logged="Not Login")
+    if session and "status" in session:
+        logged = session["status"]
+    return render_template("Diakonia.html", logged=logged)
+
 def marturia():
     logged = ""
-    if "status" in session:
-        if session["status"] == "Admin":
-            return render_template("Marturia.html", logged="Admin")
-        elif session["status"] == "Peserta":
-            return render_template("Marturia.html", logged="Peserta")
-    else:
-        return render_template("Marturia.html", logged="Not Login")
+    if session and "status" in session:
+        logged = session["status"]
+    return render_template("Marturia.html", logged=logged)
 def organisasi():
     logged = ""
-    if "status" in session:
-        if session["status"] == "Admin":
-            return render_template("Organisasi.html", logged="Admin")
-        elif session["status"] == "Peserta":
-            return render_template("Organisasi.html", logged="Peserta")
-    else:
-        return render_template("Organisasi.html", logged="Not Login")
+    if session and "status" in session:
+        logged = session["status"]
+    return render_template("Organisasi.html", logged=logged)
 
 def url_rule_user():
     app.add_url_rule("/profile", "profile", profile)
