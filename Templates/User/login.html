@@ -95,7 +95,7 @@
             <!-- User Login title aligned to the left -->
             <h4 class="text-start mb-4">Masuk Menggunakan Akun Anda</h4>
             {% if error %}
-            <p style="color: red;">Username atau Password Salah.</p>
+            <p style="color: red;">{{ error }}</p>
             {% endif %}
             <form action="/signin" method="post">
                 <div class="mb-3">

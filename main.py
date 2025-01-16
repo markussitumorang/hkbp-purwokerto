@@ -191,7 +191,9 @@ command = """ CREATE TABLE IF NOT EXISTS pemasukan (
             Keterangan TEXT,
             tanggal TEXT,
             jenis_pemasukan TEXT,
-            nominal INTEGER
+            nominal INTEGER,
+            type TEXT,
+            id_pembayaran INTEGER
         )"""
 cursor.execute(command)
 command = """ CREATE TABLE IF NOT EXISTS pengeluaran (
@@ -199,7 +201,9 @@ command = """ CREATE TABLE IF NOT EXISTS pengeluaran (
             Keterangan TEXT,
             tanggal TEXT,
             jenis_pengeluaran TEXT,
-            nominal INTEGER
+            nominal INTEGER,
+            type TEXT,
+            id_pembayaran INTEGER
         )"""
 cursor.execute(command)
 command = """ CREATE TABLE IF NOT EXISTS finansial (
@@ -486,6 +490,7 @@ def dashboard():
             # Calculate monthly nominal (difference between pemasukan and pengeluaran)
             for month in monthly_pemasukan:
                 monthly_nominal[month] = monthly_pemasukan[month] - monthly_pengeluaran[month]
+            print(monthly_nominal["Des"])
             return render_template("Admin/dashboard.html", 
                                    users=users, 
                                    keluarga=keluarga,
@@ -1033,7 +1038,7 @@ def addmeninggal():
             cursor.execute(command, (nama_keluarga,))
             user = cursor.fetchone()
             command = "DELETE FROM keluarga WHERE myid=? AND nama=?"
-            cursor.execute(command, (user[0], nama_keluarga))
+            cursor.execute(command, (user[0], nama_lengkap))
             db.commit()
             return redirect(url_for("meninggal_dunia"))
     else:
@@ -1288,14 +1293,14 @@ def verify_pembayaran():
             """
         cursor.execute(command, data)
         db.commit()
-        # data = (keterangan, tanggal, jenis_pemasukan, nominal)
-        # command = """
-        #         INSERT INTO pemasukan (
-        #         keterangan, tanggal, jenis_pemasukan, nominal
-        #         ) VALUES (?, ?, ?, ?)
-        #     """
-        # cursor.execute(command, data)
-        # db.commit()
+        data = (keterangan, tanggal, jenis_pemasukan, nominal, "Bulanan", id)
+        command = """
+                INSERT INTO pemasukan (
+                keterangan, tanggal, jenis_pemasukan, nominal, type, id_pembayaran
+                ) VALUES (?, ?, ?, ?,?,?)
+            """
+        cursor.execute(command, data)
+        db.commit()
         return redirect(url_for("pembayaran"))
     else:
         return redirect(url_for("index"))
@@ -1333,6 +1338,10 @@ def deletebulanan():
         db.commit()
         command = "DELETE FROM finansial WHERE keterangan=? AND id_pembayaran=?"
         cursor.execute(command, ("Bulanan", id))
+        db.commit()
+        command = "DELETE FROM pemasukan WHERE type=? AND id_pembayaran=?"
+        cursor.execute(command, ("Bulanan", id))
+        db.commit()
         return redirect(url_for("pembayaran"))
     else:
         return redirect(url_for("index"))
@@ -1430,6 +1439,13 @@ def deletehamauliateon():
         command = f"DELETE FROM hamauliateon WHERE id={id}"
         cursor.execute(command)
         db.commit()
+        command = f"DELETE FROM finansial WHERE id_pembayaran=? AND keuangan=? AND jenis IN (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        param = (id, "pemasukan", "Hamauliateon", "Huria", "Pembangunan", "Diakonia", "Pendeta", "Sintua", "Perhalado", "Ama", "Ina", "NHKBP", "Remaja", "Sekolah Minggu", "Pemusik", "Multimedia", "Song Leader")
+        cursor.execute(command, param)
+        db.commit()
+        command = "DELETE FROM pemasukan WHERE type=? AND id_pembayaran=?"
+        cursor.execute(command, ("Hamauliateon", id))
+        db.commit()
         return redirect(url_for("hamauliateon_admin"))
     else:
         return redirect(url_for("index"))
@@ -1451,39 +1467,39 @@ def hamauliateon_admin():
                         count += 1
                     else:
                         pending += 1
-            command = f"SELECT * FROM pemasukan"
-            cursor.execute(command)
-            pemasukan = cursor.fetchall()
-            if len(pemasukan) > 0:
-                for i in pemasukan:
-                        if i[3] == "Huria":
-                            nominal += int(i[4])
-                        elif i[3] == "Pembangunan":
-                            nominal += int(i[4])
-                        elif i[3] == "Diakonia":
-                            nominal += int(i[4])
-                        elif i[3] == "Pendeta":
-                            nominal += int(i[4])
-                        elif i[3] == "Sintua":
-                            nominal += int(i[4])
-                        elif i[3] == "Perhalado":
-                            nominal += int(i[4])
-                        elif i[3] == "Ama":
-                            nominal += int(i[4])
-                        elif i[3] == "Ina":
-                            nominal += int(i[4])
-                        elif i[3] == "NHKBP":
-                            nominal += int(i[4])
-                        elif i[3] == "Remaja":
-                            nominal += int(i[4])
-                        elif i[3] == "Sekolah Minggu":
-                            nominal += int(i[4])
-                        elif i[3] == "Pemusik":
-                            nominal += int(i[4])
-                        elif i[3] == "Multimedia":
-                            nominal += int(i[4])
-                        elif i[3] == "Song Leader":
-                            nominal += int(i[4])
+            # command = f"SELECT * FROM pemasukan"
+            # cursor.execute(command)
+            # pemasukan = cursor.fetchall()
+            # if len(pemasukan) > 0:
+            #     for i in pemasukan:
+            #             if i[3] == "Huria":
+            #                 nominal += int(i[4])
+            #             elif i[3] == "Pembangunan":
+            #                 nominal += int(i[4])
+            #             elif i[3] == "Diakonia":
+            #                 nominal += int(i[4])
+            #             elif i[3] == "Pendeta":
+            #                 nominal += int(i[4])
+            #             elif i[3] == "Sintua":
+            #                 nominal += int(i[4])
+            #             elif i[3] == "Perhalado":
+            #                 nominal += int(i[4])
+            #             elif i[3] == "Ama":
+            #                 nominal += int(i[4])
+            #             elif i[3] == "Ina":
+            #                 nominal += int(i[4])
+            #             elif i[3] == "NHKBP":
+            #                 nominal += int(i[4])
+            #             elif i[3] == "Remaja":
+            #                 nominal += int(i[4])
+            #             elif i[3] == "Sekolah Minggu":
+            #                 nominal += int(i[4])
+            #             elif i[3] == "Pemusik":
+            #                 nominal += int(i[4])
+            #             elif i[3] == "Multimedia":
+            #                 nominal += int(i[4])
+            #             elif i[3] == "Song Leader":
+            #                 nominal += int(i[4])
             pen = 0
             command = f"SELECT * FROM finansial WHERE keuangan='pengeluaran' "
             cursor.execute(command)
