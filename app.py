@@ -6,6 +6,7 @@ from datetime import datetime, timedelta, timezone
 import locale
 from openpyxl import Workbook
 import pandas as pd
+from werkzeug.utils import secure_filename
 
 locale.setlocale(locale.LC_ALL, 'id_ID.UTF-8')
 
@@ -234,9 +235,19 @@ tanggal = {
 }
 
 app = Flask(__name__, static_folder="Static", template_folder="Templates")
+app.secret_key = "y1A0A2m9U3A8n4b7b5I6b1t5y2l6d"
+# Configure the upload folder
 UPLOAD_FOLDER = 'static/pdf'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.secret_key = "y1A0A2m9U3A8n4b7b5I6b1t5y2l6d"
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'pdf'}
+
+# Ensure the upload folder exists
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
+
+def allowed_file(filename):
+    """Check if the file has an allowed extension."""
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 #session
 app.permanent_session_lifetime = timedelta(minutes=5)
@@ -1354,51 +1365,76 @@ def addbulanan_admin():
         status = request.form.get("status")
         bukti_persembahan = request.files.get('bukti')
         tanggal_sekarang = datetime.now().date()
-        commad = "SELECT * FROM user WHERE nama=?"
-        cursor.execute(commad, (nama_keluarga,))
-        user = cursor.fetchone()
-        username = user[1]
+        if not all([nama_keluarga, nominal_persembahan, persembahan_bulan, status]):
+            return redirect("/dashboard/bulanann?error=missing%20input")
+        try:
+            commad = "SELECT * FROM user WHERE nama=?"
+            cursor.execute(commad, (nama_keluarga,))
+            user = cursor.fetchone()
+            if not user:
+                return redirect("/dashboard/bulanann?error=user%20not%20found")
+            username = user[1]
+        except Exception as e:
+            return redirect(f"/dashboard/bulanann?error=database%20error:{str(e)}")
         file_path = None
-        print(bukti_persembahan)
         if bukti_persembahan:
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], bukti_persembahan.filename)
-            if file_path.endswith("jpg") or file_path.endswith("jpeg") or file_path.endswith("png"):
-                bukti_persembahan.save(file_path)
+            if allowed_file(bukti_persembahan.filename):
+                filename = secure_filename(bukti_persembahan.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                try:
+                    bukti_persembahan.save(file_path)
+                except Exception as e:
+                    return redirect(f"/dashboard/bulanann?error=file%20upload%20error:{str(e)}")
             else:
-                return redirect("/dashboard/bulanann?error=file%20tidak%20didukung")
-        
-        command = f"INSERT INTO bulanan (username, nama, nominal, bulan, bukti, status, tanggal) VALUES ('{username}', '{nama_keluarga}', {nominal_persembahan}, '{persembahan_bulan}', '{file_path}', '{status}', '{tanggal_sekarang}') "
-        cursor.execute(command)
-        db.commit()
+                return redirect("/dashboard/bulanann?error=file%20not%20supported")
+        try:
+            command = """
+                INSERT INTO bulanan (username, nama, nominal, bulan, bukti, status, tanggal) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """
+            cursor.execute(command, (
+                username, 
+                nama_keluarga, 
+                nominal_persembahan, 
+                persembahan_bulan, 
+                file_path, 
+                status, 
+                tanggal_sekarang
+            ))
+            db.commit()
+        except Exception as e:
+            return redirect(f"/dashboard/bulanann?error=database%20insert%20error:{str(e)}")
         if status == "verified":
-            keterangan = "Bulanan"
-            tanggal = tanggal_sekarang
-            jenis_pemasukan = "Pemasukan Bulan " + persembahan_bulan
-            nominal = nominal_persembahan
-            command = "SELECT * FROM bulanan"
-            cursor.execute(command)
-            users = cursor.fetchall()
-            id = len(users)
-            data = (keterangan, tanggal, jenis_pemasukan, nominal, "pemasukan", id)
-            command = """
-                    INSERT INTO finansial (
-                    keterangan, tanggal, jenis, nominal, keuangan, id_pembayaran
-                    ) VALUES (?, ?, ?, ?, ?, ?)
+            try:
+                keterangan = "Bulanan"
+                tanggal = tanggal_sekarang
+                jenis_pemasukan = "Pemasukan Bulan " + persembahan_bulan
+                nominal = nominal_persembahan
+                command = "SELECT * FROM bulanan"
+                cursor.execute(command)
+                users = cursor.fetchall()
+                id_pembayaran = len(users)
+                data = (keterangan, tanggal, jenis_pemasukan, nominal, "pemasukan", id_pembayaran)
+                command = """
+                    INSERT INTO finansial (keterangan, tanggal, jenis, nominal, keuangan, id_pembayaran) 
+                    VALUES (?, ?, ?, ?, ?, ?)
                 """
-            cursor.execute(command, data)
-            db.commit()
-            data = (keterangan, tanggal, jenis_pemasukan, nominal)
-            command = """
-                    INSERT INTO pemasukan (
-                    keterangan, tanggal, jenis_pemasukan, nominal
-                    ) VALUES (?, ?, ?, ?)
+                cursor.execute(command, data)
+                db.commit()
+                data = (keterangan, tanggal, jenis_pemasukan, nominal)
+                command = """
+                    INSERT INTO pemasukan (keterangan, tanggal, jenis_pemasukan, nominal) 
+                    VALUES (?, ?, ?, ?)
                 """
-            cursor.execute(command, data)
-            db.commit()
+                cursor.execute(command, data)
+                db.commit()
+            except Exception as e:
+                return redirect(f"/dashboard/bulanann?error=verified%20insert%20error:{str(e)}")
+
         return redirect(url_for("pembayaran"))
     else:
         return redirect(url_for("index"))
-
+        
 def verify_hamauliateon():
     if "status" in session and session["status"] == "Admin":
         id = request.args.get("id")
@@ -2843,6 +2879,6 @@ url_rule_admin()
 url_rule_user()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
  
  
